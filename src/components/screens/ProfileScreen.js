@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function LinksScreen() {
+function ProfileScreen() {
   return (
     <View>
       <Text>links</Text>
@@ -9,4 +9,4 @@ function LinksScreen() {
   );
 }
 
-export default LinksScreen;
+export default ProfileScreen;

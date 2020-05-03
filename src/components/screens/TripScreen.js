@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Animated, TouchableOpacity, Text } from 'react-native';
 import { useCollapsibleStack } from 'react-navigation-collapsible';
 
-export default function DummyScreen({ navigation }) {
+function TripScreen({ navigation }) {
   const data = [];
   for (let i = 0; i < 100; i++) {
     data.push(i);
@@ -18,7 +18,7 @@ export default function DummyScreen({ navigation }) {
       scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
       renderItem={({ item }) => (
         <TouchableOpacity
-          onPress={() => navigation.navigate('Home')}
+          onPress={() => navigation.navigate('Trips')}
           style={{
             width: '100%',
             height: 50,
@@ -41,3 +41,5 @@ export default function DummyScreen({ navigation }) {
     />
   );
 }
+
+export default TripScreen;
