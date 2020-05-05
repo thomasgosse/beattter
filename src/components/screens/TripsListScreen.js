@@ -1,19 +1,35 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+import TripList from '../trip/TripList';
 import useColors from '../themes/colors';
 
-function TripsListScreen({ navigation }) {
-  const colors = useColors();
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1
-    },
-    scrollView: {
-      backgroundColor: colors.primary
-    }
-  });
+const Tab = createMaterialTopTabNavigator();
 
-  return <ScrollView style={styles.scrollView} />;
+function TripsListScreen() {
+  const colors = useColors();
+
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        labelStyle: { fontSize: 12 },
+        tabStyle: { width: 100 },
+        style: {
+          backgroundColor: colors.primary
+        },
+        indicatorStyle: {
+          backgroundColor: colors.textTitle
+        }
+      }}
+    >
+      <Tab.Screen name="à venir" style={{ backgroundColor: colors.primary }}>
+        {() => <TripList trips={['1', '2']} />}
+      </Tab.Screen>
+      <Tab.Screen name="passés" style={{ backgroundColor: colors.primary }}>
+        {() => <TripList trips={[]} />}
+      </Tab.Screen>
+    </Tab.Navigator>
+  );
 }
 
 export default TripsListScreen;
