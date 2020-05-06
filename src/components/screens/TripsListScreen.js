@@ -23,10 +23,10 @@ function TripsListScreen() {
       }}
     >
       <Tab.Screen name="à venir" style={{ backgroundColor: colors.primary }}>
-        {() => <TripList trips={['1', '2']} />}
+        {() => <TripList trips={[1]} />}
       </Tab.Screen>
       <Tab.Screen name="passés" style={{ backgroundColor: colors.primary }}>
-        {() => <TripList trips={[]} />}
+        {() => <TripList trips={[1]} />}
       </Tab.Screen>
     </Tab.Navigator>
   );

@@ -4,8 +4,10 @@ import { useColorScheme } from 'react-native';
 const defaultColors = {
   primary: '#f4f6f6',
   textTitle: '#193b4e',
-  textBase: '#4a5568',
-  textBaseLight: '#718096'
+  textBase: 'black',
+  textBaseLight: '#4a5568',
+  card: '#fff',
+  chip: '#dfe9f2'
 };
 
 export default function useColors() {
@@ -17,7 +19,11 @@ export default function useColors() {
     if (colorScheme === 'dark') {
       const darkColors = {
         primary: '#f4f6f6',
-        textTitle: '#193b4e'
+        textTitle: '#193b4e',
+        textBase: 'black',
+        textBaseLight: '#4a5568',
+        card: '#fff',
+        chip: '#dfe9f2'
       };
       setColors(darkColors);
     } else {

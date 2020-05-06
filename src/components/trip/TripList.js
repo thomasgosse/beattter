@@ -1,13 +1,29 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
+import useColors from '../themes/colors';
+import TripListItem from './TripListItem';
 
 function TripList({ trips }) {
+  const colors = useColors();
+  const styles = StyleSheet.create({
+    contentContainer: {
+      backgroundColor: colors.primary,
+      flex: 1,
+      alignItems: 'center',
+      paddingTop: 10,
+      paddingBottom: 5
+    },
+    container: {
+      backgroundColor: colors.primary
+    }
+  });
+
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
       {trips.map((trip, i) => (
-        <Text key={i}>Home!</Text>
+        <TripListItem key={i} />
       ))}
-    </View>
+    </ScrollView>
   );
 }
 
