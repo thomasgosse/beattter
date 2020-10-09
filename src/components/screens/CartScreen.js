@@ -1,21 +1,22 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import useColors from '../themes/colors';
 
-function ProfileScreen() {
+function CartScreen({ navigation }) {
   const colors = useColors();
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.primary
-    }
+      backgroundColor: colors.primary,
+    },
   });
 
   return (
     <View style={styles.container}>
+      <Button title="Go to Settings" onPress={() => navigation.navigate('Settings')} />
       <Text>links</Text>
     </View>
   );
 }
 
-export default ProfileScreen;
+export default CartScreen;
