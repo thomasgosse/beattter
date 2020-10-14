@@ -1,40 +1,31 @@
 import * as React from 'react';
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import HomeScreen from './screens/HomeScreen';
-import CartScreen from './screens/CartScreen';
-import useColors from './themes/colors';
+import RecipesScreen from './screens/recipes/RecipesScreen';
+import ListsScreen from './screens/lists/ListsScreen';
+
+import useTheme from './hooks/useTheme';
 
 const BottomTab = createBottomTabNavigator();
 
 export default function BottomTabNavigator({ navigation, route }) {
-  const colors = useColors();
+  const { colors } = useTheme();
 
-  function getHeaderStyle() {
-    const routeName = route.state?.routes[route.state.index]?.name ?? 'Home';
-    // if (routeName === 'Home') {
-    return {
-      backgroundColor: colors.primary,
-      shadowOpacity: 0,
-      elevation: 0,
-    };
-    // } else {
-    //   return {
-    //     backgroundColor: colors.primary,
-    // };
+  function getHeaderTitle() {
+    const routeName = route.state?.routes[route.state.index]?.name;
+    if (routeName === 'Lists') {
+      return 'Listes de course';
+    } else {
+      return 'Mes Recettes';
+    }
   }
 
   React.useEffect(() => {
     navigation.setOptions({
-      headerStyle: getHeaderStyle(),
-      headerTitle: route.state?.routes[route.state.index]?.name || 'Home',
+      headerTitle: getHeaderTitle(),
       headerTitleStyle: {
         color: colors.textTitle,
-        fontWeight: 'bold',
-        fontSize: 28,
-        backgroundColor: colors.primary,
       },
     });
   }, [route]);
@@ -42,25 +33,27 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator
       tabBarOptions={{
-        style: { backgroundColor: colors.primary },
-        showLabel: false,
+        style: { backgroundColor: colors.header },
+        labelStyle: { color: colors.textTitle, marginTop: -5 },
       }}
     >
       <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Recipes"
+        component={RecipesScreen}
         options={{
+          title: 'Recettes',
           tabBarIcon: ({ focused }) => (
-            <Icon size={26} name="user" color={focused ? colors.textTitle : colors.textBaseLight} />
+            <Icon size={28} name="book-outline" color={focused ? colors.textTitle : colors.textBaseLight} />
           ),
         }}
       />
       <BottomTab.Screen
-        name="Cart"
-        component={CartScreen}
+        name="Lists"
+        component={ListsScreen}
         options={{
+          title: 'Listes',
           tabBarIcon: ({ focused }) => (
-            <Icon size={26} name="map" color={focused ? colors.textTitle : colors.textBaseLight} />
+            <Icon size={28} name="cart-outline" color={focused ? colors.textTitle : colors.textBaseLight} />
           ),
         }}
       />
