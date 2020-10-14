@@ -2,28 +2,43 @@ import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
 const defaultColors = {
-  primary: '#f4f6f6',
+  header: '#f4f6f6',
+  body: '#fff',
   textTitle: '#193b4e',
-  textBase: 'black',
-  textBaseLight: '#4a5568',
-  card: '#fff',
-  chip: '#dfe9f2'
+  textTitleLighter: '#2b4f63',
+  textBase: '#4a5568',
+  textBaseLight: '#909ba6',
+  divider: '#e1e6eb',
+  chip: '#BAA77D',
+  disabled: 'grey',
+};
+
+const defaultVariables = {
+  font: {
+    size: 16,
+    normal: '400',
+    semibold: '600',
+    bold: '700',
+  },
 };
 
 export default function useColors() {
   const colorScheme = useColorScheme();
 
   const [colors, setColors] = useState(defaultColors);
+  const [variables] = useState(defaultVariables);
 
   useEffect(() => {
     if (colorScheme === 'dark') {
       const darkColors = {
-        primary: '#f4f6f6',
+        header: '#f4f6f6',
+        body: '#fff',
         textTitle: '#193b4e',
         textBase: 'black',
         textBaseLight: '#4a5568',
-        card: '#fff',
-        chip: '#dfe9f2'
+        divider: '#aeb5bd',
+        chip: '#dfe9f2',
+        disabled: 'grey',
       };
       setColors(darkColors);
     } else {
@@ -31,5 +46,5 @@ export default function useColors() {
     }
   }, [colorScheme]);
 
-  return colors;
+  return { colors, variables };
 }
