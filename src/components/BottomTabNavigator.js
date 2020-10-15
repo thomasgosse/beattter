@@ -15,7 +15,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   function getHeaderTitle() {
     const routeName = route.state?.routes[route.state.index]?.name;
     if (routeName === 'Lists') {
-      return 'Listes de course';
+      return 'Listes de courses';
     } else {
       return 'Mes Recettes';
     }

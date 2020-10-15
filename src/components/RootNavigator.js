@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import { TransitionPresets } from '@react-navigation/stack';
 
 import * as RootNavigation from './RootNavigation';
 import BottomTabNavigator from './BottomTabNavigator';
 import CreateRecipeScreen from './screens/recipes/CreateRecipeScreen';
 import CreateListScreen from './screens/lists/CreateListScreen';
+import ListDetailScreen from './screens/lists/ListDetailScreen';
 
 import useTheme from './hooks/useTheme';
 
@@ -51,14 +51,6 @@ export default function RootNavigator() {
           title: 'Nouvelle recette',
         }}
       ></Stack.Screen>
-      {/* <Stack.Screen
-        name={'CreateListFromRecipe'}
-        component={CreateListScreen}
-        options={{
-          title: 'Nouvelle liste',
-          ...TransitionPresets.ModalTransition,
-        }}
-      ></Stack.Screen> */}
       <Stack.Screen
         name={'CreateList'}
         component={CreateListScreen}
@@ -66,6 +58,21 @@ export default function RootNavigator() {
           title: 'Nouvelle liste',
         }}
       ></Stack.Screen>
+      <Stack.Screen
+        name={'ListDetail'}
+        component={ListDetailScreen}
+        options={({ route }) => ({ title: route.params.title })}
+      ></Stack.Screen>
     </Stack.Navigator>
   );
 }
+
+// import { TransitionPresets } from '@react-navigation/stack';
+/* <Stack.Screen
+    name={'CreateListFromRecipe'}
+    component={CreateListScreen}
+    options={{
+      title: 'Nouvelle liste',
+      ...TransitionPresets.ModalTransition,
+    }}
+></Stack.Screen> */
