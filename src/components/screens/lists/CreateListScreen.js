@@ -8,14 +8,27 @@ import Calendar from '../../utils/Calendar';
 import useTheme from '../../hooks/useTheme';
 
 function CreateListScreen({ navigation }) {
-  const [placeholder, setPlaceholder] = useState('Liste du _ au _');
+  const [placeholder, setPlaceholder] = useState('Liste de courses');
   const [startingDay, setStartingDay] = useState();
   const [endingDay, setEndingDay] = useState();
 
   useEffect(() => {
-    const from = startingDay ? new Date(startingDay).toLocaleDateString() : '_';
-    const to = endingDay ? new Date(endingDay).toLocaleDateString() : '_';
-    setPlaceholder(`Liste du ${from} au ${to}`);
+    function getDayMonthString(dateString) {
+      if (!dateString) {
+        return '';
+      }
+      return new Date(dateString).toLocaleDateString('default', { day: 'numeric', month: 'long' }).toLowerCase();
+    }
+
+    const from = getDayMonthString(startingDay);
+    const to = getDayMonthString(endingDay);
+    if (!from && !to) {
+      setPlaceholder('Liste de courses');
+    } else if (from === to) {
+      setPlaceholder(`Liste du ${from}`);
+    } else {
+      setPlaceholder(`Liste du ${from} au ${to}`);
+    }
   }, [startingDay, endingDay, setPlaceholder]);
 
   const { colors, variables } = useTheme();
@@ -47,13 +60,7 @@ function CreateListScreen({ navigation }) {
           marginTop: 20,
         }}
       >
-        <Button
-          text="Créer"
-          disabled={!(startingDay && endingDay)}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
+        <Button text="Créer" disabled={!(startingDay && endingDay)} onPress={() => navigation.goBack()} />
       </View>
     </View>
   );
