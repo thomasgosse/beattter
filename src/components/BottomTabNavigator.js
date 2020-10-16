@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import RecipesScreen from './screens/recipes/RecipesScreen';
-import ListsScreen from './screens/lists/ListsScreen';
+import ListsNavigator from './screens/lists/ListsNavigator';
 
 import useTheme from './hooks/useTheme';
 
@@ -21,9 +21,25 @@ export default function BottomTabNavigator({ navigation, route }) {
     }
   }
 
+  function getHeaderStyle() {
+    const routeName = route.state?.routes[route.state.index]?.name;
+    if (routeName === 'Lists') {
+      return {
+        backgroundColor: colors.header,
+        shadowOpacity: 0,
+        elevation: 0,
+      };
+    } else {
+      return {
+        backgroundColor: colors.header,
+      };
+    }
+  }
+
   React.useEffect(() => {
     navigation.setOptions({
       headerTitle: getHeaderTitle(),
+      headerStyle: getHeaderStyle(),
       headerTitleStyle: {
         color: colors.textTitle,
       },
@@ -49,7 +65,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Lists"
-        component={ListsScreen}
+        component={ListsNavigator}
         options={{
           title: 'Listes',
           tabBarIcon: ({ focused }) => (

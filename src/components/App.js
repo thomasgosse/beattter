@@ -1,23 +1,31 @@
 import React, { useEffect } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, AppState } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { enableScreens } from 'react-native-screens';
 
 import { navigationRef } from './RootNavigation';
 import RootNavigator from './RootNavigator';
 
 import useTheme from './hooks/useTheme';
-import useUserStore from '../store/user-store';
-
-enableScreens();
+import useStore from './store/useStore';
 
 const App = () => {
-  const { getUser } = useUserStore();
+  const getLists = useStore((state) => state.getLists);
   const { colors } = useTheme();
 
+  function handleAppStateChange(appState) {
+    console.log('Handling app state', appState);
+    if (appState === 'active') {
+      getLists();
+    }
+  }
+
   useEffect(() => {
-    getUser('thomasgosse');
-  }, [getUser]);
+    AppState.addEventListener('change', handleAppStateChange);
+    handleAppStateChange('active');
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
+  }, []);
 
   const styles = StyleSheet.create({
     container: {

@@ -1,20 +1,11 @@
 import React from 'react';
-import { ScrollView, Text, StyleSheet } from 'react-native';
-
-import useTheme from '../../hooks/useTheme';
+import { ScrollView, Text } from 'react-native';
 
 export default function CreateRecipeScreen() {
-  const { colors } = useTheme();
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.body,
-    },
-  });
-
   return (
     <ScrollView>
       <Text>Ajouter une recette</Text>
+      <Text>Tu veux créer une recette le bro ?</Text>
     </ScrollView>
   );
 }

@@ -6,11 +6,12 @@ const defaultColors = {
   body: '#fff',
   textTitle: '#193b4e',
   textTitleLighter: '#2b4f63',
-  textBase: '#4a5568',
+  textBase: '#41474f',
   textBaseLight: '#909ba6',
   divider: '#e1e6eb',
   chip: '#BAA77D',
   disabled: 'grey',
+  danger: 'red',
 };
 
 const defaultVariables = {
@@ -20,6 +21,8 @@ const defaultVariables = {
     semibold: '600',
     bold: '700',
   },
+  hiddenItemWidth: 80,
+  listItemHeight: 80,
 };
 
 export default function useColors() {

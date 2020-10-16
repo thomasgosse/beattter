@@ -4,6 +4,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import Calendar from '../../utils/Calendar';
+import useStore from '../../store/useStore';
 
 import useTheme from '../../hooks/useTheme';
 
@@ -11,6 +12,7 @@ function CreateListScreen({ navigation }) {
   const [placeholder, setPlaceholder] = useState('Liste de courses');
   const [startingDay, setStartingDay] = useState();
   const [endingDay, setEndingDay] = useState();
+  const createList = useStore((state) => state.createList);
 
   useEffect(() => {
     function getDayMonthString(dateString) {
@@ -48,6 +50,12 @@ function CreateListScreen({ navigation }) {
     input: { marginHorizontal: 10, marginVertical: 20 },
   });
 
+  async function onPress() {
+    const list = { endingDay, startingDay, name: placeholder, key: Date.now().toString() };
+    await createList(list);
+    navigation.goBack();
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.calendarLabel}>Période de la liste de courses</Text>
@@ -60,7 +68,7 @@ function CreateListScreen({ navigation }) {
           marginTop: 20,
         }}
       >
-        <Button text="Créer" disabled={!(startingDay && endingDay)} onPress={() => navigation.goBack()} />
+        <Button text="Créer" disabled={!(startingDay && endingDay)} onPress={onPress} />
       </View>
     </View>
   );
