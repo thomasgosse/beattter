@@ -12,6 +12,7 @@ function CreateListScreen({ navigation }) {
   const [placeholder, setPlaceholder] = useState('Liste de courses');
   const [startingDay, setStartingDay] = useState();
   const [endingDay, setEndingDay] = useState();
+  const [name, setName] = useState('');
   const createList = useStore((state) => state.createList);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ function CreateListScreen({ navigation }) {
   });
 
   async function onPress() {
-    const list = { endingDay, startingDay, name: placeholder, key: Date.now().toString() };
+    const list = { endingDay, startingDay, name: name || placeholder, key: Date.now().toString() };
     await createList(list);
     navigation.goBack();
   }
@@ -60,7 +61,13 @@ function CreateListScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.calendarLabel}>Période de la liste de courses</Text>
       <Calendar setStartingDay={setStartingDay} setEndingDay={setEndingDay} />
-      <Input containerStyle={styles.input} label="Nom de la liste" placeholder={placeholder} />
+      <Input
+        containerStyle={styles.input}
+        label="Nom de la liste"
+        placeholder={placeholder}
+        value={name}
+        setValue={setName}
+      />
       <View
         style={{
           flex: 1,

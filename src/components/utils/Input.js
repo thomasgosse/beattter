@@ -3,9 +3,7 @@ import { StyleSheet, View, TextInput, Text } from 'react-native';
 
 import useTheme from '../hooks/useTheme';
 
-export default function Input({ containerStyle, label, placeholder }) {
-  const [value, setValue] = useState('');
-
+export default function Input({ containerStyle, label, placeholder, value, setValue }) {
   const { colors, variables } = useTheme();
   const styles = StyleSheet.create({
     container: {
