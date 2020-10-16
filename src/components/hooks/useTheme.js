@@ -37,11 +37,13 @@ export default function useColors() {
         header: '#f4f6f6',
         body: '#fff',
         textTitle: '#193b4e',
-        textBase: 'black',
-        textBaseLight: '#4a5568',
-        divider: '#aeb5bd',
-        chip: '#dfe9f2',
+        textTitleLighter: '#2b4f63',
+        textBase: '#41474f',
+        textBaseLight: '#909ba6',
+        divider: '#e1e6eb',
+        chip: '#BAA77D',
         disabled: 'grey',
+        danger: 'red',
       };
       setColors(darkColors);
     } else {
