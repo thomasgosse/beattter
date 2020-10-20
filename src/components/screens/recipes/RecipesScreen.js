@@ -14,7 +14,6 @@ function RecipesScreen({ navigation }) {
     },
     contentContainer: {
       flex: 1,
-      backgroundColor: colors.body,
       justifyContent: 'center',
       alignItems: 'center',
     },
