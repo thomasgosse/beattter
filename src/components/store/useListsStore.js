@@ -77,7 +77,7 @@ const useListsStore = create((set, get) => ({
     }
   },
 
-  reset: async () => set({ lists: [], overLists: [], onGoingLists: [], loading: false }),
+  reset: async () => set({}, true),
 }));
 
 export default useListsStore;
