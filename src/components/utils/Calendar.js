@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import * as RNCalendars from 'react-native-calendars';
-
-import useTheme from '../hooks/useTheme';
+import { ThemeContext } from 'react-native-elements';
 
 function Calendar({ setStartingDay, setEndingDay }) {
   const [today, setToday] = useState();
   const [markedDates, setMarkedDates] = useState({});
-  const { colors } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
 
   useEffect(() => {
     const todayDate = new Date();

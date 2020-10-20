@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import Calendar from '../../utils/Calendar';
 import useStore from '../../store/useStore';
-
-import useTheme from '../../hooks/useTheme';
+import { ThemeContext } from 'react-native-elements';
 
 function CreateListScreen({ navigation }) {
   const [placeholder, setPlaceholder] = useState('Liste de courses');
@@ -34,7 +33,9 @@ function CreateListScreen({ navigation }) {
     }
   }, [startingDay, endingDay, setPlaceholder]);
 
-  const { colors, variables } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -44,7 +45,7 @@ function CreateListScreen({ navigation }) {
       marginLeft: 10,
       marginTop: 20,
       marginBottom: 5,
-      fontSize: variables.font.size,
+      fontSize: 16,
       color: colors.textBaseLight,
       fontWeight: '500',
     },

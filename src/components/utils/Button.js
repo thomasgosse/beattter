@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
-
-import useTheme from '../hooks/useTheme';
+import { ThemeContext } from 'react-native-elements';
 
 export default function Button({ text, disabled, onPress }) {
-  const { colors, variables } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
   const styles = StyleSheet.create({
     button: {
       paddingTop: 12,
@@ -21,7 +22,7 @@ export default function Button({ text, disabled, onPress }) {
       fontWeight: '500',
       paddingLeft: 20,
       paddingRight: 20,
-      fontSize: variables.font.size,
+      fontSize: 16,
     },
   });
 

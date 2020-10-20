@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import shallow from 'zustand/shallow';
 import { ScrollView, StyleSheet, Image, Text, ActivityIndicator, View } from 'react-native';
+import { ThemeContext } from 'react-native-elements';
 
 import Button from '../../utils/Button';
 import ShoppingList from './ShoppingLists';
 import * as RootNavigation from '../../RootNavigation';
 
-import useTheme from '../../hooks/useTheme';
 import useStore from '../../store/useStore';
 
 function ListsScreen({ route }) {
@@ -19,7 +19,9 @@ function ListsScreen({ route }) {
     shallow
   );
 
-  const { colors, variables } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
 
   const styles = StyleSheet.create({
     contentContainer: {
@@ -38,7 +40,7 @@ function ListsScreen({ route }) {
     },
     text: {
       width: '80%',
-      fontSize: variables.font.size,
+      fontSize: 16,
       color: colors.textBase,
       textAlign: 'center',
       marginVertical: 20,

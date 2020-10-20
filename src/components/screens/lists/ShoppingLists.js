@@ -1,18 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import { StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { ThemeContext } from 'react-native-elements';
 
 import ShoppingListItem from './ShoppingListsItem';
 import * as RootNavigation from '../../RootNavigation';
 
-import useTheme from '../../hooks/useTheme';
 import useStore from '../../store/useStore';
 
 export default function ShoppingLists({ lists }) {
   const swipeListRef = useRef(null);
   const deleteList = useStore((state) => state.deleteList);
-  const { colors, variables } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
+  const hiddenItemWidth = 80;
 
   const styles = StyleSheet.create({
     container: {
@@ -32,7 +35,7 @@ export default function ShoppingLists({ lists }) {
       position: 'absolute',
       top: 0,
       bottom: 0,
-      width: variables.hiddenItemWidth,
+      width: hiddenItemWidth,
       backgroundColor: colors.danger,
       right: 0,
     },
@@ -48,7 +51,7 @@ export default function ShoppingLists({ lists }) {
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.hiddenRow}>
       <TouchableOpacity style={styles.hiddenBtn} onPress={() => deleteRow(rowMap, data.item.key)}>
-        <Icon style={styles.hiddenBtnIcon} name="trash" size={28}></Icon>
+        <Icon style={styles.hiddenBtnIcon} name="trash" size={28} />
       </TouchableOpacity>
     </View>
   );
@@ -69,8 +72,8 @@ export default function ShoppingLists({ lists }) {
           />
         )}
         renderHiddenItem={renderHiddenItem}
-        rightOpenValue={-variables.hiddenItemWidth}
-        stopRightSwipe={-variables.hiddenItemWidth * 1.5}
+        rightOpenValue={-hiddenItemWidth}
+        stopRightSwipe={-hiddenItemWidth * 1.5}
       />
     </SafeAreaView>
   );

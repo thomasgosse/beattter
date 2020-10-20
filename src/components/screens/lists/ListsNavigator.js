@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { ThemeContext } from 'react-native-elements';
 
 import ListsScreen from './ListsScreen';
-
-import useTheme from '../../hooks/useTheme';
 
 const TopTab = createMaterialTopTabNavigator();
 
 export default function ListsNavigator() {
-  const { colors } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
 
   return (
     <TopTab.Navigator

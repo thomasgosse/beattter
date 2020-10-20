@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, Image, Text } from 'react-native';
+import { ThemeContext } from 'react-native-elements';
 
 import Button from '../../utils/Button';
 
-import useTheme from '../../hooks/useTheme';
-
 function RecipesScreen({ navigation }) {
-  const { colors, variables } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
   const styles = StyleSheet.create({
     container: {
       backgroundColor: colors.body,
@@ -24,7 +25,7 @@ function RecipesScreen({ navigation }) {
     },
     text: {
       width: '80%',
-      fontSize: variables.font.size,
+      fontSize: 16,
       color: colors.textBase,
       textAlign: 'center',
       marginVertical: 20,

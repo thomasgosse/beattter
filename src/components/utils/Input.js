@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, TextInput, Text } from 'react-native';
-
-import useTheme from '../hooks/useTheme';
+import { ThemeContext } from 'react-native-elements';
 
 export default function Input({ containerStyle, label, placeholder, value, setValue }) {
-  const { colors, variables } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -14,14 +15,14 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
       marginLeft: 10,
       marginTop: 10,
       marginBottom: 5,
-      fontSize: variables.font.size,
+      fontSize: 16,
       color: colors.textBaseLight,
       fontWeight: '500',
     },
     label: {
       marginBottom: 7,
       fontWeight: '500',
-      fontSize: variables.font.size,
+      fontSize: 16,
       color: colors.textBaseLight,
     },
   });

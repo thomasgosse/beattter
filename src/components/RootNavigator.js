@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import * as RootNavigation from './RootNavigation';
@@ -8,13 +9,13 @@ import CreateRecipeScreen from './screens/recipes/CreateRecipeScreen';
 import CreateListScreen from './screens/lists/CreateListScreen';
 import ListDetailScreen from './screens/lists/ListDetailScreen';
 
-import useTheme from './hooks/useTheme';
-
 const Stack = createStackNavigator();
 const INITIAL_ROUTE_NAME = 'Recipes';
 
 export default function RootNavigator() {
-  const { colors } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
 
   return (
     <Stack.Navigator
@@ -43,26 +44,26 @@ export default function RootNavigator() {
             />
           ),
         }}
-      ></Stack.Screen>
+      />
       <Stack.Screen
         name={'CreateRecipe'}
         component={CreateRecipeScreen}
         options={{
           title: 'Nouvelle recette',
         }}
-      ></Stack.Screen>
+      />
       <Stack.Screen
         name={'CreateList'}
         component={CreateListScreen}
         options={{
           title: 'Nouvelle liste',
         }}
-      ></Stack.Screen>
+      />
       <Stack.Screen
         name={'ListDetail'}
         component={ListDetailScreen}
         options={({ route }) => ({ title: route.params.title })}
-      ></Stack.Screen>
+      />
     </Stack.Navigator>
   );
 }

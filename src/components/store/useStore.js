@@ -5,8 +5,12 @@ import { getMultipleWithRegex, removeData, storeData } from '../../services/loca
 const orderDescStartingDay = (a, b) => {
   var keyA = new Date(a.startingDay),
     keyB = new Date(b.startingDay);
-  if (keyA < keyB) return -1;
-  if (keyA > keyB) return 1;
+  if (keyA < keyB) {
+    return -1;
+  }
+  if (keyA > keyB) {
+    return 1;
+  }
   return 0;
 };
 

@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
-import { ListItem } from 'react-native-elements';
-
-import useTheme from '../../hooks/useTheme';
+import { ListItem, ThemeContext } from 'react-native-elements';
 
 export default function ShoppingListsItem({ item, navigate, closeAll }) {
-  const { colors, variables } = useTheme();
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
   const styles = StyleSheet.create({
     container: {
-      height: variables.listItemHeight,
+      height: 80,
     },
     title: {
       marginBottom: 7,
@@ -17,7 +17,7 @@ export default function ShoppingListsItem({ item, navigate, closeAll }) {
     },
     subtitle: {
       color: colors.textBaseLight,
-      fontWeight: variables.font.normal,
+      fontWeight: '400',
     },
   });
 
