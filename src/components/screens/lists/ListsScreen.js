@@ -26,7 +26,6 @@ function ListsScreen({ route }) {
   const styles = StyleSheet.create({
     contentContainer: {
       flex: 1,
-      backgroundColor: colors.body,
       justifyContent: 'center',
       alignItems: 'center',
     },

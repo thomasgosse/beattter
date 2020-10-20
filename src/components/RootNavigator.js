@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -8,8 +9,9 @@ import BottomTabNavigator from './BottomTabNavigator';
 import CreateRecipeScreen from './screens/recipes/CreateRecipeScreen';
 import CreateListScreen from './screens/lists/CreateListScreen';
 import ListDetailScreen from './screens/lists/ListDetailScreen';
+import IngredientPickScreen from './screens/recipes/IngredientPickScreen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 const INITIAL_ROUTE_NAME = 'Recipes';
 
 export default function RootNavigator() {
@@ -17,32 +19,39 @@ export default function RootNavigator() {
     theme: { colors },
   } = useContext(ThemeContext);
 
+  const renderHeaderRight = () => (
+    <TouchableOpacity
+      onPress={() => {
+        RootNavigation.getCurrentRoute() === 'Recipes'
+          ? RootNavigation.navigate('CreateRecipe')
+          : RootNavigation.navigate('CreateList');
+      }}
+    >
+      <Icon
+        backgroundColor={colors.header}
+        size={26}
+        underlayColor={colors.header}
+        name="add-outline"
+        color={colors.textBase}
+      />
+    </TouchableOpacity>
+  );
+
   return (
     <Stack.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
       screenOptions={{
         headerStyle: { backgroundColor: colors.header },
         headerTintColor: colors.title,
+        headerHideShadow: true,
+        stackPresentation: 'push',
       }}
     >
       <Stack.Screen
         name={INITIAL_ROUTE_NAME}
         component={BottomTabNavigator}
         options={{
-          headerRight: () => (
-            <Icon.Button
-              backgroundColor={colors.header}
-              size={28}
-              underlayColor={colors.header}
-              name="add-outline"
-              color={colors.textBase}
-              onPress={() => {
-                RootNavigation.getCurrentRoute() === 'Recipes'
-                  ? RootNavigation.navigate('CreateRecipe')
-                  : RootNavigation.navigate('CreateList');
-              }}
-            />
-          ),
+          headerRight: renderHeaderRight,
         }}
       />
       <Stack.Screen
@@ -64,16 +73,14 @@ export default function RootNavigator() {
         component={ListDetailScreen}
         options={({ route }) => ({ title: route.params.title })}
       />
+      <Stack.Screen
+        name={'IngredientPick'}
+        component={IngredientPickScreen}
+        options={{
+          headerShown: false,
+          stackPresentation: 'modal',
+        }}
+      />
     </Stack.Navigator>
   );
 }
-
-// import { TransitionPresets } from '@react-navigation/stack';
-/* <Stack.Screen
-    name={'CreateListFromRecipe'}
-    component={CreateListScreen}
-    options={{
-      title: 'Nouvelle liste',
-      ...TransitionPresets.ModalTransition,
-    }}
-></Stack.Screen> */

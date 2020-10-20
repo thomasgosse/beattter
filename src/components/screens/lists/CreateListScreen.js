@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { ThemeContext } from 'react-native-elements';
 
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import Calendar from '../../utils/Calendar';
 import useStore from '../../store/useStore';
-import { ThemeContext } from 'react-native-elements';
 
 function CreateListScreen({ navigation }) {
   const [placeholder, setPlaceholder] = useState('Liste de courses');
@@ -50,6 +50,11 @@ function CreateListScreen({ navigation }) {
       fontWeight: '500',
     },
     input: { marginHorizontal: 10, marginVertical: 20 },
+    buttonContainer: {
+      flex: 1,
+      alignItems: 'center',
+      marginTop: 20,
+    },
   });
 
   async function onPress() {
@@ -69,13 +74,7 @@ function CreateListScreen({ navigation }) {
         value={name}
         setValue={setName}
       />
-      <View
-        style={{
-          flex: 1,
-          alignItems: 'center',
-          marginTop: 20,
-        }}
-      >
+      <View style={styles.buttonContainer}>
         <Button text="Créer" disabled={!(startingDay && endingDay)} onPress={onPress} />
       </View>
     </View>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Platform, StatusBar, StyleSheet, View, AppState, Appearance } from 'react-native';
+import { StatusBar, StyleSheet, View, AppState, Appearance } from 'react-native';
+import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from 'react-native-elements';
 
@@ -8,6 +9,8 @@ import RootNavigator from './components/RootNavigator';
 import appTheme from './appTheme';
 
 import useStore from './components/store/useStore';
+
+enableScreens();
 
 const App = () => {
   const themeProvideRef = useRef(null);
@@ -45,7 +48,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme} ref={themeProvideRef}>
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <StatusBar barStyle="default" translucent={true} />
         <NavigationContainer ref={navigationRef}>
           <RootNavigator />
         </NavigationContainer>

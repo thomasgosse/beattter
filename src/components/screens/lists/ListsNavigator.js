@@ -22,6 +22,8 @@ export default function ListsNavigator() {
         style: {
           colors: colors.textTitle,
           backgroundColor: colors.header,
+          shadowOpacity: 0,
+          elevation: 0,
         },
         indicatorStyle: {
           backgroundColor: colors.textTitleLighter,

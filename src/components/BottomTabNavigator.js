@@ -23,24 +23,11 @@ export default function BottomTabNavigator({ navigation, route }) {
       }
     }
 
-    function getHeaderStyle() {
-      const routeName = route.state?.routes[route.state.index]?.name;
-      if (routeName === 'Lists') {
-        return {
-          backgroundColor: colors.header,
-          shadowOpacity: 0,
-          elevation: 0,
-        };
-      } else {
-        return {
-          backgroundColor: colors.header,
-        };
-      }
-    }
-
     navigation.setOptions({
       headerTitle: getHeaderTitle(),
-      headerStyle: getHeaderStyle(),
+      headerStyle: {
+        backgroundColor: colors.header,
+      },
       headerTitleStyle: {
         color: colors.textTitle,
       },
