@@ -11,19 +11,19 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
       flex: 1,
       backgroundColor: colors.body,
     },
-    text: {
-      marginLeft: 10,
-      marginTop: 10,
-      marginBottom: 5,
-      fontSize: 16,
-      color: colors.textBaseLight,
-      fontWeight: '500',
+    input: {
+      fontSize: 18,
     },
     label: {
       marginBottom: 7,
       fontWeight: '500',
       fontSize: 16,
       color: colors.textBaseLight,
+    },
+    divider: {
+      marginTop: 5,
+      borderBottomColor: colors.divider,
+      borderBottomWidth: 1,
     },
   });
 
@@ -34,18 +34,10 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
         clearButtonMode="always"
         placeholder={placeholder}
         value={value}
-        onChangeText={(text) => setValue(text)}
-        style={{
-          fontSize: 18,
-        }}
+        onChangeText={(text) => setValue && setValue(text)}
+        style={styles.input}
       />
-      <View
-        style={{
-          marginTop: 5,
-          borderBottomColor: colors.divider,
-          borderBottomWidth: 1,
-        }}
-      />
+      <View style={styles.divider} />
     </View>
   );
 }
