@@ -8,13 +8,13 @@ import { navigationRef } from './components/RootNavigation';
 import RootNavigator from './components/RootNavigator';
 import appTheme from './appTheme';
 
-import useStore from './components/store/useStore';
+import useListsStore from './components/store/useListsStore';
 
 enableScreens();
 
 const App = () => {
   const themeProvideRef = useRef(null);
-  const getLists = useStore((state) => state.getLists);
+  const getLists = useListsStore((state) => state.getLists);
 
   useEffect(() => {
     function handleAppStateChange(appState) {

@@ -5,14 +5,14 @@ import { ThemeContext } from 'react-native-elements';
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import Calendar from '../../utils/Calendar';
-import useStore from '../../store/useStore';
+import useListsStore from '../../store/useListsStore';
 
 function CreateListScreen({ navigation }) {
   const [placeholder, setPlaceholder] = useState('Liste de courses');
   const [startingDay, setStartingDay] = useState();
   const [endingDay, setEndingDay] = useState();
   const [name, setName] = useState('');
-  const createList = useStore((state) => state.createList);
+  const createList = useListsStore((state) => state.createList);
 
   useEffect(() => {
     function getDayMonthString(dateString) {

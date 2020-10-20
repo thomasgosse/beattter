@@ -31,7 +31,7 @@ function updateLists(lists, set) {
   set({ lists, overLists, onGoingLists });
 }
 
-const useStore = create((set, get) => ({
+const useListsStore = create((set, get) => ({
   lists: [],
   onGoingLists: [],
   overLists: [],
@@ -80,4 +80,4 @@ const useStore = create((set, get) => ({
   reset: async () => set({ lists: [], overLists: [], onGoingLists: [], loading: false }),
 }));
 
-export default useStore;
+export default useListsStore;

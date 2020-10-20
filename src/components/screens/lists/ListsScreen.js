@@ -7,11 +7,11 @@ import Button from '../../utils/Button';
 import ShoppingList from './ShoppingLists';
 import * as RootNavigation from '../../RootNavigation';
 
-import useStore from '../../store/useStore';
+import useListsStore from '../../store/useListsStore';
 
 function ListsScreen({ route }) {
   const type = route?.params?.type;
-  const { lists, loading } = useStore(
+  const { lists, loading } = useListsStore(
     (state) => ({
       lists: type === 'ONGOING' ? state.onGoingLists : state.overLists,
       loading: state.loading,

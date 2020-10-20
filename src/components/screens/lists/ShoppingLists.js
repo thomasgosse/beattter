@@ -7,11 +7,11 @@ import { ThemeContext } from 'react-native-elements';
 import ShoppingListItem from './ShoppingListsItem';
 import * as RootNavigation from '../../RootNavigation';
 
-import useStore from '../../store/useStore';
+import useListsStore from '../../store/useListsStore';
 
 export default function ShoppingLists({ lists }) {
   const swipeListRef = useRef(null);
-  const deleteList = useStore((state) => state.deleteList);
+  const deleteList = useListsStore((state) => state.deleteList);
   const {
     theme: { colors },
   } = useContext(ThemeContext);
