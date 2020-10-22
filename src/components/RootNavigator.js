@@ -9,7 +9,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import CreateRecipeScreen from './screens/recipes/CreateRecipeScreen';
 import CreateListScreen from './screens/lists/CreateListScreen';
 import ListDetailScreen from './screens/lists/ListDetailScreen';
-import IngredientPickScreen from './screens/recipes/IngredientPickScreen';
+import IngredientPickNavigator from './screens/recipes/IngredientPickNavigator';
 
 const Stack = createNativeStackNavigator();
 const INITIAL_ROUTE_NAME = 'Recipes';
@@ -75,7 +75,7 @@ export default function RootNavigator() {
       />
       <Stack.Screen
         name={'IngredientPick'}
-        component={IngredientPickScreen}
+        component={IngredientPickNavigator}
         options={{
           headerShown: false,
           stackPresentation: 'modal',

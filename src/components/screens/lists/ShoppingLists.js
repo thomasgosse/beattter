@@ -61,6 +61,7 @@ export default function ShoppingLists({ lists }) {
       <SwipeListView
         ref={swipeListRef}
         data={lists}
+        friction={9}
         closeOnScroll={true}
         disableRightSwipe={true}
         keyExtractor={(item) => item.key}

@@ -14,6 +14,12 @@ const useRecipesStore = create((set, get) => ({
     set({ newRecipe });
   },
 
+  removeIngredient: (index) => {
+    let newRecipe = { ...get().newRecipe };
+    newRecipe.ingredients.splice(index, 1);
+    set({ newRecipe });
+  },
+
   reset: async () => set({}, true),
 }));
 
