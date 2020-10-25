@@ -9,17 +9,20 @@ import RootNavigator from './components/RootNavigator';
 import appTheme from './appTheme';
 
 import useListsStore from './components/store/useListsStore';
+import useRecipesStore from './components/store/useRecipesStore';
 
 enableScreens();
 
 const App = () => {
   const themeProvideRef = useRef(null);
   const getLists = useListsStore((state) => state.getLists);
+  const getRecipes = useRecipesStore((state) => state.getRecipes);
 
   useEffect(() => {
     function handleAppStateChange(appState) {
       if (appState === 'active') {
         getLists();
+        getRecipes();
       }
     }
 
@@ -34,7 +37,7 @@ const App = () => {
       AppState.removeEventListener('change', handleAppStateChange);
       Appearance.removeChangeListener(handleAppearanceChange);
     };
-  }, [getLists]);
+  }, [getLists, getRecipes]);
 
   const theme = Appearance.getColorScheme() === 'light' ? appTheme.light : appTheme.dark;
 

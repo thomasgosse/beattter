@@ -10,7 +10,7 @@ export default {
       textBaseLight: '#909ba6',
       divider: '#e1e6eb',
       chip: '#BAA77D',
-      disabled: 'grey',
+      disabled: '#c5c7c9',
       danger: 'red',
     },
   },

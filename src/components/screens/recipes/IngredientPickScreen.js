@@ -1,12 +1,15 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, Keyboard } from 'react-native';
 import { Picker } from '@react-native-community/picker';
-import { ThemeContext } from 'react-native-elements';
+import { ListItem, ThemeContext } from 'react-native-elements';
 
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 
 import useRecipesStore from '../../store/useRecipesStore';
+
+import data from '../../../data';
+const slugify = require('slugify');
 
 const decimals = [...Array(100).keys()].map((i) => (i < 10 ? `0${i}` : i.toString()));
 const units = ['kg', 'gr'];
@@ -25,18 +28,25 @@ const integers = [...Array(1001).keys()]
   .map((i) => i.toString());
 
 export default function IngredientPickerScreen({ navigation }) {
-  const [name, setName] = useState('');
+  const [search, setSearch] = useState('');
   const [integer, setInteger] = useState(integers[0]);
   const [decimal, setDecimal] = useState(decimals[0]);
   const [unit, setUnit] = useState(units[0]);
+
+  const [autoCompleteResult, setAutoCompleteResult] = useState([]);
+  const [selectedIngredient, setSelectedIngredient] = useState('');
+
   const addIngredient = useRecipesStore((state) => state.addIngredient);
 
   const {
     theme: { colors },
   } = useContext(ThemeContext);
   const styles = StyleSheet.create({
-    contentContainer: { flex: 1 },
-    container: { backgroundColor: colors.body },
+    container: { flex: 1, backgroundColor: colors.body },
+    list: { backgroundColor: colors.body },
+    listItem: {
+      height: 50,
+    },
     input: {
       marginHorizontal: 10,
       marginVertical: 20,
@@ -53,6 +63,19 @@ export default function IngredientPickerScreen({ navigation }) {
     },
   });
 
+  useEffect(() => {
+    if (search.length > 2) {
+      let filteredBySearch = data.filter((d) => {
+        const slugSearch = slugify(search.toUpperCase());
+        const slugData = d.name.toUpperCase();
+        return slugify(slugData).indexOf(slugSearch) > -1;
+      });
+      setAutoCompleteResult(filteredBySearch);
+    } else {
+      setAutoCompleteResult([]);
+    }
+  }, [search]);
+
   function getPicker(list, selectedValue, onValueChange) {
     return (
       <Picker mode="dialog" style={styles.picker} selectedValue={selectedValue} onValueChange={onValueChange}>
@@ -64,13 +87,36 @@ export default function IngredientPickerScreen({ navigation }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
+    <View style={styles.container}>
       <Input
         containerStyle={styles.input}
         label="Nom de l'ingrédient"
         placeholder={'Cherche dans la liste'}
-        value={name}
-        setValue={setName}
+        value={search}
+        setValue={setSearch}
+      />
+
+      <FlatList
+        data={autoCompleteResult}
+        renderItem={({ item }) => (
+          <ListItem
+            containerStyle={[
+              styles.listItem,
+              { backgroundColor: selectedIngredient === item.name ? colors.disabled : colors.body },
+            ]}
+            bottomDivider
+            key={item.slug}
+            onPress={() => {
+              setSelectedIngredient(item.name);
+              Keyboard.dismiss();
+            }}
+          >
+            <ListItem.Content>
+              <ListItem.Title style={styles.ingredientName}>{item.name}</ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
+        )}
+        keyExtractor={(item) => item.slug}
       />
 
       <View style={styles.pickersContainer}>
@@ -81,14 +127,14 @@ export default function IngredientPickerScreen({ navigation }) {
       </View>
 
       <Button
-        text="Créer"
-        disabled={!name}
+        text="Ajouter"
+        disabled={!selectedIngredient}
         containerStyle={styles.button}
         onPress={() => {
-          addIngredient({ name, quantity: `${integer}.${decimal} ${unit}` });
+          addIngredient({ name: selectedIngredient, quantity: `${integer}.${decimal} ${unit}` });
           navigation.goBack();
         }}
       />
-    </ScrollView>
+    </View>
   );
 }
