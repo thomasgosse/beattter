@@ -11,7 +11,6 @@ const useRecipesStore = create((set, get) => ({
     try {
       set({ loading: true });
       const recipes = (await getMultipleWithRegex('recipe_')) || [];
-      console.log(recipes);
       set({ recipes });
     } catch (e) {
       console.log('Could not get recipes', e);

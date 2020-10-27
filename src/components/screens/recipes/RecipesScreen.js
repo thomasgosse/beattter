@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import shallow from 'zustand/shallow';
-import { ScrollView, View, StyleSheet, Image, Text, ActivityIndicator } from 'react-native';
+import { ScrollView, View, StyleSheet, Image, Text, ActivityIndicator, FlatList } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
 import Button from '../../utils/Button';
-import RecipeList from './RecipeList';
+import RecipeListItem from './RecipeListItem';
 
 import useRecipeStores from '../../store/useRecipesStore';
 
-function RecipesScreen({ navigation }) {
+export default function RecipesScreen({ navigation }) {
   const { recipes, loading } = useRecipeStores(
     (state) => ({
       recipes: state.recipes,
@@ -41,6 +41,10 @@ function RecipesScreen({ navigation }) {
       textAlign: 'center',
       marginVertical: 20,
     },
+    list: {
+      marginTop: 10,
+      flex: 1,
+    },
   });
 
   if (loading && recipes.length === 0) {
@@ -61,7 +65,14 @@ function RecipesScreen({ navigation }) {
     );
   }
 
-  return <RecipeList />;
+  return (
+    <FlatList
+      contentContainerStyle={styles.list}
+      style={{ backgroundColor: colors.body }}
+      data={recipes}
+      renderItem={({ item, index }) => <RecipeListItem name={item.name} index={index} />}
+      keyExtractor={(item) => item.key}
+      numColumns={2}
+    />
+  );
 }
-
-export default RecipesScreen;

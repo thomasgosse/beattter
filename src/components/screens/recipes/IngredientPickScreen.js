@@ -34,7 +34,7 @@ export default function IngredientPickerScreen({ navigation }) {
   const [unit, setUnit] = useState(units[0]);
 
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
-  const [selectedIngredient, setSelectedIngredient] = useState('');
+  const [selectedIngredient, setSelectedIngredient] = useState({});
 
   const addIngredient = useRecipesStore((state) => state.addIngredient);
 
@@ -102,12 +102,12 @@ export default function IngredientPickerScreen({ navigation }) {
           <ListItem
             containerStyle={[
               styles.listItem,
-              { backgroundColor: selectedIngredient === item.name ? colors.disabled : colors.body },
+              { backgroundColor: selectedIngredient.name === item.name ? colors.disabled : colors.body },
             ]}
             bottomDivider
             key={item.slug}
             onPress={() => {
-              setSelectedIngredient(item.name);
+              setSelectedIngredient(item);
               Keyboard.dismiss();
             }}
           >
@@ -128,10 +128,10 @@ export default function IngredientPickerScreen({ navigation }) {
 
       <Button
         text="Ajouter"
-        disabled={!selectedIngredient}
+        disabled={!selectedIngredient.name}
         containerStyle={styles.button}
         onPress={() => {
-          addIngredient({ name: selectedIngredient, quantity: `${integer}.${decimal} ${unit}` });
+          addIngredient({ ...selectedIngredient, quantity: `${integer}.${decimal} ${unit}` });
           navigation.goBack();
         }}
       />
