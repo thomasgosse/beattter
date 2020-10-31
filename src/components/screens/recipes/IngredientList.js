@@ -33,7 +33,12 @@ export default function IngredientList({ label }) {
       {label && <Text style={styles.label}>Ingredients</Text>}
 
       {ingredients.map((ingredient, i) => (
-        <Ingredient ingredient={ingredient} index={i} key={ingredient.name + i} itemHeight={listItemHeight} />
+        <Ingredient
+          ingredient={ingredient}
+          index={i}
+          key={ingredient.name + ingredient.quantity}
+          itemHeight={listItemHeight}
+        />
       ))}
 
       <ListItem
