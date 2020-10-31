@@ -4,6 +4,7 @@ import { ListItem, ThemeContext } from 'react-native-elements';
 
 import { SwipeRow } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
+import IngredientKindTooltip from './IngredientKindTooltip';
 
 import useRecipesStore from '../../store/useRecipesStore';
 
@@ -94,6 +95,7 @@ export default function Ingredient({ ingredient, index, itemHeight }) {
             <ListItem.Title style={styles.ingredientName}>{ingredient.name}</ListItem.Title>
             <ListItem.Title style={styles.quantity}> - {ingredient.quantity}</ListItem.Title>
           </ListItem.Content>
+          <IngredientKindTooltip kind={ingredient.kind} />
         </ListItem>
       </Animated.View>
     </SwipeRow>

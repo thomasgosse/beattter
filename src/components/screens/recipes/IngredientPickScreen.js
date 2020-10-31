@@ -2,30 +2,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Keyboard } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import { ListItem, ThemeContext } from 'react-native-elements';
+import slugify from 'slugify';
 
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
+import IngredientKindTooltip from './IngredientKindTooltip';
 
 import useRecipesStore from '../../store/useRecipesStore';
-
 import data from '../../../data';
-const slugify = require('slugify');
-
-const decimals = [...Array(100).keys()].map((i) => (i < 10 ? `0${i}` : i.toString()));
-const units = ['kg', 'gr'];
-const integers = [...Array(1001).keys()]
-  .filter((i) => {
-    if (i <= 50) {
-      return true;
-    } else if (i < 200 && i % 5 === 0) {
-      return true;
-    } else if (i <= 1000 && i % 20 === 0) {
-      return true;
-    } else {
-      return false;
-    }
-  })
-  .map((i) => i.toString());
 
 export default function IngredientPickerScreen({ navigation }) {
   const [search, setSearch] = useState('');
@@ -112,8 +96,11 @@ export default function IngredientPickerScreen({ navigation }) {
             }}
           >
             <ListItem.Content>
-              <ListItem.Title style={styles.ingredientName}>{item.name}</ListItem.Title>
+              <ListItem.Title style={styles.ingredientName} numberOfLines={1}>
+                {item.name}
+              </ListItem.Title>
             </ListItem.Content>
+            <IngredientKindTooltip kind={item.kind} />
           </ListItem>
         )}
         keyExtractor={(item) => item.slug}
@@ -138,3 +125,19 @@ export default function IngredientPickerScreen({ navigation }) {
     </View>
   );
 }
+
+const decimals = [...Array(100).keys()].map((i) => (i < 10 ? `0${i}` : i.toString()));
+const units = ['kg', 'gr'];
+const integers = [...Array(1001).keys()]
+  .filter((i) => {
+    if (i <= 50) {
+      return true;
+    } else if (i < 200 && i % 5 === 0) {
+      return true;
+    } else if (i <= 1000 && i % 20 === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  })
+  .map((i) => i.toString());
