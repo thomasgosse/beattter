@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, TextInput, Text } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import Label from './Label';
 
