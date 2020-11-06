@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View, TextInput, Text } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
+import Label from './Label';
 
 export default function Input({ containerStyle, label, placeholder, value, setValue }) {
   const {
@@ -16,9 +17,6 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
     },
     label: {
       marginBottom: 7,
-      fontWeight: '500',
-      fontSize: 16,
-      color: colors.textBaseLight,
     },
     divider: {
       marginTop: 5,
@@ -29,7 +27,7 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
 
   return (
     <View style={containerStyle}>
-      <Text style={styles.label}>{label}</Text>
+      <Label label={label} containerStyle={styles.label} />
       <TextInput
         clearButtonMode="always"
         placeholder={placeholder}
