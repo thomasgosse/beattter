@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList, Keyboard } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import { ListItem, ThemeContext } from 'react-native-elements';
@@ -47,17 +47,25 @@ export default function IngredientPickerScreen({ navigation }) {
     },
   });
 
+  const timer = useRef();
   useEffect(() => {
-    if (search.length > 2) {
-      let filteredBySearch = data.filter((d) => {
-        const slugSearch = slugify(search.toUpperCase());
-        const slugData = d.name.toUpperCase();
-        return slugify(slugData).indexOf(slugSearch) > -1;
-      });
-      setAutoCompleteResult(filteredBySearch);
-    } else {
-      setAutoCompleteResult([]);
+    function filterResult() {
+      if (search.length > 2) {
+        let filteredBySearch = data.filter((d) => {
+          const slugSearch = slugify(search.toUpperCase());
+          const slugData = d.name.toUpperCase();
+          return slugify(slugData).indexOf(slugSearch) > -1;
+        });
+        setAutoCompleteResult(filteredBySearch);
+      } else {
+        setAutoCompleteResult([]);
+      }
     }
+
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      filterResult();
+    }, 200);
   }, [search]);
 
   function getPicker(list, selectedValue, onValueChange) {
@@ -127,7 +135,7 @@ export default function IngredientPickerScreen({ navigation }) {
 }
 
 const decimals = [...Array(100).keys()].map((i) => (i < 10 ? `0${i}` : i.toString()));
-const units = ['kg', 'gr'];
+const units = ['kg', 'gr', 'l', 'cl', 'ml', 'pièce(s)', 'c.à café', 'c.à soupe'];
 const integers = [...Array(1001).keys()]
   .filter((i) => {
     if (i <= 50) {
