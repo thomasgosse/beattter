@@ -70,7 +70,14 @@ export default function RecipesScreen({ navigation }) {
       contentContainerStyle={styles.list}
       style={{ backgroundColor: colors.body }}
       data={recipes}
-      renderItem={({ item, index }) => <RecipeListItem name={item.name} index={index} />}
+      renderItem={({ item, index }) => (
+        <RecipeListItem
+          name={item.name}
+          index={index}
+          ingredients={item.ingredients}
+          principalKind={item.principalKind}
+        />
+      )}
       keyExtractor={(item) => item.key}
       numColumns={2}
     />

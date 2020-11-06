@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { Avatar, Tooltip } from 'react-native-elements';
-import { Dimensions, Text } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { Dimensions, Text, StyleSheet } from 'react-native';
+import { Avatar, Tooltip, ThemeContext } from 'react-native-elements';
 
 const kinds = {
   meat: { image: require('../../../assets/meat.png'), description: 'Viandes' },
+  meatBased: { image: require('../../../assets/meat.png'), description: 'Avec de la viande' },
   fish: { image: require('../../../assets/fish.png'), description: 'Poissons' },
+  fishBased: { image: require('../../../assets/fish.png'), description: 'Avec du poisson' },
+  nonVegetal: { image: require('../../../assets/nonVegetal.png'), description: 'Non végétal' },
   vegetable: { image: require('../../../assets/vegetable.png'), description: 'Fruits et Légumes' },
+  vegetarian: { image: require('../../../assets/vegetarian.png'), description: 'Végétarien' },
   starchy: { image: require('../../../assets/starchy.png'), description: 'Céréales, pâtes, riz et pains' },
   'sweet-fat-product': {
     image: require('../../../assets/sweet-fat-product.png'),
@@ -23,16 +27,36 @@ const kinds = {
     image: require('../../../assets/non-alcool-drink.png'),
     description: 'Boissons non alcoolisées',
   },
+  seasonal: {
+    image: require('../../../assets/seasonal.png'),
+    description: '100% de saison',
+  },
 };
 
 export default function IngredientKindTooltip({ kind }) {
   const [tooltipSize] = useState({ w: Dimensions.get('window').width / 2, h: 16 });
+  const {
+    theme: { colors },
+  } = useContext(ThemeContext);
+  const styles = StyleSheet.create({
+    tooltip: {
+      backgroundColor: colors.tooltip,
+      color: colors.textBase,
+      fontSize: 15,
+      fontWeight: '500',
+    },
+  });
 
   return (
     <Tooltip
+      backgroundColor={styles.tooltip.backgroundColor}
       width={tooltipSize.w + 30}
       height={tooltipSize.h + 30}
-      popover={<Text numberOfLines={1}>{kinds[kind]?.description}</Text>}
+      popover={
+        <Text style={styles.tooltip} numberOfLines={1}>
+          {kinds[kind]?.description}
+        </Text>
+      }
     >
       <Avatar rounded source={kinds[kind]?.image} />
     </Tooltip>

@@ -1,6 +1,7 @@
 import create from 'zustand';
 
 import { getMultipleWithRegex, removeData, storeData } from '../../services/local-storage';
+import { getPrincipalKind } from '../../services/ingredient';
 
 const useRecipesStore = create((set, get) => ({
   recipes: [],
@@ -19,7 +20,7 @@ const useRecipesStore = create((set, get) => ({
     }
   },
 
-  createRecipe: async (name) => {
+  createRecipe: async (name, nbPersons) => {
     try {
       set({ loading: true });
       let recipes = [...get().recipes];
@@ -27,6 +28,8 @@ const useRecipesStore = create((set, get) => ({
       const newRecipe = {
         key: Date.now(),
         name,
+        nbPersons,
+        principalKind: getPrincipalKind(ingredients),
         ingredients,
       };
       recipes.push(newRecipe);

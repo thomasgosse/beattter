@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ListItem, ThemeContext } from 'react-native-elements';
 
 import Ingredient from './Ingredient';
 import * as RootNavigation from '../../RootNavigation';
+import Label from '../../utils/Label';
 
 import useRecipesStore from '../../store/useRecipesStore';
 
@@ -21,16 +22,13 @@ export default function IngredientList({ label }) {
     },
     label: {
       marginBottom: 7,
-      fontWeight: '500',
-      fontSize: 16,
-      color: colors.textBaseLight,
       marginLeft: 10,
     },
   });
 
   return (
     <>
-      {label && <Text style={styles.label}>Ingredients</Text>}
+      {label && <Label label="Ingrédients" containerStyle={styles.label} />}
 
       {ingredients.map((ingredient, i) => (
         <Ingredient
