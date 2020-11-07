@@ -9,6 +9,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import CreateRecipeScreen from './screens/recipes/CreateRecipeScreen';
 import CreateListScreen from './screens/lists/CreateListScreen';
 import ListDetailScreen from './screens/lists/ListDetailScreen';
+import RecipeDetailScreen from './screens/recipes/RecipeDetailScreen';
 import IngredientPickNavigator from './screens/recipes/IngredientPickNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -55,22 +56,27 @@ export default function RootNavigator() {
         }}
       />
       <Stack.Screen
-        name={'CreateRecipe'}
+        name="CreateRecipe"
         component={CreateRecipeScreen}
         options={{
           title: 'Nouvelle recette',
         }}
       />
       <Stack.Screen
-        name={'CreateList'}
+        name="CreateList"
         component={CreateListScreen}
         options={{
           title: 'Nouvelle liste',
         }}
       />
       <Stack.Screen
-        name={'ListDetail'}
+        name="ListDetail"
         component={ListDetailScreen}
+        options={({ route }) => ({ title: route.params.title })}
+      />
+      <Stack.Screen
+        name="RecipeDetail"
+        component={RecipeDetailScreen}
         options={({ route }) => ({ title: route.params.title })}
       />
       <Stack.Screen

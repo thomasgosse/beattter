@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Text, StyleSheet, View, Image, Dimensions } from 'react-native';
+import { Text, StyleSheet, View, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
+import * as RootNavigation from '../../RootNavigation';
+
 import { isSeasonal } from '../../../services/ingredient';
 
-export default function RecipeListItem({ name, ingredients, principalKind, index }) {
+export default function RecipeListItem({ name, id, ingredients, principalKind, index }) {
   const [seasonal, setSeasonal] = useState(false);
   const {
     theme: { colors },
@@ -68,7 +70,10 @@ export default function RecipeListItem({ name, ingredients, principalKind, index
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => RootNavigation.navigate('RecipeDetail', { title: name, id })}
+    >
       <View style={styles.card}>
         <Image source={image} style={styles.image} />
         <View>
@@ -90,6 +95,6 @@ export default function RecipeListItem({ name, ingredients, principalKind, index
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }

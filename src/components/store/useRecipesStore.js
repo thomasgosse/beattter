@@ -20,20 +20,25 @@ const useRecipesStore = create((set, get) => ({
     }
   },
 
+  getRecipeById: (id) => {
+    let recipes = get().recipes;
+    return recipes.find((recipe) => recipe.id === id);
+  },
+
   createRecipe: async (name, nbPersons) => {
     try {
       set({ loading: true });
       let recipes = [...get().recipes];
       const ingredients = get().ingredients;
       const newRecipe = {
-        key: Date.now(),
+        id: Date.now(),
         name,
         nbPersons,
         principalKind: getPrincipalKind(ingredients),
         ingredients,
       };
       recipes.push(newRecipe);
-      await storeData(`recipe_${newRecipe.key}`, newRecipe);
+      await storeData(`recipe_${newRecipe.id}`, newRecipe);
       set({ recipes, ingredients: [] });
     } catch (e) {
       console.log('Could not create recipe', e);
@@ -42,12 +47,12 @@ const useRecipesStore = create((set, get) => ({
     }
   },
 
-  deleteList: async (key) => {
+  deleteList: async (id) => {
     try {
       const recipes = [...get().recipes];
-      const prevIndex = recipes.findIndex((item) => item.key === key);
+      const prevIndex = recipes.findIndex((item) => item.id === id);
       recipes.splice(prevIndex, 1);
-      await removeData(`list_${key}`);
+      await removeData(`list_${id}`);
       set({ recipes });
     } catch (e) {
       console.log('Could not delete list', e);

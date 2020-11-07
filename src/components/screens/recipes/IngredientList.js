@@ -6,11 +6,7 @@ import Ingredient from './Ingredient';
 import * as RootNavigation from '../../RootNavigation';
 import Label from '../../utils/Label';
 
-import useRecipesStore from '../../store/useRecipesStore';
-
-export default function IngredientList({ label }) {
-  const ingredients = useRecipesStore((state) => state.ingredients);
-
+export default function IngredientList({ label, ingredients, removeIngredient }) {
   const listItemHeight = 60;
   const {
     theme: { colors },
@@ -36,6 +32,7 @@ export default function IngredientList({ label }) {
           index={i}
           key={ingredient.name + ingredient.quantity}
           itemHeight={listItemHeight}
+          removeIngredient={removeIngredient}
         />
       ))}
 

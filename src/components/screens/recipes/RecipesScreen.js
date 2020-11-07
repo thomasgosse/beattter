@@ -73,12 +73,13 @@ export default function RecipesScreen({ navigation }) {
       renderItem={({ item, index }) => (
         <RecipeListItem
           name={item.name}
+          id={item.id}
           index={index}
           ingredients={item.ingredients}
           principalKind={item.principalKind}
         />
       )}
-      keyExtractor={(item) => item.key}
+      keyExtractor={(item) => item.id}
       numColumns={2}
     />
   );

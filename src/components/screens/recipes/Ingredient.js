@@ -6,11 +6,7 @@ import { SwipeRow } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
-import useRecipesStore from '../../store/useRecipesStore';
-
-export default function Ingredient({ ingredient, index, itemHeight }) {
-  const removeIngredient = useRecipesStore((state) => state.removeIngredient);
-
+export default function Ingredient({ ingredient, index, itemHeight, removeIngredient }) {
   const animatedHeight = useRef(new Animated.Value(1)).current;
   const hiddenItemWidth = 50;
   const {
