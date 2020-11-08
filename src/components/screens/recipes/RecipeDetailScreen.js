@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Button } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
 import Input from '../../utils/Input';
@@ -8,10 +8,11 @@ import IngredientList from './IngredientList';
 import useRecipesStore from '../../store/useRecipesStore';
 import PersonPicker from './PersonPicker';
 
-export default function RecipeDetailScreen({ route }) {
+export default function RecipeDetailScreen({ route, navigation }) {
   const [name, setName] = useState('');
   const [nbPersons, setNbPersons] = useState(2);
   const [ingredients, setIngredients] = useState([]);
+  const [isReadOnly, setIsReadOnly] = useState(true);
   const getRecipeById = useRecipesStore((state) => state.getRecipeById);
   const {
     theme: { colors },
@@ -35,6 +36,14 @@ export default function RecipeDetailScreen({ route }) {
     setIngredients(r.ingredients);
   }, [getRecipeById, route]);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button title={isReadOnly ? 'Modifier' : 'Terminé'} onPress={() => setIsReadOnly(!isReadOnly)} />
+      ),
+    });
+  }, [navigation, isReadOnly]);
+
   function removeIngredient(index) {
     const updatedIngredients = [...ingredients];
     updatedIngredients.splice(index, 1);
@@ -49,6 +58,7 @@ export default function RecipeDetailScreen({ route }) {
         placeholder="Risotto de poirreaux"
         value={name}
         setValue={setName}
+        isReadOnly={isReadOnly}
       />
 
       <PersonPicker nbPersons={nbPersons} setNbPersons={setNbPersons} />

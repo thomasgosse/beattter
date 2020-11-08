@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, Button } from 'react-native';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -77,7 +77,9 @@ export default function RootNavigator() {
       <Stack.Screen
         name="RecipeDetail"
         component={RecipeDetailScreen}
-        options={({ route }) => ({ title: route.params.title })}
+        options={({ route, navigation }) => ({
+          title: route.params.title,
+        })}
       />
       <Stack.Screen
         name={'IngredientPick'}

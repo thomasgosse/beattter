@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import Label from './Label';
 
-export default function Input({ containerStyle, label, placeholder, value, setValue }) {
+export default function Input({ containerStyle, label, placeholder, value, setValue, isReadOnly }) {
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -13,6 +13,7 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
       backgroundColor: colors.body,
     },
     input: {
+      color: colors.textBase,
       fontSize: 18,
     },
     label: {
@@ -29,7 +30,8 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
     <View style={containerStyle}>
       <Label label={label} containerStyle={styles.label} />
       <TextInput
-        clearButtonMode="always"
+        clearButtonMode={isReadOnly ? 'never' : 'always'}
+        editable={!isReadOnly}
         placeholder={placeholder}
         value={value}
         onChangeText={(text) => setValue && setValue(text)}
