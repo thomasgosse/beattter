@@ -8,10 +8,9 @@ import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
-import useRecipesStore from '../../store/useRecipesStore';
 import data from '../../../data';
 
-export default function IngredientPickerScreen({ navigation }) {
+export default function IngredientPickerScreen({ navigation, route }) {
   const [search, setSearch] = useState('');
   const [integer, setInteger] = useState(integers[0]);
   const [decimal, setDecimal] = useState(decimals[0]);
@@ -19,8 +18,6 @@ export default function IngredientPickerScreen({ navigation }) {
 
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [selectedIngredient, setSelectedIngredient] = useState({});
-
-  const addIngredient = useRecipesStore((state) => state.addIngredient);
 
   const {
     theme: { colors },
@@ -126,8 +123,8 @@ export default function IngredientPickerScreen({ navigation }) {
         disabled={!selectedIngredient.name}
         containerStyle={styles.button}
         onPress={() => {
-          addIngredient({ ...selectedIngredient, quantity: `${integer}.${decimal} ${unit}` });
-          navigation.goBack();
+          const ingredient = { ...selectedIngredient, quantity: `${integer}.${decimal} ${unit}` };
+          navigation.navigate(route.params?.initiatorRoute, { ingredient });
         }}
       />
     </View>

@@ -8,6 +8,7 @@ export default {
       textTitleLighter: '#2b4f63',
       textBase: '#41474f',
       textBaseLight: '#909ba6',
+      iconBtn: '#636b75',
       divider: '#e1e6eb',
       chip: '#BAA77D',
       disabled: '#c5c7c9',

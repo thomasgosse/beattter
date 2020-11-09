@@ -6,7 +6,7 @@ import Ingredient from './Ingredient';
 import * as RootNavigation from '../../RootNavigation';
 import Label from '../../utils/Label';
 
-export default function IngredientList({ label, ingredients, removeIngredient }) {
+export default function IngredientList({ label, ingredients, removeIngredient, isReadOnly, initiatorRoute }) {
   const listItemHeight = 60;
   const {
     theme: { colors },
@@ -33,19 +33,29 @@ export default function IngredientList({ label, ingredients, removeIngredient })
           key={ingredient.name + ingredient.quantity}
           itemHeight={listItemHeight}
           removeIngredient={removeIngredient}
+          isReadOnly={isReadOnly}
         />
       ))}
 
-      <ListItem
-        containerStyle={styles.listItem}
-        bottomDivider
-        topDivider={ingredients.length === 0}
-        onPress={() => RootNavigation.navigate('IngredientPick')}
-      >
-        <ListItem.Content>
-          <ListItem.Chevron name="add-circle-outline" type="ionicon" size={30} color={colors.textBaseLight} />
-        </ListItem.Content>
-      </ListItem>
+      {!isReadOnly && (
+        <ListItem
+          containerStyle={styles.listItem}
+          bottomDivider
+          topDivider={ingredients.length === 0}
+          onPress={() =>
+            RootNavigation.navigate('IngredientPick', {
+              screen: 'Ajouter un ingrédient',
+              params: {
+                initiatorRoute,
+              },
+            })
+          }
+        >
+          <ListItem.Content>
+            <ListItem.Chevron name="add-circle-outline" type="ionicon" size={30} color={colors.iconBtn} />
+          </ListItem.Content>
+        </ListItem>
+      )}
     </>
   );
 }

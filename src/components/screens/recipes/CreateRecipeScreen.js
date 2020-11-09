@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import shallow from 'zustand/shallow';
@@ -10,17 +10,24 @@ import IngredientList from './IngredientList';
 import useRecipesStore from '../../store/useRecipesStore';
 import PersonPicker from './PersonPicker';
 
-export default function CreateRecipeScreen({ navigation }) {
+export default function CreateRecipeScreen({ navigation, route }) {
   const [name, setName] = useState('');
   const [nbPersons, setNbPersons] = useState(2);
-  const { createRecipe, ingredients, removeIngredient } = useRecipesStore(
+  const { createRecipe, ingredients, removeIngredient, addIngredient } = useRecipesStore(
     (state) => ({
       createRecipe: state.createRecipe,
       ingredients: state.ingredients,
       removeIngredient: state.removeIngredient,
+      addIngredient: state.addIngredient,
     }),
     shallow
   );
+
+  useEffect(() => {
+    if (route.params?.ingredient) {
+      addIngredient(route.params?.ingredient);
+    }
+  }, [route.params, addIngredient]);
 
   const {
     theme: { colors },
@@ -48,7 +55,12 @@ export default function CreateRecipeScreen({ navigation }) {
       />
 
       <PersonPicker nbPersons={nbPersons} setNbPersons={setNbPersons} />
-      <IngredientList label={true} ingredients={ingredients} removeIngredient={removeIngredient} />
+      <IngredientList
+        label={true}
+        ingredients={ingredients}
+        removeIngredient={removeIngredient}
+        initiatorRoute="CreateRecipe"
+      />
 
       <Button
         text="Créer"

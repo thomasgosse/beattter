@@ -78,7 +78,9 @@ export default function RecipeListItem({ name, id, ingredients, principalKind, i
         <Image source={image} style={styles.image} />
         <View>
           <View style={styles.firstRow}>
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name} numberOfLines={2}>
+              {name}
+            </Text>
             <View style={styles.icon}>
               <IngredientKindTooltip kind={principalKind} />
             </View>

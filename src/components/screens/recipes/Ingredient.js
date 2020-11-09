@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { StyleSheet, Animated, View, Dimensions } from 'react-native';
 import { ListItem, ThemeContext } from 'react-native-elements';
 
@@ -6,7 +6,9 @@ import { SwipeRow } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
-export default function Ingredient({ ingredient, index, itemHeight, removeIngredient }) {
+export default function Ingredient({ ingredient, index, itemHeight, removeIngredient, isReadOnly }) {
+  const rowRef = useRef(null);
+  const hasTransitioned = useRef(false);
   const animatedHeight = useRef(new Animated.Value(1)).current;
   const hiddenItemWidth = 50;
   const {
@@ -64,10 +66,25 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
     }
   };
 
+  useEffect(() => {
+    if (!isReadOnly && index === 0 && !hasTransitioned.current) {
+      hasTransitioned.current = true;
+      rowRef.current.manuallySwipeRow(-hiddenItemWidth);
+      setTimeout(() => {
+        rowRef.current.manuallySwipeRow(0);
+      }, 1000);
+    } else {
+      hasTransitioned.current = false;
+    }
+  }, [isReadOnly, index]);
+
   return (
     <SwipeRow
+      ref={rowRef}
       friction={9}
       disableRightSwipe={true}
+      disableLeftSwipe={isReadOnly}
+      initialLeftActionState={true}
       rightOpenValue={-Dimensions.get('window').width}
       onSwipeValueChange={onSwipeValueChange}
       useNativeDriver={false}

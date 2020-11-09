@@ -25,6 +25,21 @@ const useRecipesStore = create((set, get) => ({
     return recipes.find((recipe) => recipe.id === id);
   },
 
+  updateRecipe: async ({ id, name, nbPersons, ingredients }) => {
+    const updatedRecipe = {
+      id,
+      name,
+      nbPersons,
+      principalKind: getPrincipalKind(ingredients),
+      ingredients,
+    };
+    await storeData(`recipe_${updatedRecipe.id}`, updatedRecipe);
+    let recipes = [...get().recipes];
+    const index = recipes.findIndex((recipe) => recipe.id === id);
+    recipes[index] = updatedRecipe;
+    set({ recipes });
+  },
+
   createRecipe: async (name, nbPersons) => {
     try {
       set({ loading: true });
