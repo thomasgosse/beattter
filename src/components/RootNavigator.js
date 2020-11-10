@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { TouchableOpacity, Button } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -11,6 +11,7 @@ import CreateListScreen from './screens/lists/CreateListScreen';
 import ListDetailScreen from './screens/lists/ListDetailScreen';
 import RecipeDetailScreen from './screens/recipes/RecipeDetailScreen';
 import IngredientPickNavigator from './screens/recipes/IngredientPickNavigator';
+import AddRecipeToListNavigator from './screens/AddRecipeToListNavigator';
 
 const Stack = createNativeStackNavigator();
 const INITIAL_ROUTE_NAME = 'Recipes';
@@ -43,7 +44,7 @@ export default function RootNavigator() {
       initialRouteName={INITIAL_ROUTE_NAME}
       screenOptions={{
         headerStyle: { backgroundColor: colors.header },
-        headerTintColor: colors.title,
+        headerTitleStyle: { color: colors.textTitle },
         headerHideShadow: true,
         stackPresentation: 'push',
       }}
@@ -72,18 +73,30 @@ export default function RootNavigator() {
       <Stack.Screen
         name="ListDetail"
         component={ListDetailScreen}
-        options={({ route }) => ({ title: route.params.title })}
-      />
-      <Stack.Screen
-        name="RecipeDetail"
-        component={RecipeDetailScreen}
-        options={({ route, navigation }) => ({
+        options={({ route }) => ({
+          headerLargeTitle: true,
           title: route.params.title,
         })}
       />
       <Stack.Screen
-        name={'IngredientPick'}
+        name="RecipeDetail"
+        component={RecipeDetailScreen}
+        options={({ route }) => ({
+          headerLargeTitle: true,
+          title: route.params.title,
+        })}
+      />
+      <Stack.Screen
+        name="IngredientPick"
         component={IngredientPickNavigator}
+        options={{
+          headerShown: false,
+          stackPresentation: 'modal',
+        }}
+      />
+      <Stack.Screen
+        name="AddRecipeToList"
+        component={AddRecipeToListNavigator}
         options={{
           headerShown: false,
           stackPresentation: 'modal',

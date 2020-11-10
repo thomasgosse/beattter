@@ -33,9 +33,6 @@ export default function RecipeDetailScreen({ route, navigation }) {
   } = useContext(ThemeContext);
 
   const styles = StyleSheet.create({
-    contentContainer: {
-      flex: 1,
-    },
     container: {
       backgroundColor: colors.body,
     },
@@ -113,7 +110,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
+    <ScrollView style={styles.container}>
       <Input
         containerStyle={styles.input}
         label="Nom de la recette"

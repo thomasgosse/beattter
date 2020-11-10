@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
 import Input from '../../utils/Input';
@@ -64,7 +64,7 @@ function CreateListScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.calendarLabel}>Période de la liste de courses</Text>
       <Calendar setStartingDay={setStartingDay} setEndingDay={setEndingDay} />
       <Input
@@ -77,7 +77,7 @@ function CreateListScreen({ navigation }) {
       <View style={styles.buttonContainer}>
         <Button text="Créer" disabled={!(startingDay && endingDay)} onPress={onPress} />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

@@ -21,7 +21,7 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
     },
     divider: {
       marginTop: 5,
-      borderBottomColor: colors.divider,
+      borderBottomColor: isReadOnly ? colors.body : colors.divider,
       borderBottomWidth: 1,
     },
   });
@@ -33,6 +33,7 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
         clearButtonMode={isReadOnly ? 'never' : 'always'}
         editable={!isReadOnly}
         placeholder={placeholder}
+        placeholderTextColor={colors.textBaseLight}
         value={value}
         onChangeText={(text) => setValue && setValue(text)}
         style={styles.input}
