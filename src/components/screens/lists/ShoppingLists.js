@@ -1,5 +1,5 @@
 import React, { useRef, useContext } from 'react';
-import { StyleSheet, View, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ThemeContext } from 'react-native-elements';
@@ -48,9 +48,30 @@ export default function ShoppingLists({ lists }) {
     await deleteList(rowKey);
   }
 
+  function onPressDelete(rowMap, rowKey) {
+    Alert.alert(
+      'Souhaitez vous vraiment supprimer cette list ?',
+      'Elles sont utiles pour générer ta synthèse',
+      [
+        {
+          text: 'Annuler',
+          onPress: () => swipeListRef.current.closeAllOpenRows(),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            deleteRow(rowMap, rowKey);
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.hiddenRow}>
-      <TouchableOpacity style={styles.hiddenBtn} onPress={() => deleteRow(rowMap, data.item.key)}>
+      <TouchableOpacity style={styles.hiddenBtn} onPress={() => onPressDelete(rowMap, data.item.key)}>
         <Icon style={styles.hiddenBtnIcon} name="trash" size={28} />
       </TouchableOpacity>
     </View>

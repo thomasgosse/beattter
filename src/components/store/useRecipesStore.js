@@ -62,15 +62,15 @@ const useRecipesStore = create((set, get) => ({
     }
   },
 
-  deleteList: async (id) => {
+  deleteRecipe: async (id) => {
     try {
       const recipes = [...get().recipes];
       const prevIndex = recipes.findIndex((item) => item.id === id);
       recipes.splice(prevIndex, 1);
-      await removeData(`list_${id}`);
+      await removeData(`recipe_${id}`);
       set({ recipes });
     } catch (e) {
-      console.log('Could not delete list', e);
+      console.log('Could not delete recipe', e);
     } finally {
       set({ loading: false });
     }

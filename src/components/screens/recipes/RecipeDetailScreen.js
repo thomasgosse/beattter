@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Button } from 'react-native';
+import { ScrollView, StyleSheet, Button as RNButton, Alert } from 'react-native';
 import shallow from 'zustand/shallow';
 import { ThemeContext } from 'react-native-elements';
 import isEqual from 'lodash.isequal';
 
+import Button from '../../utils/Button';
 import Input from '../../utils/Input';
 import IngredientList from './IngredientList';
 
@@ -19,10 +20,11 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const [nbPersons, setNbPersons] = useState(2);
   const [ingredients, setIngredients] = useState([]);
   const [isReadOnly, setIsReadOnly] = useState(true);
-  const { getRecipeById, updateRecipe } = useRecipesStore(
+  const { getRecipeById, updateRecipe, deleteRecipe } = useRecipesStore(
     (state) => ({
       getRecipeById: state.getRecipeById,
       updateRecipe: state.updateRecipe,
+      deleteRecipe: state.deleteRecipe,
     }),
     shallow
   );
@@ -39,17 +41,22 @@ export default function RecipeDetailScreen({ route, navigation }) {
     },
     input: { marginHorizontal: 10, marginVertical: 20 },
     button: { alignSelf: 'center', marginVertical: 30 },
+    deleteButtton: {
+      alignSelf: 'center',
+      marginVertical: 30,
+      backgroundColor: colors.danger,
+      borderWidth: 0,
+    },
   });
 
   useEffect(() => {
     if (ingredient) {
-      setIngredients((ings) => {
-        ings.push(ingredient);
-        return ings;
-      });
+      let ings = [...ingredients];
+      ings.push(ingredient);
+      setIngredients(ings);
       navigation.setParams({ ingredient: null });
     }
-  }, [ingredient, navigation]);
+  }, [ingredient, ingredients, navigation]);
 
   useEffect(() => {
     const r = getRecipeById(id);
@@ -73,7 +80,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
     }
 
     navigation.setOptions({
-      headerRight: () => <Button title={isReadOnly ? 'Modifier' : 'Terminé'} onPress={onPress} />,
+      headerRight: () => <RNButton title={isReadOnly ? 'Modifier' : 'Terminé'} onPress={onPress} />,
     });
   }, [navigation, updateRecipe, recipe, name, nbPersons, ingredients, isReadOnly]);
 
@@ -81,6 +88,28 @@ export default function RecipeDetailScreen({ route, navigation }) {
     const updatedIngredients = [...ingredients];
     updatedIngredients.splice(index, 1);
     setIngredients(updatedIngredients);
+  }
+
+  function onPressDelete() {
+    Alert.alert(
+      'Souhaitez vous supprimer cette recette ?',
+      '',
+      [
+        {
+          text: 'Annuler',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            deleteRecipe(id);
+            navigation.goBack();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   }
 
   return (
@@ -102,6 +131,8 @@ export default function RecipeDetailScreen({ route, navigation }) {
         isReadOnly={isReadOnly}
         initiatorRoute="RecipeDetail"
       />
+
+      {!isReadOnly && <Button text="Supprimer" containerStyle={styles.deleteButtton} onPress={onPressDelete} />}
     </ScrollView>
   );
 }

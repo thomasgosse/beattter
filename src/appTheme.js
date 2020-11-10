@@ -13,7 +13,7 @@ export default {
       chip: '#BAA77D',
       disabled: '#c5c7c9',
       tooltip: '#c5c7c9',
-      danger: 'red',
+      danger: '#e32434',
     },
   },
   dark: {
@@ -29,7 +29,7 @@ export default {
       chip: '#BAA77D',
       disabled: 'grey',
       tooltip: '#c5c7c9',
-      danger: 'red',
+      danger: '#e32434',
     },
   },
 };
