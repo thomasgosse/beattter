@@ -58,7 +58,7 @@ function CreateListScreen({ navigation }) {
   });
 
   async function onPress() {
-    const list = { endingDay, startingDay, name: name || placeholder, key: Date.now().toString() };
+    const list = { endingDay, startingDay, name: name || placeholder, id: Date.now().toString() };
     await createList(list);
     navigation.goBack();
   }

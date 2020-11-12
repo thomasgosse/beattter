@@ -7,7 +7,14 @@ import Ingredient from './Ingredient';
 import * as RootNavigation from '../../RootNavigation';
 import Label from '../../utils/Label';
 
-export default function IngredientList({ label, ingredients, removeIngredient, isReadOnly, initiatorRoute }) {
+export default function IngredientList({
+  label,
+  ingredients,
+  removeIngredient,
+  onPressAddCart,
+  isReadOnly,
+  initiatorRoute,
+}) {
   const listItemHeight = 60;
   const animatedHeight = useRef(new Animated.Value(1)).current;
   const {
@@ -39,10 +46,6 @@ export default function IngredientList({ label, ingredients, removeIngredient, i
       useNativeDriver: false,
     }).start();
   }, [isReadOnly, animatedHeight]);
-
-  function onPressAddCart() {
-    RootNavigation.navigate('AddRecipeToList');
-  }
 
   return (
     <>

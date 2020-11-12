@@ -94,7 +94,6 @@ export default function RecipeDetailScreen({ route, navigation }) {
       [
         {
           text: 'Annuler',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
@@ -127,6 +126,12 @@ export default function RecipeDetailScreen({ route, navigation }) {
         removeIngredient={removeIngredient}
         isReadOnly={isReadOnly}
         initiatorRoute="RecipeDetail"
+        onPressAddCart={() => {
+          navigation.navigate('AddRecipeToList', {
+            screen: 'Ajouter à une liste',
+            params: { recipe: { id, name, ingredients } },
+          });
+        }}
       />
 
       {!isReadOnly && <Button text="Supprimer" containerStyle={styles.deleteButtton} onPress={onPressDelete} />}

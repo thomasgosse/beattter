@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { ListItem, ThemeContext } from 'react-native-elements';
 
-export default function ShoppingListsItem({ item, navigate, closeAll }) {
+export default function ShoppingListsItem({ item, itemHeight, chevronIcon, onPress }) {
   const {
     theme: { colors },
   } = useContext(ThemeContext);
   const styles = StyleSheet.create({
     container: {
-      height: 80,
+      height: itemHeight,
     },
     title: {
       marginBottom: 7,
@@ -22,21 +22,14 @@ export default function ShoppingListsItem({ item, navigate, closeAll }) {
   });
 
   return (
-    <ListItem
-      key={item.name}
-      containerStyle={styles.container}
-      onPress={() => {
-        navigate('ListDetail', { title: item.name });
-        closeAll();
-      }}
-    >
+    <ListItem key={item.name} containerStyle={styles.container} onPress={onPress}>
       <ListItem.Content>
         <ListItem.Title style={styles.title}>{item.name}</ListItem.Title>
         <ListItem.Subtitle style={styles.subtitle}>
           {new Date(item.startingDay).toLocaleDateString()} - {new Date(item.endingDay).toLocaleDateString()}
         </ListItem.Subtitle>
       </ListItem.Content>
-      <ListItem.Chevron name="chevron-forward" type="ionicon" size={18} />
+      <ListItem.Chevron name={chevronIcon} type="ionicon" size={20} />
     </ListItem>
   );
 }

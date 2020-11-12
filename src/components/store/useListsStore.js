@@ -54,7 +54,7 @@ const useListsStore = create((set, get) => ({
       set({ loading: true });
       let lists = [...get().lists];
       lists.push(list);
-      await storeData(`list_${list.key}`, list);
+      await storeData(`list_${list.id}`, list);
       updateLists(lists, set);
     } catch (e) {
       console.log('Could not create list', e);
@@ -63,12 +63,57 @@ const useListsStore = create((set, get) => ({
     }
   },
 
-  deleteList: async (key) => {
+  isRecipeInList: (listId, recipeId) => {
+    const lists = get().lists;
+    const index = lists.findIndex((item) => item.id === listId);
+    if (index > -1) {
+      return lists[index].recipes?.findIndex((recipe) => recipe.id === recipeId) > -1;
+    }
+    return false;
+  },
+
+  incrementRecipe: async (listId, recipeId) => {
     try {
       const lists = [...get().lists];
-      const prevIndex = lists.findIndex((item) => item.key === key);
+      const index = lists.findIndex((item) => item.id === listId);
+      const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
+      lists[index].recipes[recipeIndex].nbTimes
+        ? lists[index].recipes[recipeIndex].nbTimes++
+        : (lists[index].recipes[recipeIndex].nbTimes = 2);
+      await storeData(`list_${listId}`, lists[index]);
+      updateLists(lists, set);
+    } catch (e) {
+      console.log('Could not update list', e);
+    }
+  },
+
+  addRecipeToList: async (id, recipe) => {
+    try {
+      const lists = [...get().lists];
+      const index = lists.findIndex((item) => item.id === id);
+      if (lists[index].recipes?.length > 0) {
+        lists[index].recipes.push(recipe);
+      } else {
+        lists[index].recipes = [recipe];
+      }
+      await storeData(`list_${id}`, lists[index]);
+      updateLists(lists, set);
+    } catch (e) {
+      console.log('Could not update list', e);
+    }
+  },
+
+  getListById: (id) => {
+    const lists = get().lists;
+    return lists.find((item) => item.id === id);
+  },
+
+  deleteList: async (id) => {
+    try {
+      const lists = [...get().lists];
+      const prevIndex = lists.findIndex((item) => item.id === id);
       lists.splice(prevIndex, 1);
-      await removeData(`list_${key}`);
+      await removeData(`list_${id}`);
       updateLists(lists, set);
     } catch (e) {
       console.log('Could not delete list', e);

@@ -73,7 +73,12 @@ export default function RecipeListItem({ name, id, ingredients, principalKind, i
     <TouchableOpacity
       style={styles.container}
       onPress={() => RootNavigation.navigate('RecipeDetail', { title: name, id })}
-      onLongPress={() => RootNavigation.navigate('AddRecipeToList')}
+      onLongPress={() =>
+        RootNavigation.navigate('AddRecipeToList', {
+          screen: 'Ajouter à une liste',
+          params: { recipe: { id, name, ingredients } },
+        })
+      }
     >
       <View style={styles.card}>
         <Image source={image} style={styles.image} />

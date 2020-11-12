@@ -41,14 +41,14 @@ export default function ShoppingLists({ lists }) {
     },
   });
 
-  async function deleteRow(rowMap, rowKey) {
-    if (rowMap[rowKey]) {
-      rowMap[rowKey].closeRow();
+  async function deleteRow(rowMap, listId) {
+    if (rowMap[listId]) {
+      rowMap[listId].closeRow();
     }
-    await deleteList(rowKey);
+    await deleteList(listId);
   }
 
-  function onPressDelete(rowMap, rowKey) {
+  function onPressDelete(rowMap, listId) {
     Alert.alert(
       'Souhaitez vous vraiment supprimer cette list ?',
       'Elles sont utiles pour générer ta synthèse',
@@ -60,9 +60,7 @@ export default function ShoppingLists({ lists }) {
         },
         {
           text: 'OK',
-          onPress: () => {
-            deleteRow(rowMap, rowKey);
-          },
+          onPress: () => deleteRow(rowMap, listId),
         },
       ],
       { cancelable: false }
@@ -71,7 +69,7 @@ export default function ShoppingLists({ lists }) {
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.hiddenRow}>
-      <TouchableOpacity style={styles.hiddenBtn} onPress={() => onPressDelete(rowMap, data.item.key)}>
+      <TouchableOpacity style={styles.hiddenBtn} onPress={() => onPressDelete(rowMap, data.item.id)}>
         <Icon style={styles.hiddenBtnIcon} name="trash" size={28} />
       </TouchableOpacity>
     </View>
@@ -85,12 +83,16 @@ export default function ShoppingLists({ lists }) {
         friction={9}
         closeOnScroll={true}
         disableRightSwipe={true}
-        keyExtractor={(item) => item.key}
+        keyExtractor={(item) => item.id}
         renderItem={(data) => (
           <ShoppingListItem
             item={data.item}
-            navigate={RootNavigation.navigate}
-            closeAll={() => swipeListRef.current.closeAllOpenRows()}
+            itemHeight={hiddenItemWidth}
+            chevronIcon="chevron-forward"
+            onPress={() => {
+              RootNavigation.navigate('ListDetail', { title: data.item.name, id: data.item.id });
+              swipeListRef.current.closeAllOpenRows();
+            }}
           />
         )}
         renderHiddenItem={renderHiddenItem}

@@ -74,7 +74,6 @@ export default function RootNavigator() {
         name="ListDetail"
         component={ListDetailScreen}
         options={({ route }) => ({
-          headerLargeTitle: true,
           title: route.params.title,
         })}
       />
@@ -82,7 +81,6 @@ export default function RootNavigator() {
         name="RecipeDetail"
         component={RecipeDetailScreen}
         options={({ route }) => ({
-          headerLargeTitle: true,
           title: route.params.title,
         })}
       />

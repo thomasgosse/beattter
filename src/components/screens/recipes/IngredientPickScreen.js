@@ -108,7 +108,7 @@ export default function IngredientPickerScreen({ navigation, route }) {
             <IngredientKindTooltip kind={item.kind} />
           </ListItem>
         )}
-        keyExtractor={(item) => item.slug}
+        keyExtractor={(item) => item.slug + item.kind}
       />
 
       <View style={styles.pickersContainer}>
