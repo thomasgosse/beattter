@@ -26,6 +26,7 @@ const useRecipesStore = create((set, get) => ({
   },
 
   updateRecipe: async ({ id, name, nbPersons, ingredients }) => {
+    // TODO: update une liste de course si l'ingredient est présent dedans
     const updatedRecipe = {
       id,
       name,

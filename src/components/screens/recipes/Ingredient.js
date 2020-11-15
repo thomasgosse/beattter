@@ -6,9 +6,8 @@ import { SwipeRow } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
-export default function Ingredient({ ingredient, index, itemHeight, removeIngredient, isReadOnly }) {
+export default function Ingredient({ ingredient, index, itemHeight, removeIngredient, isReadOnly, hasTransitioned }) {
   const rowRef = useRef(null);
-  const hasTransitioned = useRef(false);
   const animatedHeight = useRef(new Animated.Value(1)).current;
   const hiddenItemWidth = 50;
   const {
@@ -73,10 +72,8 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
       setTimeout(() => {
         rowRef.current.manuallySwipeRow(0);
       }, 1000);
-    } else {
-      hasTransitioned.current = false;
     }
-  }, [isReadOnly, index]);
+  }, [isReadOnly, hasTransitioned, index]);
 
   return (
     <SwipeRow

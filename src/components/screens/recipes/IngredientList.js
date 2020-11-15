@@ -17,6 +17,7 @@ export default function IngredientList({
 }) {
   const listItemHeight = 60;
   const animatedHeight = useRef(new Animated.Value(1)).current;
+  const hasTransitioned = useRef(false);
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -66,6 +67,7 @@ export default function IngredientList({
           itemHeight={listItemHeight}
           removeIngredient={removeIngredient}
           isReadOnly={isReadOnly}
+          hasTransitioned={hasTransitioned}
         />
       ))}
 
