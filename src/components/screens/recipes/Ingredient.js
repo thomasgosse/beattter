@@ -103,7 +103,11 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
         <ListItem containerStyle={styles.listItem} bottomDivider topDivider={index === 0}>
           <ListItem.Content style={styles.listItemContent}>
             <ListItem.Title style={styles.ingredientName}>{ingredient.name}</ListItem.Title>
-            <ListItem.Title style={styles.quantity}> - {ingredient.quantity}</ListItem.Title>
+            <ListItem.Title style={styles.quantity}>
+              {' '}
+              - {ingredient.quantity.value}
+              {ingredient.quantity.unit}
+            </ListItem.Title>
           </ListItem.Content>
           <IngredientKindTooltip kind={ingredient.kind} />
         </ListItem>

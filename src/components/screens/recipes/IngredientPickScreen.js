@@ -123,7 +123,7 @@ export default function IngredientPickerScreen({ navigation, route }) {
         disabled={!selectedIngredient.name}
         containerStyle={styles.button}
         onPress={() => {
-          const ingredient = { ...selectedIngredient, quantity: `${integer}.${decimal} ${unit}` };
+          const ingredient = { ...selectedIngredient, quantity: { value: `${integer}.${decimal}`, unit } };
           navigation.navigate(route.params?.initiatorRoute, { ingredient });
         }}
       />
