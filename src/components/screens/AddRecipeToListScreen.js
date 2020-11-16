@@ -11,12 +11,12 @@ import Button from '../utils/Button';
 import useListsStore from '../store/useListsStore';
 
 export default function AddRecipeToListScreen({ navigation, route }) {
-  const { lists, addRecipeToList, isRecipeInList, incrementRecipeNbTimes } = useListsStore(
+  const { lists, addRecipeToList, isRecipeInList, updateRecipeNbTimes } = useListsStore(
     (state) => ({
       lists: state.onGoingLists,
       addRecipeToList: state.addRecipeToList,
-      incrementRecipeNbTimes: state.incrementRecipeNbTimes,
       isRecipeInList: state.isRecipeInList,
+      updateRecipeNbTimes: state.updateRecipeNbTimes,
     }),
     shallow
   );
@@ -52,7 +52,7 @@ export default function AddRecipeToListScreen({ navigation, route }) {
           {
             text: 'OK',
             onPress: () => {
-              incrementRecipeNbTimes(listId, route.params?.recipe.id);
+              updateRecipeNbTimes(listId, route.params?.recipe.id, 1);
               navigation.goBack();
             },
           },

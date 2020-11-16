@@ -1,5 +1,4 @@
 import create from 'zustand';
-
 import { getMultipleWithRegex, removeData, storeData } from '../../services/local-storage';
 
 const orderDescStartingDay = (a, b) => {
@@ -49,10 +48,22 @@ const useListsStore = create((set, get) => ({
     }
   },
 
-  createList: async (list) => {
+  getListById: (id) => {
+    const lists = get().lists;
+    return lists.find((item) => item.id === id);
+  },
+
+  createList: async (endingDay, startingDay, name) => {
     try {
       set({ loading: true });
       let lists = [...get().lists];
+      const list = {
+        endingDay,
+        startingDay,
+        name,
+        id: Date.now().toString(),
+        recipes: [],
+      };
       lists.push(list);
       await storeData(`list_${list.id}`, list);
       updateLists(lists, set);
@@ -60,6 +71,32 @@ const useListsStore = create((set, get) => ({
       console.log('Could not create list', e);
     } finally {
       set({ loading: false });
+    }
+  },
+
+  addRecipeToList: async (listId, recipe) => {
+    try {
+      recipe.nbTimes = 1;
+      const lists = [...get().lists];
+      const index = lists.findIndex((item) => item.id === listId);
+      lists[index].recipes.push(recipe);
+      await storeData(`list_${listId}`, lists[index]);
+      updateLists(lists, set);
+    } catch (e) {
+      console.log('Could not update list', e);
+    }
+  },
+
+  removeRecipeFromList: async (listId, recipeId) => {
+    try {
+      const lists = [...get().lists];
+      const index = lists.findIndex((item) => item.id === listId);
+      const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
+      lists[index].recipes.splice(recipeIndex, 1);
+      await storeData(`list_${listId}`, lists[index]);
+      updateLists(lists, set);
+    } catch (e) {
+      console.log('Could not remove recipe from list', e);
     }
   },
 
@@ -72,14 +109,13 @@ const useListsStore = create((set, get) => ({
     return false;
   },
 
-  incrementRecipe: async (listId, recipeId) => {
+  checkRecipeIngredient: async (listId, recipeId, ingrSlug, value) => {
     try {
       const lists = [...get().lists];
       const index = lists.findIndex((item) => item.id === listId);
       const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
-      lists[index].recipes[recipeIndex].nbTimes
-        ? lists[index].recipes[recipeIndex].nbTimes++
-        : (lists[index].recipes[recipeIndex].nbTimes = 2);
+      const ingrIndex = lists[index].recipes[recipeIndex].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
+      lists[index].recipes[recipeIndex].ingredients[ingrIndex].checked = value;
       await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
     } catch (e) {
@@ -87,25 +123,17 @@ const useListsStore = create((set, get) => ({
     }
   },
 
-  addRecipeToList: async (id, recipe) => {
+  updateRecipeNbTimes: async (listId, recipeId, value) => {
     try {
       const lists = [...get().lists];
-      const index = lists.findIndex((item) => item.id === id);
-      if (lists[index].recipes?.length > 0) {
-        lists[index].recipes.push(recipe);
-      } else {
-        lists[index].recipes = [recipe];
-      }
-      await storeData(`list_${id}`, lists[index]);
+      const index = lists.findIndex((item) => item.id === listId);
+      const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
+      lists[index].recipes[recipeIndex].nbTimes += value;
+      await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
     } catch (e) {
       console.log('Could not update list', e);
     }
-  },
-
-  getListById: (id) => {
-    const lists = get().lists;
-    return lists.find((item) => item.id === id);
   },
 
   deleteList: async (id) => {

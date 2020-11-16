@@ -58,8 +58,7 @@ function CreateListScreen({ navigation }) {
   });
 
   async function onPress() {
-    const list = { endingDay, startingDay, name: name || placeholder, id: Date.now().toString() };
-    await createList(list);
+    await createList(endingDay, startingDay, name || placeholder);
     navigation.goBack();
   }
 
