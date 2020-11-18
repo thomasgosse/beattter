@@ -11,9 +11,10 @@ export default {
       iconBtn: '#636b75',
       divider: '#e1e6eb',
       chip: '#BAA77D',
-      disabled: '#c5c7c9',
+      disabled: '#c9e6e9',
       tooltip: '#c5c7c9',
       danger: '#e32434',
+      button: '#56c9d8',
     },
   },
   dark: {
@@ -28,9 +29,10 @@ export default {
       iconBtn: '#636b75',
       divider: '#e1e6eb',
       chip: '#BAA77D',
-      disabled: '#c5c7c9',
+      disabled: '#c9e6e9',
       tooltip: '#c5c7c9',
       danger: '#e32434',
+      button: '#56c9d8',
     },
   },
 };

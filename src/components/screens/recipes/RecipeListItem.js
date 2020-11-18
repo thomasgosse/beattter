@@ -27,8 +27,10 @@ export default function RecipeListItem({ name, id, ingredients, principalKind, i
       padding: 7,
     },
     image: {
-      height: 120,
+      height: 130,
       borderRadius: 8,
+      width: cardWidth - 28,
+      alignSelf: 'center',
     },
     firstRow: {
       paddingLeft: 5,
@@ -65,10 +67,6 @@ export default function RecipeListItem({ name, id, ingredients, principalKind, i
     setSeasonal(isSeasonal(ingredients));
   }, [ingredients]);
 
-  let image = {
-    uri: 'https://www.topuniversities.com/sites/default/files/articles/lead-images/study_in_bangkok.jpg',
-  };
-
   return (
     <TouchableOpacity
       style={styles.container}
@@ -81,7 +79,7 @@ export default function RecipeListItem({ name, id, ingredients, principalKind, i
       }
     >
       <View style={styles.card}>
-        <Image source={image} style={styles.image} />
+        <Image source={require('../../../assets/empty-recipes.png')} style={styles.image} />
         <View>
           <View style={styles.firstRow}>
             <Text style={styles.name} numberOfLines={2}>

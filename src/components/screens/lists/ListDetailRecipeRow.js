@@ -60,10 +60,6 @@ export default function ListDetailRecipeRow({ name, nbTimes, index, removeRecipe
     },
   });
 
-  let image = {
-    uri: 'https://www.topuniversities.com/sites/default/files/articles/lead-images/study_in_bangkok.jpg',
-  };
-
   return (
     <>
       <SwipeRow
@@ -80,7 +76,7 @@ export default function ListDetailRecipeRow({ name, nbTimes, index, removeRecipe
         </View>
 
         <ListItem containerStyle={styles.recipe} bottomDivider topDivider={index === 0}>
-          <Image source={image} style={styles.image} />
+          <Image source={require('../../../assets/empty-recipes.png')} style={styles.image} />
           <ListItem.Content style={styles.recipeItemContent}>
             <ListItem.Title style={styles.recipeName}>{name}</ListItem.Title>
             {nbTimes > 1 && <ListItem.Title style={styles.nbTimes}>{` (x${nbTimes})`}</ListItem.Title>}
