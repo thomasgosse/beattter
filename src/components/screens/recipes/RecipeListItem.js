@@ -7,7 +7,7 @@ import * as RootNavigation from '../../RootNavigation';
 
 import { isSeasonal } from '../../../services/ingredient';
 
-export default function RecipeListItem({ name, id, ingredients, principalKind, index }) {
+export default function RecipeListItem({ name, id, nbPersonsBase, ingredients, principalKind, index }) {
   const [seasonal, setSeasonal] = useState(false);
   const {
     theme: { colors },
@@ -74,7 +74,7 @@ export default function RecipeListItem({ name, id, ingredients, principalKind, i
       onLongPress={() =>
         RootNavigation.navigate('AddRecipeToList', {
           screen: 'Ajouter à une liste',
-          params: { recipe: { id, name, ingredients } },
+          params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
         })
       }
     >

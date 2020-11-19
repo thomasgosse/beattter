@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Label from '../../utils/Label';
 import Button from '../../utils/Button';
 
-export default function PersonPicker({ nbPersons, setNbPersons, isReadOnly }) {
+export default function PersonPicker({ nbPersons, setNbPersons, label, isReadOnly }) {
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -45,7 +45,7 @@ export default function PersonPicker({ nbPersons, setNbPersons, isReadOnly }) {
 
   return (
     <>
-      <Label label="Nombre de personnes" containerStyle={styles.label} />
+      <Label label={label || 'Nombre de personnes'} containerStyle={styles.label} />
       <View style={styles.container}>
         <Button disabled={isReadOnly} containerStyle={styles.button} onPress={() => onPress(-1)}>
           <Icon name="remove-circle-outline" size={30} color={isReadOnly ? colors.textBaseLight : colors.iconBtn} />

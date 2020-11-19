@@ -15,11 +15,11 @@ export default function ListDetail({ navigation, route }) {
 
   const [ingredients, setIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const { getListById, removeRecipeFromList, updateRecipeNbTimes, checkRecipeIngredient } = useListsStore(
+  const { getListById, removeRecipeFromList, updateRecipeNbPersons, checkRecipeIngredient } = useListsStore(
     (state) => ({
       getListById: state.getListById,
       removeRecipeFromList: state.removeRecipeFromList,
-      updateRecipeNbTimes: state.updateRecipeNbTimes,
+      updateRecipeNbPersons: state.updateRecipeNbPersons,
       checkRecipeIngredient: state.checkRecipeIngredient,
     }),
     shallow
@@ -69,7 +69,10 @@ export default function ListDetail({ navigation, route }) {
       return recipe.ingredients.map((ingredient) => {
         return {
           ...ingredient,
-          quantity: { unit: ingredient.quantity.unit, value: recipe.nbTimes * Number(ingredient.quantity.value) },
+          quantity: {
+            unit: ingredient.quantity.unit,
+            value: (recipe.nbPersons / recipe.nbPersonsBase) * Number(ingredient.quantity.value),
+          },
           recipeId: recipe.id,
           recipeName: recipe.name,
         };
@@ -83,11 +86,11 @@ export default function ListDetail({ navigation, route }) {
     updateStates();
   }, [updateStates]);
 
-  async function removeRecipe(listId, recipeId, remove) {
+  async function removeRecipe(listId, recipeId, remove, nbPersonsToRemove) {
     if (remove) {
       await removeRecipeFromList(listId, recipeId);
     } else {
-      await updateRecipeNbTimes(listId, recipeId, -1);
+      await updateRecipeNbPersons(listId, recipeId, -nbPersonsToRemove);
     }
     updateStates();
   }
@@ -107,31 +110,28 @@ export default function ListDetail({ navigation, route }) {
   return (
     <ScrollView style={styles.container}>
       <Label containerStyle={styles.labelList} label="Recettes de la liste" />
-      {recipes.map((recipe, index) => {
-        return (
-          <ListDetailRecipeRow
-            key={recipe.id}
-            name={recipe.name}
-            nbTimes={recipe.nbTimes}
-            index={index}
-            removeRecipe={removeRecipe.bind(null, id, recipe.id)}
-          />
-        );
-      })}
+      {recipes.map((recipe, index) => (
+        <ListDetailRecipeRow
+          key={recipe.id}
+          name={recipe.name}
+          nbPersons={recipe.nbPersons}
+          nbPersonsBase={recipe.nbPersonsBase}
+          index={index}
+          removeRecipe={removeRecipe.bind(null, id, recipe.id)}
+        />
+      ))}
 
       <Label containerStyle={styles.label} label="Ingrédients" />
-      {ingredients.map((ingredient) => {
-        return (
-          <ListDetailIngredientRow
-            key={ingredient.slug + ingredient.recipeId}
-            name={ingredient.name}
-            recipeName={ingredient.recipeName}
-            quantity={ingredient.quantity}
-            checked={ingredient.checked}
-            onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
-          />
-        );
-      })}
+      {ingredients.map((ingredient) => (
+        <ListDetailIngredientRow
+          key={ingredient.slug + ingredient.recipeId}
+          name={ingredient.name}
+          recipeName={ingredient.recipeName}
+          quantity={ingredient.quantity}
+          checked={ingredient.checked}
+          onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
+        />
+      ))}
     </ScrollView>
   );
 }

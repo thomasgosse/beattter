@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
-import { ScrollView, StyleSheet, Alert } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Alert, View } from 'react-native';
 import shallow from 'zustand/shallow';
 import { ThemeContext } from 'react-native-elements';
 
+import PersonPicker from './recipes/PersonPicker';
 import * as RootNavigation from '../RootNavigation';
 import ShoppingListsItem from './lists/ShoppingListsItem';
 import Label from '../utils/Label';
@@ -11,12 +12,14 @@ import Button from '../utils/Button';
 import useListsStore from '../store/useListsStore';
 
 export default function AddRecipeToListScreen({ navigation, route }) {
-  const { lists, addRecipeToList, isRecipeInList, updateRecipeNbTimes } = useListsStore(
+  const nbPersonsBase = route.params?.recipe?.nbPersonsBase;
+  const [nbPersons, setNbPersons] = useState(nbPersonsBase);
+  const { lists, addRecipeToList, isRecipeInList, updateRecipeNbPersons } = useListsStore(
     (state) => ({
       lists: state.onGoingLists,
       addRecipeToList: state.addRecipeToList,
       isRecipeInList: state.isRecipeInList,
-      updateRecipeNbTimes: state.updateRecipeNbTimes,
+      updateRecipeNbPersons: state.updateRecipeNbPersons,
     }),
     shallow
   );
@@ -29,9 +32,11 @@ export default function AddRecipeToListScreen({ navigation, route }) {
       backgroundColor: colors.body,
     },
     label: {
-      marginTop: 10,
       marginBottom: 7,
       marginLeft: 10,
+    },
+    personPicker: {
+      marginTop: 20,
     },
     button: {
       marginTop: 20,
@@ -39,11 +44,15 @@ export default function AddRecipeToListScreen({ navigation, route }) {
     },
   });
 
+  useEffect(() => {
+    setNbPersons(nbPersonsBase);
+  }, [nbPersonsBase]);
+
   async function onPressAddToList(listId) {
     if (isRecipeInList(listId, route.params?.recipe.id)) {
       Alert.alert(
-        'Souhaitez vous ajouter une nouvelle fois cette recette ?',
-        'Elle est déja présente dans cette liste',
+        `Cuisiner cette recette pour ${nbPersons} personne(s) de plus ?`,
+        'Elle est déja présente dans cette liste de courses',
         [
           {
             text: 'Annuler',
@@ -52,7 +61,7 @@ export default function AddRecipeToListScreen({ navigation, route }) {
           {
             text: 'OK',
             onPress: () => {
-              updateRecipeNbTimes(listId, route.params?.recipe.id, 1);
+              updateRecipeNbPersons(listId, route.params?.recipe.id, nbPersons);
               navigation.goBack();
             },
           },
@@ -60,13 +69,16 @@ export default function AddRecipeToListScreen({ navigation, route }) {
         { cancelable: false }
       );
     } else {
-      await addRecipeToList(listId, route.params?.recipe);
+      await addRecipeToList(listId, route.params?.recipe, nbPersons);
       navigation.goBack();
     }
   }
 
   return (
     <ScrollView style={styles.container}>
+      <View style={styles.personPicker}>
+        <PersonPicker label="Pour combien allez vous cuisiner ?" nbPersons={nbPersons} setNbPersons={setNbPersons} />
+      </View>
       <Label label="Listes en cours" containerStyle={styles.label} />
       {lists.map((list) => (
         <ShoppingListsItem

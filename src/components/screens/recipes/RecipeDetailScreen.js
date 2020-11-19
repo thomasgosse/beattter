@@ -7,9 +7,10 @@ import isEqual from 'lodash.isequal';
 import Button from '../../utils/Button';
 import Input from '../../utils/Input';
 import IngredientList from './IngredientList';
+import PersonPicker from './PersonPicker';
 
 import useRecipesStore from '../../store/useRecipesStore';
-import PersonPicker from './PersonPicker';
+import useListsStore from '../../store/useListsStore';
 
 export default function RecipeDetailScreen({ route, navigation }) {
   const ingredient = route.params?.ingredient;
@@ -17,7 +18,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
 
   const [recipe, setRecipe] = useState({});
   const [name, setName] = useState('');
-  const [nbPersons, setNbPersons] = useState(2);
+  const [nbPersonsBase, setNbPersonsBase] = useState(2);
   const [ingredients, setIngredients] = useState([]);
   const [isReadOnly, setIsReadOnly] = useState(true);
   const { getRecipeById, updateRecipe, deleteRecipe } = useRecipesStore(
@@ -28,6 +29,8 @@ export default function RecipeDetailScreen({ route, navigation }) {
     }),
     shallow
   );
+  const updateRecipeInOngoingLists = useListsStore((state) => state.updateRecipeInOngoingLists);
+
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -63,15 +66,17 @@ export default function RecipeDetailScreen({ route, navigation }) {
     delete r.principalKind;
     setRecipe(r);
     setName(r.name);
-    setNbPersons(r.nbPersons);
+    setNbPersonsBase(r.nbPersonsBase);
     setIngredients(r.ingredients);
   }, [id, getRecipeById]);
 
   useLayoutEffect(() => {
-    function onPress() {
-      const updatedRecipe = { id: recipe.id, name, nbPersons, ingredients };
-      if (!isReadOnly && !isEqual(recipe, updatedRecipe)) {
-        updateRecipe(updatedRecipe);
+    async function onPress() {
+      const recipeUpdate = { id: recipe.id, name, nbPersonsBase, ingredients };
+      if (!isReadOnly && !isEqual(recipe, recipeUpdate)) {
+        await updateRecipe(recipeUpdate);
+        await updateRecipeInOngoingLists(recipeUpdate);
+        setRecipe(recipeUpdate);
       }
       setIsReadOnly(!isReadOnly);
     }
@@ -79,7 +84,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
     navigation.setOptions({
       headerRight: () => <RNButton title={isReadOnly ? 'Modifier' : 'Terminé'} onPress={onPress} />,
     });
-  }, [navigation, updateRecipe, recipe, name, nbPersons, ingredients, isReadOnly]);
+  }, [navigation, updateRecipe, updateRecipeInOngoingLists, recipe, name, nbPersonsBase, ingredients, isReadOnly]);
 
   function removeIngredient(index) {
     const updatedIngredients = [...ingredients];
@@ -119,7 +124,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
         isReadOnly={isReadOnly}
       />
 
-      <PersonPicker nbPersons={nbPersons} setNbPersons={setNbPersons} isReadOnly={isReadOnly} />
+      <PersonPicker nbPersons={nbPersonsBase} setNbPersons={setNbPersonsBase} isReadOnly={isReadOnly} />
       <IngredientList
         label={true}
         ingredients={ingredients}
@@ -129,7 +134,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
         onPressAddCart={() => {
           navigation.navigate('AddRecipeToList', {
             screen: 'Ajouter à une liste',
-            params: { recipe: { id, name, ingredients } },
+            params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
           });
         }}
       />

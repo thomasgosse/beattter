@@ -74,6 +74,7 @@ export default function RecipesScreen({ navigation }) {
         <RecipeListItem
           name={item.name}
           id={item.id}
+          nbPersonsBase={item.nbPersonsBase}
           index={index}
           ingredients={item.ingredients}
           principalKind={item.principalKind}

@@ -25,12 +25,11 @@ const useRecipesStore = create((set, get) => ({
     return recipes.find((recipe) => recipe.id === id);
   },
 
-  updateRecipe: async ({ id, name, nbPersons, ingredients }) => {
-    // TODO: update une liste de course si l'ingredient est présent dedans
+  updateRecipe: async ({ id, name, nbPersonsBase, ingredients }) => {
     const updatedRecipe = {
       id,
       name,
-      nbPersons,
+      nbPersonsBase,
       principalKind: getPrincipalKind(ingredients),
       ingredients,
     };
@@ -41,7 +40,7 @@ const useRecipesStore = create((set, get) => ({
     set({ recipes });
   },
 
-  createRecipe: async (name, nbPersons) => {
+  createRecipe: async (name, nbPersonsBase) => {
     try {
       set({ loading: true });
       let recipes = [...get().recipes];
@@ -49,7 +48,7 @@ const useRecipesStore = create((set, get) => ({
       const newRecipe = {
         id: Date.now(),
         name,
-        nbPersons,
+        nbPersonsBase,
         principalKind: getPrincipalKind(ingredients),
         ingredients,
       };

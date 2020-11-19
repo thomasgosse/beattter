@@ -12,7 +12,7 @@ import PersonPicker from './PersonPicker';
 
 export default function CreateRecipeScreen({ navigation, route }) {
   const [name, setName] = useState('');
-  const [nbPersons, setNbPersons] = useState(2);
+  const [nbPersonsBase, setNbPersonsBase] = useState(2);
   const { createRecipe, ingredients, removeIngredient, addIngredient } = useRecipesStore(
     (state) => ({
       createRecipe: state.createRecipe,
@@ -52,7 +52,7 @@ export default function CreateRecipeScreen({ navigation, route }) {
         setValue={setName}
       />
 
-      <PersonPicker nbPersons={nbPersons} setNbPersons={setNbPersons} />
+      <PersonPicker nbPersons={nbPersonsBase} setNbPersons={setNbPersonsBase} />
       <IngredientList
         label={true}
         ingredients={ingredients}
@@ -64,7 +64,7 @@ export default function CreateRecipeScreen({ navigation, route }) {
         text="Créer"
         disabled={!name}
         onPress={() => {
-          createRecipe(name, nbPersons);
+          createRecipe(name, nbPersonsBase);
           navigation.goBack();
         }}
         containerStyle={styles.button}

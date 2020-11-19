@@ -6,9 +6,9 @@ import Modal from 'react-native-modal';
 
 import Button from '../../utils/Button';
 
-export default function ListDetailRecipeModalDelete({ modalVisible, recipeName, nbTimes, removeRecipe, onClose }) {
+export default function ListDetailRecipeModalDelete({ modalVisible, nbPersons, removeRecipe, onClose }) {
   const [selectedValue, setSelectedValue] = useState(1);
-  const [values, setValues] = useState([...Array(nbTimes ? nbTimes : 1).keys()].map((i) => (i + 1).toString()));
+  const [values, setValues] = useState([...Array(nbPersons).keys()].map((i) => (i + 1).toString()));
 
   const {
     theme: { colors },
@@ -53,12 +53,12 @@ export default function ListDetailRecipeModalDelete({ modalVisible, recipeName, 
   });
 
   useEffect(() => {
-    setValues([...Array(nbTimes).keys()].map((i) => (i + 1).toString()));
-  }, [nbTimes]);
+    setValues([...Array(nbPersons).keys()].map((i) => (i + 1).toString()));
+  }, [nbPersons]);
 
   async function onPress() {
-    await removeRecipe(nbTimes === selectedValue);
-    if (nbTimes !== selectedValue) {
+    await removeRecipe(nbPersons === selectedValue, selectedValue);
+    if (nbPersons !== selectedValue) {
       setTimeout(() => onClose(), 200);
     }
   }
@@ -67,7 +67,7 @@ export default function ListDetailRecipeModalDelete({ modalVisible, recipeName, 
     <Modal isVisible={modalVisible} onBackdropPress={onClose}>
       <View style={styles.modalView}>
         <Text style={styles.text}>
-          Supprimer <Text style={styles.recipeName}>{recipeName}</Text> de la liste
+          Supprimer <Text style={styles.recipeName}>{selectedValue} personne(s)</Text> de la liste ?
         </Text>
         <View style={styles.pickersContainer}>
           <Picker style={styles.picker} selectedValue={selectedValue} onValueChange={setSelectedValue}>
@@ -76,7 +76,7 @@ export default function ListDetailRecipeModalDelete({ modalVisible, recipeName, 
             })}
           </Picker>
         </View>
-        <Button containerStyle={styles.button} text={`Supprimer ${selectedValue} fois`} onPress={onPress} />
+        <Button containerStyle={styles.button} text={`Supprimer`} onPress={onPress} />
       </View>
     </Modal>
   );

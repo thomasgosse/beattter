@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import ListDetailRecipeModalDelete from './ListDetailRecipeModalDelete';
 
-export default function ListDetailRecipeRow({ name, nbTimes, index, removeRecipe }) {
+export default function ListDetailRecipeRow({ name, nbPersons, index, removeRecipe }) {
   const rowRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -50,7 +50,7 @@ export default function ListDetailRecipeRow({ name, nbTimes, index, removeRecipe
       color: colors.textBase,
       fontWeight: '500',
     },
-    nbTimes: {
+    nbPersons: {
       color: colors.textBase,
     },
     recipeItemContent: {
@@ -79,15 +79,14 @@ export default function ListDetailRecipeRow({ name, nbTimes, index, removeRecipe
           <Image source={require('../../../assets/empty-recipes.png')} style={styles.image} />
           <ListItem.Content style={styles.recipeItemContent}>
             <ListItem.Title style={styles.recipeName}>{name}</ListItem.Title>
-            {nbTimes > 1 && <ListItem.Title style={styles.nbTimes}>{` (x${nbTimes})`}</ListItem.Title>}
+            <ListItem.Title style={styles.nbPersons}>{` (${nbPersons} pers.)`}</ListItem.Title>
           </ListItem.Content>
         </ListItem>
       </SwipeRow>
 
       <ListDetailRecipeModalDelete
-        recipeName={name}
         modalVisible={modalVisible}
-        nbTimes={nbTimes}
+        nbPersons={nbPersons}
         removeRecipe={removeRecipe}
         onClose={() => {
           setModalVisible(false);
