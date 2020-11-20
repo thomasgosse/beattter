@@ -9,12 +9,14 @@ import ListDetailRecipeRow from './ListDetailRecipeRow';
 import ListDetailIngredientRow from './ListDetailIngredientRow';
 
 import useListsStore from '../../store/useListsStore';
+import kinds from '../../../kinds';
 
 export default function ListDetail({ navigation, route }) {
   const id = route.params?.id;
 
   const [ingredients, setIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
+  const [sections, setSections] = useState([]);
   const { getListById, removeRecipeFromList, updateRecipeNbPersons, checkRecipeIngredient } = useListsStore(
     (state) => ({
       getListById: state.getListById,
@@ -29,10 +31,9 @@ export default function ListDetail({ navigation, route }) {
     theme: { colors },
   } = useContext(ThemeContext);
   const styles = StyleSheet.create({
-    contentContainer: {
+    container: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      backgroundColor: colors.body,
     },
     image: {
       alignSelf: 'center',
@@ -46,14 +47,11 @@ export default function ListDetail({ navigation, route }) {
       textAlign: 'center',
       marginVertical: 20,
     },
-    container: {
-      backgroundColor: colors.body,
-    },
     labelList: {
       marginVertical: 10,
       marginLeft: 10,
     },
-    label: {
+    sectionLabel: {
       marginTop: 10,
       marginLeft: 10,
     },
@@ -86,6 +84,19 @@ export default function ListDetail({ navigation, route }) {
     updateStates();
   }, [updateStates]);
 
+  useEffect(() => {
+    const updatedSections = ingredients.reduce((acc, val) => {
+      const index = acc.findIndex((section) => section.title === kinds[val.kind].description);
+      if (index > -1) {
+        acc[index].data.push(val);
+      } else {
+        acc.push({ title: kinds[val.kind].description, data: [val] });
+      }
+      return acc;
+    }, []);
+    setSections(updatedSections);
+  }, [ingredients, setSections]);
+
   async function removeRecipe(listId, recipeId, remove, nbPersonsToRemove) {
     if (remove) {
       await removeRecipeFromList(listId, recipeId);
@@ -100,7 +111,7 @@ export default function ListDetail({ navigation, route }) {
       <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
         <Image style={styles.image} source={require('../../../assets/empty-lists.png')} />
         <Text style={styles.text}>
-          Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter les ingrédients de te recettes.
+          Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter tes recettes.
         </Text>
         <Button text="Aller aux recettes" onPress={() => navigation.navigate('Recipes', { screen: 'Recipes' })} />
       </ScrollView>
@@ -121,16 +132,20 @@ export default function ListDetail({ navigation, route }) {
         />
       ))}
 
-      <Label containerStyle={styles.label} label="Ingrédients" />
-      {ingredients.map((ingredient) => (
-        <ListDetailIngredientRow
-          key={ingredient.slug + ingredient.recipeId}
-          name={ingredient.name}
-          recipeName={ingredient.recipeName}
-          quantity={ingredient.quantity}
-          checked={ingredient.checked}
-          onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
-        />
+      {sections.map((section) => (
+        <>
+          <Label containerStyle={styles.sectionLabel} label={section.title} />
+          {section.data.map((ingredient) => (
+            <ListDetailIngredientRow
+              key={ingredient.slug + ingredient.recipeId}
+              name={ingredient.name}
+              recipeName={ingredient.recipeName}
+              quantity={ingredient.quantity}
+              checked={ingredient.checked}
+              onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
+            />
+          ))}
+        </>
       ))}
     </ScrollView>
   );

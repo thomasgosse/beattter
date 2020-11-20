@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import CheckBox from '@react-native-community/checkbox';
 
-export default function ListDetailIngredientRow({ name, recipeName, quantity, checked, onCheck }) {
+export default function ListDetailIngredientRow({ name, recipeName, quantity, checked, onCheck, index }) {
   const [toggleCheckbox, setToggleCheckbox] = useState(checked);
 
   const {
@@ -19,7 +19,7 @@ export default function ListDetailIngredientRow({ name, recipeName, quantity, ch
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginTop: 10,
+      marginTop: index === 0 ? 0 : 10,
     },
     ingredientName: {
       textDecorationLine: toggleCheckbox ? 'line-through' : 'none',

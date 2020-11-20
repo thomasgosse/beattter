@@ -60,7 +60,7 @@ function ListsScreen({ route }) {
         <Image style={styles.image} source={require('../../../assets/empty-lists.png')} />
         <Text style={styles.text}>
           {type === 'ONGOING'
-            ? "Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter les ingrédients de te recettes."
+            ? "Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter tes recettes."
             : 'Tes listes dont la date est passée finiront ici ! Gardes les, elles nous servent à générer tes statisiques de consommation.'}
         </Text>
         <Button text="Créer une liste" onPress={() => RootNavigation.navigate('CreateList')} />
