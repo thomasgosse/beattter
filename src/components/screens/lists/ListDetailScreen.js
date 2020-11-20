@@ -138,7 +138,7 @@ export default function ListDetail({ navigation, route }) {
       ))}
 
       {sections.map((section) => (
-        <>
+        <React.Fragment key={section.title}>
           <Label containerStyle={styles.sectionLabel} label={section.title} />
           {section.data.map((ingredient) => (
             <ListDetailIngredientRow
@@ -150,7 +150,7 @@ export default function ListDetail({ navigation, route }) {
               onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
             />
           ))}
-        </>
+        </React.Fragment>
       ))}
     </ScrollView>
   );
