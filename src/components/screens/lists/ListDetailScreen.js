@@ -31,6 +31,11 @@ export default function ListDetail({ navigation, route }) {
     theme: { colors },
   } = useContext(ThemeContext);
   const styles = StyleSheet.create({
+    contentContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     container: {
       flex: 1,
       backgroundColor: colors.body,
