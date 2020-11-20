@@ -3,8 +3,8 @@ import { Text, StyleSheet, View } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import Label from '../../utils/Label';
-import Button from '../../utils/Button';
+import Label from '../utils/Label';
+import Button from '../utils/Button';
 
 export default function PersonPicker({ nbPersons, setNbPersons, label, isReadOnly }) {
   const {

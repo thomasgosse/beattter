@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Alert, View } from 'react-native';
 import shallow from 'zustand/shallow';
 import { ThemeContext } from 'react-native-elements';
 
-import PersonPicker from './recipes/PersonPicker';
+import PersonPicker from './PersonPicker';
 import * as RootNavigation from '../RootNavigation';
 import ShoppingListsItem from './lists/ShoppingListsItem';
 import Label from '../utils/Label';

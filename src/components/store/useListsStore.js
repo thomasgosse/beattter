@@ -118,6 +118,7 @@ const useListsStore = create((set, get) => ({
 
   updateRecipeInOngoingLists: async (r) => {
     let recipeUpdate = JSON.parse(JSON.stringify(r));
+    let modifiedLists = [];
     const lists = await Promise.all(
       get().lists.map(async (list) => {
         if (isListOver(list.endingDay)) {
@@ -126,12 +127,14 @@ const useListsStore = create((set, get) => ({
         const recipeIndex = list.recipes.findIndex((recipe) => recipe.id === recipeUpdate.id);
         if (recipeIndex > -1) {
           list.recipes[recipeIndex] = updateRecipe(list.recipes[recipeIndex], recipeUpdate);
+          modifiedLists.push(list.name);
           await storeData(`list_${list.id}`, list);
         }
         return list;
       })
     );
     updateLists(lists, set);
+    return modifiedLists;
   },
 
   isRecipeInList: (listId, recipeId) => {

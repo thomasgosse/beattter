@@ -71,7 +71,7 @@ export default function ListDetail({ navigation, route }) {
           ...ingredient,
           quantity: {
             unit: ingredient.quantity.unit,
-            value: (recipe.nbPersons / recipe.nbPersonsBase) * Number(ingredient.quantity.value),
+            value: ((recipe.nbPersons / recipe.nbPersonsBase) * Number(ingredient.quantity.value)).toFixed(2),
           },
           recipeId: recipe.id,
           recipeName: recipe.name,

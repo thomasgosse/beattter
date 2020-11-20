@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Button as RNButton, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Button as RNButton, Alert, Text, View } from 'react-native';
 import shallow from 'zustand/shallow';
 import { ThemeContext } from 'react-native-elements';
 import isEqual from 'lodash.isequal';
 
 import Button from '../../utils/Button';
 import Input from '../../utils/Input';
+import Popup from '../../utils/Popup';
 import IngredientList from './IngredientList';
-import PersonPicker from './PersonPicker';
+import PersonPicker from '../PersonPicker';
 
 import useRecipesStore from '../../store/useRecipesStore';
 import useListsStore from '../../store/useListsStore';
@@ -21,6 +22,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const [nbPersonsBase, setNbPersonsBase] = useState(2);
   const [ingredients, setIngredients] = useState([]);
   const [isReadOnly, setIsReadOnly] = useState(true);
+  const [modifiedLists, setModifiedLists] = useState([]);
   const { getRecipeById, updateRecipe, deleteRecipe } = useRecipesStore(
     (state) => ({
       getRecipeById: state.getRecipeById,
@@ -46,6 +48,19 @@ export default function RecipeDetailScreen({ route, navigation }) {
       marginVertical: 30,
       backgroundColor: colors.danger,
       borderWidth: 0,
+    },
+    popupMessage: {
+      fontWeight: '400',
+      fontSize: 16,
+      lineHeight: 22,
+      color: colors.header,
+      paddingVertical: 4,
+    },
+    popupBold: {
+      lineHeight: 22,
+      fontWeight: '500',
+      fontSize: 16,
+      color: colors.header,
     },
   });
 
@@ -75,7 +90,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
       const recipeUpdate = { id: recipe.id, name, nbPersonsBase, ingredients };
       if (!isReadOnly && !isEqual(recipe, recipeUpdate)) {
         await updateRecipe(recipeUpdate);
-        await updateRecipeInOngoingLists(recipeUpdate);
+        setModifiedLists(await updateRecipeInOngoingLists(recipeUpdate));
         setRecipe(recipeUpdate);
       }
       setIsReadOnly(!isReadOnly);
@@ -90,6 +105,33 @@ export default function RecipeDetailScreen({ route, navigation }) {
     const updatedIngredients = [...ingredients];
     updatedIngredients.splice(index, 1);
     setIngredients(updatedIngredients);
+  }
+
+  function getMessage() {
+    if (modifiedLists.length === 1) {
+      return (
+        <View>
+          <Text style={styles.popupMessage}>Comme cette recette était ajoutée dans:</Text>
+          <Text style={styles.popupBold} numberOfLines={1}>
+            {modifiedLists[0]}
+          </Text>
+          <Text style={styles.popupMessage}>les modifications ont été faites sur cette liste</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <Text style={styles.popupMessage}>Comme cette recette était ajoutée dans:</Text>
+          {modifiedLists.map((listName) => (
+            <Text key={listName} style={styles.popupBold} numberOfLines={1}>
+              {'\u2022' + ' '}
+              {listName}
+            </Text>
+          ))}
+          <Text style={styles.popupMessage}>les modifications ont été faites sur ces listes</Text>
+        </View>
+      );
+    }
   }
 
   function onPressDelete() {
@@ -140,6 +182,10 @@ export default function RecipeDetailScreen({ route, navigation }) {
       />
 
       {!isReadOnly && <Button text="Supprimer" containerStyle={styles.deleteButtton} onPress={onPressDelete} />}
+
+      <Popup isVisible={modifiedLists.length > 0} close={() => setModifiedLists([])}>
+        {getMessage()}
+      </Popup>
     </ScrollView>
   );
 }

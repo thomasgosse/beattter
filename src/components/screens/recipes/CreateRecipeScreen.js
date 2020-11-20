@@ -6,9 +6,9 @@ import shallow from 'zustand/shallow';
 import Input from '../../utils/Input';
 import Button from '../../utils/Button';
 import IngredientList from './IngredientList';
+import PersonPicker from '../PersonPicker';
 
 import useRecipesStore from '../../store/useRecipesStore';
-import PersonPicker from './PersonPicker';
 
 export default function CreateRecipeScreen({ navigation, route }) {
   const [name, setName] = useState('');
