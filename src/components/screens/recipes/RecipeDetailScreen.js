@@ -78,7 +78,6 @@ export default function RecipeDetailScreen({ route, navigation }) {
     if (!r) {
       return;
     }
-    delete r.principalKind;
     setRecipe(r);
     setName(r.name);
     setNbPersonsBase(r.nbPersonsBase);
@@ -87,7 +86,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
 
   useLayoutEffect(() => {
     async function onPress() {
-      const recipeUpdate = { id: recipe.id, name, nbPersonsBase, ingredients };
+      const recipeUpdate = { id: recipe.id, name, nbPersonsBase, ingredients, principalKind: recipe.principalKind };
       if (!isReadOnly && !isEqual(recipe, recipeUpdate)) {
         await updateRecipe(recipeUpdate);
         setModifiedLists(await updateRecipeInOngoingLists(recipeUpdate));
