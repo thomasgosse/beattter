@@ -18,6 +18,7 @@ export default function AddRecipeToListNavigator({ navigation }) {
     <Stack.Navigator
       initialRouteName="Ajouter à une liste"
       screenOptions={{
+        headerStatusBarHeight: 0,
         headerStyle: { backgroundColor: colors.header, elevation: 0, shadowOpacity: 0 },
       }}
     >
