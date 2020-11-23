@@ -1,5 +1,15 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Button as RNButton, Alert, Text, View } from 'react-native';
+import React, { useContext, useEffect, useLayoutEffect, useState, useRef } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Button as RNButton,
+  Alert,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  SafeAreaView,
+} from 'react-native';
 import shallow from 'zustand/shallow';
 import { ThemeContext } from 'react-native-elements';
 import isEqual from 'lodash.isequal';
@@ -12,6 +22,15 @@ import PersonPicker from '../PersonPicker';
 
 import useRecipesStore from '../../store/useRecipesStore';
 import useListsStore from '../../store/useListsStore';
+import HeaderImage from './HeaderImage';
+
+import { onScrollEvent, useValue } from 'react-native-redash/src/v1';
+import Animated, { Extrapolate, interpolate } from 'react-native-reanimated';
+import TestHeader from './TestHeader';
+const { height: wHeight, width: wWidth } = Dimensions.get('window');
+
+const HEADER_IMAGE_HEIGHT = wHeight / 3;
+const MIN_HEADER_HEIGHT = 45;
 
 export default function RecipeDetailScreen({ route, navigation }) {
   const ingredient = route.params?.ingredient;
@@ -61,6 +80,10 @@ export default function RecipeDetailScreen({ route, navigation }) {
       fontWeight: '500',
       fontSize: 16,
       color: colors.header,
+    },
+    placeholder: {
+      height: HEADER_IMAGE_HEIGHT,
+      // marginBottom: MIN_HEADER_HEIGHT,
     },
   });
 
@@ -154,37 +177,82 @@ export default function RecipeDetailScreen({ route, navigation }) {
     );
   }
 
+  const y = useValue(0);
+  const onScroll = onScrollEvent({ y });
+  const scrollView = useRef(null);
+
+  const opacity = interpolate(y, {
+    inputRange: [HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT - 100, HEADER_IMAGE_HEIGHT - MIN_HEADER_HEIGHT],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
   return (
-    <ScrollView style={styles.container}>
-      <Input
-        containerStyle={styles.input}
-        label="Nom de la recette"
-        placeholder="Risotto de poirreaux"
-        value={name}
-        setValue={setName}
-        isReadOnly={isReadOnly}
-      />
+    <View style={{ backgroundColor: colors.body, flex: 1 }}>
+      <HeaderImage {...{ y }} />
 
-      <PersonPicker nbPersons={nbPersonsBase} setNbPersons={setNbPersonsBase} isReadOnly={isReadOnly} />
-      <IngredientList
-        label={true}
-        ingredients={ingredients}
-        removeIngredient={removeIngredient}
-        isReadOnly={isReadOnly}
-        initiatorRoute="RecipeDetail"
-        onPressAddCart={() => {
-          navigation.navigate('AddRecipeToList', {
-            screen: 'Ajouter à une liste',
-            params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
-          });
-        }}
-      />
+      <Animated.ScrollView style={StyleSheet.absoluteFill} ref={scrollView} scrollEventThrottle={1} {...{ onScroll }}>
+        <View style={styles.placeholder} />
+        <Animated.View style={[styles.section]}>
+          <Input
+            containerStyle={styles.input}
+            label="Nom de la recette"
+            placeholder="Risotto de poirreaux"
+            value={name}
+            setValue={setName}
+            isReadOnly={isReadOnly}
+          />
 
-      {!isReadOnly && <Button text="Supprimer" containerStyle={styles.deleteButtton} onPress={onPressDelete} />}
+          <PersonPicker nbPersons={nbPersonsBase} setNbPersons={setNbPersonsBase} isReadOnly={isReadOnly} />
+          <IngredientList
+            label={true}
+            ingredients={ingredients}
+            removeIngredient={removeIngredient}
+            isReadOnly={isReadOnly}
+            initiatorRoute="RecipeDetail"
+            onPressAddCart={() => {
+              navigation.navigate('AddRecipeToList', {
+                screen: 'Ajouter à une liste',
+                params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
+              });
+            }}
+          />
 
-      <Popup isVisible={modifiedLists.length > 0} close={() => setModifiedLists([])}>
-        {getMessage()}
-      </Popup>
-    </ScrollView>
+          <IngredientList
+            label={true}
+            ingredients={ingredients}
+            removeIngredient={removeIngredient}
+            isReadOnly={isReadOnly}
+            initiatorRoute="RecipeDetail"
+            onPressAddCart={() => {
+              navigation.navigate('AddRecipeToList', {
+                screen: 'Ajouter à une liste',
+                params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
+              });
+            }}
+          />
+          <IngredientList
+            label={true}
+            ingredients={ingredients}
+            removeIngredient={removeIngredient}
+            isReadOnly={isReadOnly}
+            initiatorRoute="RecipeDetail"
+            onPressAddCart={() => {
+              navigation.navigate('AddRecipeToList', {
+                screen: 'Ajouter à une liste',
+                params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
+              });
+            }}
+          />
+
+          {!isReadOnly && <Button text="Supprimer" containerStyle={styles.deleteButtton} onPress={onPressDelete} />}
+
+          <Popup isVisible={modifiedLists.length > 0} close={() => setModifiedLists([])}>
+            {getMessage()}
+          </Popup>
+        </Animated.View>
+      </Animated.ScrollView>
+      <TestHeader {...{ y }} />
+    </View>
   );
 }
