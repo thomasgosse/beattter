@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -15,7 +16,7 @@ export default function BottomTabNavigator({ navigation, route }) {
 
   useEffect(() => {
     function getHeaderTitle() {
-      const routeName = route.state?.routes[route.state.index]?.name;
+      const routeName = getFocusedRouteNameFromRoute(route);
       if (routeName === 'Lists') {
         return 'Listes de courses';
       } else {
