@@ -4,11 +4,11 @@ import { Picker } from '@react-native-community/picker';
 import { ListItem, ThemeContext } from 'react-native-elements';
 import slugify from 'slugify';
 
-import Input from '../../utils/Input';
-import Button from '../../utils/Button';
-import IngredientKindTooltip from './IngredientKindTooltip';
+import Input from '../../components/utils/Input';
+import Button from '../../components/utils/Button';
+import IngredientKindTooltip from '../../components/recipes/IngredientKindTooltip';
 
-import data from '../../../data';
+import data from '../../data';
 
 export default function IngredientPickerScreen({ navigation, route }) {
   const [search, setSearch] = useState('');

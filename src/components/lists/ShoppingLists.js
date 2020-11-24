@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { ThemeContext } from 'react-native-elements';
 
 import ShoppingListItem from './ShoppingListsItem';
-import * as RootNavigation from '../../RootNavigation';
+import * as RootNavigation from '../../navigation/RootNavigation';
 
 import useListsStore from '../../store/useListsStore';
 

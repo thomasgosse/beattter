@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { getMultipleWithRegex, removeData, storeData } from '../../services/local-storage';
+import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
 
 const isListOver = (endingDay) => {
   let now = new Date().setHours(0, 0, 0);

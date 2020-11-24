@@ -3,13 +3,14 @@ import { StatusBar, StyleSheet, View, AppState, Appearance } from 'react-native'
 import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from 'react-native-elements';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { navigationRef } from './components/RootNavigation';
-import RootNavigator from './components/RootNavigator';
+import { navigationRef } from './navigation/RootNavigation';
+import RootNavigator from './navigation/RootNavigator';
 import appTheme from './appTheme';
 
-import useListsStore from './components/store/useListsStore';
-import useRecipesStore from './components/store/useRecipesStore';
+import useListsStore from './store/useListsStore';
+import useRecipesStore from './store/useRecipesStore';
 
 enableScreens();
 
@@ -52,9 +53,11 @@ const App = () => {
     <ThemeProvider theme={theme} ref={themeProvideRef}>
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" translucent={true} />
-        <NavigationContainer ref={navigationRef}>
-          <RootNavigator />
-        </NavigationContainer>
+        <SafeAreaProvider>
+          <NavigationContainer ref={navigationRef}>
+            <RootNavigator />
+          </NavigationContainer>
+        </SafeAreaProvider>
       </View>
     </ThemeProvider>
   );

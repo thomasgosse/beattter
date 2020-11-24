@@ -4,8 +4,8 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import RecipesScreen from './screens/recipes/RecipesScreen';
-import ListsNavigator from './screens/lists/ListsNavigator';
+import RecipesScreen from '../screens/recipes/RecipesScreen';
+import ListsNavigator from './ListsNavigator';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -38,7 +38,11 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator
       tabBarOptions={{
-        style: { backgroundColor: colors.header },
+        style: {
+          backgroundColor: colors.header,
+          borderTopColor: colors.divider,
+          borderTopWidth: 1,
+        },
         labelStyle: { color: colors.textTitle, marginTop: -5 },
       }}
     >

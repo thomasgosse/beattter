@@ -3,9 +3,9 @@ import { Text, StyleSheet, View, Image, Dimensions, TouchableOpacity } from 'rea
 import { ThemeContext } from 'react-native-elements';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
-import * as RootNavigation from '../../RootNavigation';
+import * as RootNavigation from '../../navigation/RootNavigation';
 
-import { isSeasonal } from '../../../services/ingredient';
+import { isSeasonal } from '../../services/ingredient';
 
 export default function RecipeListItem({ name, id, nbPersonsBase, ingredients, principalKind, index }) {
   const [seasonal, setSeasonal] = useState(false);
@@ -13,23 +13,25 @@ export default function RecipeListItem({ name, id, nbPersonsBase, ingredients, p
     theme: { colors },
   } = useContext(ThemeContext);
 
-  const cardWidth = Dimensions.get('window').width / 2;
+  const cardWidth = Dimensions.get('window').width / 2 - 15 - 7.5;
   const styles = StyleSheet.create({
     container: {
       width: cardWidth,
-      paddingLeft: index % 2 === 0 ? 10 : 5,
-      paddingRight: index % 2 === 0 ? 5 : 10,
-      marginBottom: 20,
+      marginLeft: index % 2 === 0 ? 15 : 7.5,
+      marginRight: index % 2 === 0 ? 7.5 : 15,
+      marginBottom: 15,
     },
     card: {
       backgroundColor: colors.listRow,
       borderRadius: 8,
-      padding: 7,
+      padding: 4,
+      paddingTop: 0,
     },
     image: {
       height: 130,
-      borderRadius: 8,
-      width: cardWidth - 28,
+      borderTopRightRadius: 8,
+      borderTopLeftRadius: 8,
+      width: cardWidth,
       alignSelf: 'center',
     },
     firstRow: {
@@ -79,7 +81,7 @@ export default function RecipeListItem({ name, id, nbPersonsBase, ingredients, p
       }
     >
       <View style={styles.card}>
-        <Image source={require('../../../assets/empty-recipes.png')} style={styles.image} />
+        <Image source={require('../../assets/chou.jpg')} style={styles.image} />
         <View>
           <View style={styles.firstRow}>
             <Text style={styles.name} numberOfLines={2}>

@@ -4,8 +4,8 @@ import { ThemeContext } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import AddRecipeToListScreen from './AddRecipeToListScreen';
-import CreateListScreen from './lists/CreateListScreen';
+import AddRecipeToListScreen from '../screens/AddRecipeToListScreen';
+import CreateListScreen from '../screens/lists/CreateListScreen';
 
 const Stack = createStackNavigator();
 

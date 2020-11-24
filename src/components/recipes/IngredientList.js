@@ -1,11 +1,11 @@
-import React, { useContext, useRef, useEffect } from 'react';
-import { Animated, StyleSheet, View, TouchableOpacity } from 'react-native';
+import React, { useContext, useRef } from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { ListItem, ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Ingredient from './Ingredient';
-import * as RootNavigation from '../../RootNavigation';
-import Label from '../../utils/Label';
+import * as RootNavigation from '../../navigation/RootNavigation';
+import Label from '../utils/Label';
 
 export default function IngredientList({
   label,
@@ -16,7 +16,6 @@ export default function IngredientList({
   initiatorRoute,
 }) {
   const listItemHeight = 60;
-  const animatedHeight = useRef(new Animated.Value(1)).current;
   const hasTransitioned = useRef(false);
   const {
     theme: { colors },
@@ -39,14 +38,6 @@ export default function IngredientList({
       backgroundColor: colors.listRow,
     },
   });
-
-  useEffect(() => {
-    Animated.timing(animatedHeight, {
-      toValue: isReadOnly ? 0 : 1,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-  }, [isReadOnly, animatedHeight]);
 
   return (
     <>
@@ -71,18 +62,8 @@ export default function IngredientList({
         />
       ))}
 
-      <Animated.View
-        style={[
-          styles.listItem,
-          {
-            height: animatedHeight.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, listItemHeight],
-            }),
-          },
-        ]}
-      >
-        {!isReadOnly && (
+      {!isReadOnly && (
+        <View style={styles.listItem}>
           <ListItem
             containerStyle={styles.listItem}
             bottomDivider
@@ -100,8 +81,8 @@ export default function IngredientList({
               <ListItem.Chevron name="add-circle-outline" type="ionicon" size={30} color={colors.iconBtn} />
             </ListItem.Content>
           </ListItem>
-        )}
-      </Animated.View>
+        </View>
+      )}
     </>
   );
 }

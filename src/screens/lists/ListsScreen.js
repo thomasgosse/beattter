@@ -3,14 +3,13 @@ import shallow from 'zustand/shallow';
 import { ScrollView, StyleSheet, Image, Text, ActivityIndicator, View } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
-import Button from '../../utils/Button';
-import ShoppingList from './ShoppingLists';
-import * as RootNavigation from '../../RootNavigation';
+import Button from '../../components/utils/Button';
+import ShoppingList from '../../components/lists/ShoppingLists';
+import * as RootNavigation from '../../navigation/RootNavigation';
 
 import useListsStore from '../../store/useListsStore';
 
-function ListsScreen({ route }) {
-  const type = route?.params?.type;
+function ListsScreen({ type }) {
   const { lists, loading } = useListsStore(
     (state) => ({
       lists: type === 'ONGOING' ? state.onGoingLists : state.overLists,
@@ -22,7 +21,6 @@ function ListsScreen({ route }) {
   const {
     theme: { colors },
   } = useContext(ThemeContext);
-
   const styles = StyleSheet.create({
     contentContainer: {
       flex: 1,
@@ -57,7 +55,7 @@ function ListsScreen({ route }) {
   if (lists.length === 0) {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
-        <Image style={styles.image} source={require('../../../assets/empty-lists.png')} />
+        <Image style={styles.image} source={require('../../assets/empty-lists.png')} />
         <Text style={styles.text}>
           {type === 'ONGOING'
             ? "Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter tes recettes."

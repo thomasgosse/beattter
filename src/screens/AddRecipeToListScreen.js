@@ -3,11 +3,11 @@ import { ScrollView, StyleSheet, Alert, View } from 'react-native';
 import shallow from 'zustand/shallow';
 import { ThemeContext } from 'react-native-elements';
 
-import PersonPicker from './PersonPicker';
-import * as RootNavigation from '../RootNavigation';
-import ShoppingListsItem from './lists/ShoppingListsItem';
-import Label from '../utils/Label';
-import Button from '../utils/Button';
+import PersonPicker from '../components/utils/PersonPicker';
+import * as RootNavigation from '../navigation/RootNavigation';
+import ShoppingListsItem from '../components/lists/ShoppingListsItem';
+import Label from '../components/utils/Label';
+import Button from '../components/utils/Button';
 
 import useListsStore from '../store/useListsStore';
 

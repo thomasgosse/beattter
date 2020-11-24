@@ -21,7 +21,7 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
     },
     divider: {
       marginTop: 5,
-      borderBottomColor: isReadOnly ? colors.body : colors.divider,
+      borderBottomColor: isReadOnly ? colors.body : colors.inputDivider,
       borderBottomWidth: 1,
     },
   });

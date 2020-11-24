@@ -6,12 +6,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import * as RootNavigation from './RootNavigation';
 import BottomTabNavigator from './BottomTabNavigator';
-import CreateRecipeScreen from './screens/recipes/CreateRecipeScreen';
-import CreateListScreen from './screens/lists/CreateListScreen';
-import ListDetailScreen from './screens/lists/ListDetailScreen';
-import RecipeDetailScreen from './screens/recipes/RecipeDetailScreen';
-import IngredientPickNavigator from './screens/recipes/IngredientPickNavigator';
-import AddRecipeToListNavigator from './screens/AddRecipeToListNavigator';
+import CreateRecipeScreen from '../screens/recipes/CreateRecipeScreen';
+import CreateListScreen from '../screens/lists/CreateListScreen';
+import ListDetailScreen from '../screens/lists/ListDetailScreen';
+import RecipeDetailScreen from '../screens/recipes/RecipeDetailScreen';
+import IngredientPickNavigator from './IngredientPickNavigator';
+import AddRecipeToListNavigator from './AddRecipeToListNavigator';
 
 const Stack = createNativeStackNavigator();
 const INITIAL_ROUTE_NAME = 'Recipes';
@@ -45,7 +45,6 @@ export default function RootNavigator() {
       screenOptions={{
         headerStyle: { backgroundColor: colors.header },
         headerTitleStyle: { color: colors.textTitle },
-        headerHideShadow: true,
         stackPresentation: 'push',
       }}
     >
@@ -81,6 +80,7 @@ export default function RootNavigator() {
         name="RecipeDetail"
         component={RecipeDetailScreen}
         options={({ route }) => ({
+          headerShown: false,
           title: route.params.title,
         })}
       />

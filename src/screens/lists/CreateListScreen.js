@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
-import Input from '../../utils/Input';
-import Button from '../../utils/Button';
-import Calendar from '../../utils/Calendar';
+import Input from '../../components/utils/Input';
+import Button from '../../components/utils/Button';
+import Calendar from '../../components/utils/Calendar';
 import useListsStore from '../../store/useListsStore';
 
 function CreateListScreen({ navigation }) {

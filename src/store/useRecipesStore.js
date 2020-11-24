@@ -1,7 +1,7 @@
 import create from 'zustand';
 
-import { getMultipleWithRegex, removeData, storeData } from '../../services/local-storage';
-import { getPrincipalKind } from '../../services/ingredient';
+import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
+import { getPrincipalKind } from '../services/ingredient';
 
 const useRecipesStore = create((set, get) => ({
   recipes: [],

@@ -4,7 +4,7 @@ import { ThemeContext } from 'react-native-elements';
 import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import IngredientPickerScreen from './IngredientPickScreen';
+import IngredientPickerScreen from '../screens/recipes/IngredientPickScreen';
 
 const Stack = createStackNavigator();
 

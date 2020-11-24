@@ -76,7 +76,7 @@ export default function ListDetailRecipeRow({ name, nbPersons, index, removeReci
         </View>
 
         <ListItem containerStyle={styles.recipe} bottomDivider topDivider={index === 0}>
-          <Image source={require('../../../assets/empty-recipes.png')} style={styles.image} />
+          <Image source={require('../../assets/empty-recipes.png')} style={styles.image} />
           <ListItem.Content style={styles.recipeItemContent}>
             <ListItem.Title style={styles.recipeName}>{name}</ListItem.Title>
             <ListItem.Title style={styles.nbPersons}>{` (${nbPersons} pers.)`}</ListItem.Title>

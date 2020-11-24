@@ -3,8 +3,8 @@ import shallow from 'zustand/shallow';
 import { ScrollView, View, StyleSheet, Image, Text, ActivityIndicator, FlatList } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
-import Button from '../../utils/Button';
-import RecipeListItem from './RecipeListItem';
+import Button from '../../components/utils/Button';
+import RecipeListItem from '../../components/recipes/RecipeListItem';
 
 import useRecipeStores from '../../store/useRecipesStore';
 
@@ -42,7 +42,7 @@ export default function RecipesScreen({ navigation }) {
       marginVertical: 20,
     },
     list: {
-      marginTop: 10,
+      marginTop: 15,
       flex: 1,
     },
   });
@@ -58,7 +58,7 @@ export default function RecipesScreen({ navigation }) {
   if (recipes.length === 0) {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
-        <Image style={styles.image} source={require('../../../assets/empty-recipes.png')} />
+        <Image style={styles.image} source={require('../../assets/empty-recipes.png')} />
         <Text style={styles.text}>Il semblerait que tu n'aies pas encore de recettes, créer la première !</Text>
         <Button text="Créer une recette" onPress={() => navigation.navigate('CreateRecipe')} />
       </ScrollView>

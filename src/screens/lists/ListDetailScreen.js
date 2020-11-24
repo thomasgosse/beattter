@@ -3,13 +3,13 @@ import shallow from 'zustand/shallow';
 import { ScrollView, Text, StyleSheet, Image } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
-import Label from '../../utils/Label';
-import Button from '../../utils/Button';
-import ListDetailRecipeRow from './ListDetailRecipeRow';
-import ListDetailIngredientRow from './ListDetailIngredientRow';
+import Label from '../../components/utils/Label';
+import Button from '../../components/utils/Button';
+import ListDetailRecipeRow from '../../components/lists/ListDetailRecipeRow';
+import ListDetailIngredientRow from '../../components/lists/ListDetailIngredientRow';
 
 import useListsStore from '../../store/useListsStore';
-import kinds from '../../../kinds';
+import kinds from '../../kinds';
 
 export default function ListDetail({ navigation, route }) {
   const id = route.params?.id;
@@ -114,7 +114,7 @@ export default function ListDetail({ navigation, route }) {
   if (recipes.length === 0 && ingredients.length === 0) {
     return (
       <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
-        <Image style={styles.image} source={require('../../../assets/empty-lists.png')} />
+        <Image style={styles.image} source={require('../../assets/empty-lists.png')} />
         <Text style={styles.text}>
           Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter tes recettes.
         </Text>

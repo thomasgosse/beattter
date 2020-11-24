@@ -4,7 +4,7 @@ import { ThemeContext } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
 import Modal from 'react-native-modal';
 
-import Button from '../../utils/Button';
+import Button from '../utils/Button';
 
 export default function ListDetailRecipeModalDelete({ modalVisible, nbPersons, removeRecipe, onClose }) {
   const [selectedValue, setSelectedValue] = useState(1);

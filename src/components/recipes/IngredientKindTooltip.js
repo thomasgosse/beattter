@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Dimensions, Text, StyleSheet } from 'react-native';
 import { Avatar, Tooltip, ThemeContext } from 'react-native-elements';
 
-import kinds from '../../../kinds';
+import kinds from '../../kinds';
 
 export default function IngredientKindTooltip({ kind }) {
   const [tooltipSize] = useState({ w: Dimensions.get('window').width / 2, h: 16 });

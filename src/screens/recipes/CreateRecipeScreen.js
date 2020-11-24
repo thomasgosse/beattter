@@ -3,10 +3,10 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import shallow from 'zustand/shallow';
 
-import Input from '../../utils/Input';
-import Button from '../../utils/Button';
-import IngredientList from './IngredientList';
-import PersonPicker from '../PersonPicker';
+import Input from '../../components/utils/Input';
+import Button from '../../components/utils/Button';
+import IngredientList from '../../components/recipes/IngredientList';
+import PersonPicker from '../../components/utils/PersonPicker';
 
 import useRecipesStore from '../../store/useRecipesStore';
 
