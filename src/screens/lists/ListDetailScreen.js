@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import shallow from 'zustand/shallow';
-import { ScrollView, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 
 import Label from '../../components/utils/Label';
-import Button from '../../components/utils/Button';
 import ListDetailRecipeRow from '../../components/lists/ListDetailRecipeRow';
 import ListDetailIngredientRow from '../../components/lists/ListDetailIngredientRow';
+import EmptyList from '../../components/utils/EmptyList';
 
 import useListsStore from '../../store/useListsStore';
 import kinds from '../../kinds';
@@ -31,26 +31,9 @@ export default function ListDetail({ navigation, route }) {
     theme: { colors },
   } = useContext(ThemeContext);
   const styles = StyleSheet.create({
-    contentContainer: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
     container: {
       flex: 1,
       backgroundColor: colors.body,
-    },
-    image: {
-      alignSelf: 'center',
-      height: 300,
-      resizeMode: 'contain',
-    },
-    text: {
-      width: '80%',
-      fontSize: 16,
-      color: colors.textBase,
-      textAlign: 'center',
-      marginVertical: 20,
     },
     labelList: {
       marginVertical: 10,
@@ -113,13 +96,12 @@ export default function ListDetail({ navigation, route }) {
 
   if (recipes.length === 0 && ingredients.length === 0) {
     return (
-      <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
-        <Image style={styles.image} source={require('../../assets/empty-lists.png')} />
-        <Text style={styles.text}>
-          Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter tes recettes.
-        </Text>
-        <Button text="Aller aux recettes" onPress={() => navigation.navigate('Recipes', { screen: 'Recipes' })} />
-      </ScrollView>
+      <EmptyList
+        source={require('../../assets/empty-lists.png')}
+        text="Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter tes recettes."
+        btnText="Aller aux recettes"
+        onPress={() => navigation.navigate('Recipes', { screen: 'Recipes' })}
+      />
     );
   }
 
