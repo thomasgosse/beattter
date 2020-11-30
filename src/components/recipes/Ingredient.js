@@ -1,8 +1,8 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import { StyleSheet, Animated, View, Dimensions } from 'react-native';
 import { ListItem, ThemeContext } from 'react-native-elements';
-
 import { SwipeRow } from 'react-native-swipe-list-view';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
@@ -66,13 +66,15 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
   };
 
   useEffect(() => {
+    let timeout;
     if (!isReadOnly && index === 0 && !hasTransitioned.current) {
       hasTransitioned.current = true;
       rowRef.current.manuallySwipeRow(-hiddenItemWidth);
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         rowRef.current.manuallySwipeRow(0);
       }, 1000);
     }
+    return () => clearTimeout(timeout);
   }, [isReadOnly, hasTransitioned, index]);
 
   return (
@@ -82,6 +84,7 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
       disableRightSwipe={true}
       disableLeftSwipe={isReadOnly}
       initialLeftActionState={true}
+      swipeToOpenPercent={30}
       rightOpenValue={-Dimensions.get('window').width}
       onSwipeValueChange={onSwipeValueChange}
       useNativeDriver={false}
