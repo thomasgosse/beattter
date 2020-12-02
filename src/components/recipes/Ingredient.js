@@ -66,6 +66,7 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
   };
 
   useEffect(() => {
+    let current = rowRef.current;
     let timeout;
     if (!isReadOnly && index === 0 && !hasTransitioned.current) {
       hasTransitioned.current = true;
@@ -74,7 +75,10 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
         rowRef.current.manuallySwipeRow(0);
       }, 1000);
     }
-    return () => clearTimeout(timeout);
+    return () => {
+      current.manuallySwipeRow(0);
+      clearTimeout(timeout);
+    };
   }, [isReadOnly, hasTransitioned, index]);
 
   return (

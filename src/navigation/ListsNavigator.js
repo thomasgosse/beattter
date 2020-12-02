@@ -25,6 +25,7 @@ export default function ListsNavigator() {
     <View style={styles.container}>
       <View style={styles.controlContainer}>
         <SegmentedControl
+          appearance="light"
           values={['En cours', 'Passées']}
           selectedIndex={selectedIndex}
           onChange={(event) => setSelectedIndex(event.nativeEvent.selectedSegmentIndex)}

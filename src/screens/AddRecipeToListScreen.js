@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ScrollView, StyleSheet, Alert, View } from 'react-native';
 import shallow from 'zustand/shallow';
 import { ThemeContext } from 'react-native-elements';
@@ -12,8 +12,7 @@ import Button from '../components/utils/Button';
 import useListsStore from '../store/useListsStore';
 
 export default function AddRecipeToListScreen({ navigation, route }) {
-  const nbPersonsBase = route.params?.recipe?.nbPersonsBase;
-  const [nbPersons, setNbPersons] = useState(nbPersonsBase);
+  const [nbPersons, setNbPersons] = useState(1);
   const { lists, addRecipeToList, isRecipeInList, updateRecipeNbPersons } = useListsStore(
     (state) => ({
       lists: state.onGoingLists,
@@ -43,10 +42,6 @@ export default function AddRecipeToListScreen({ navigation, route }) {
       alignSelf: 'center',
     },
   });
-
-  useEffect(() => {
-    setNbPersons(nbPersonsBase);
-  }, [nbPersonsBase]);
 
   async function onPressAddToList(listId) {
     if (isRecipeInList(listId, route.params?.recipe.id)) {
