@@ -25,11 +25,13 @@ export default function Popup({ children, isVisible, close }) {
   });
 
   useEffect(() => {
+    let timeout;
     if (isVisible) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         close();
       }, 3000);
     }
+    return () => clearTimeout(timeout);
   }, [close, isVisible]);
 
   return (
