@@ -7,7 +7,7 @@ import * as RootNavigation from '../../navigation/RootNavigation';
 
 import { isSeasonal } from '../../services/ingredient';
 
-export default function RecipeListItem({ name, id, nbPersonsBase, ingredients, principalKind, index }) {
+export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredients, principalKind, index }) {
   const [seasonal, setSeasonal] = useState(false);
   const {
     theme: { colors },
@@ -69,6 +69,8 @@ export default function RecipeListItem({ name, id, nbPersonsBase, ingredients, p
     setSeasonal(isSeasonal(ingredients));
   }, [ingredients]);
 
+  const source = uri ? { uri } : require('../../assets/chou.jpg');
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -76,12 +78,14 @@ export default function RecipeListItem({ name, id, nbPersonsBase, ingredients, p
       onLongPress={() =>
         RootNavigation.navigate('AddRecipeToList', {
           screen: 'Ajouter à une liste',
-          params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
+          params: {
+            recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)), imageUri: uri },
+          },
         })
       }
     >
       <View style={styles.card}>
-        <Image source={require('../../assets/chou.jpg')} style={styles.image} />
+        <Image source={source} style={styles.image} />
         <View>
           <View style={styles.firstRow}>
             <Text style={styles.name} numberOfLines={2}>

@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import ListDetailRecipeModalDelete from './ListDetailRecipeModalDelete';
 
-export default function ListDetailRecipeRow({ name, nbPersons, index, removeRecipe }) {
+export default function ListDetailRecipeRow({ name, nbPersons, uri, index, removeRecipe }) {
   const rowRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -60,6 +60,8 @@ export default function ListDetailRecipeRow({ name, nbPersons, index, removeReci
     },
   });
 
+  const source = uri ? { uri } : require('../../assets/empty-recipes.png');
+
   return (
     <>
       <SwipeRow
@@ -76,7 +78,7 @@ export default function ListDetailRecipeRow({ name, nbPersons, index, removeReci
         </View>
 
         <ListItem containerStyle={styles.recipe} bottomDivider topDivider={index === 0}>
-          <Image source={require('../../assets/empty-recipes.png')} style={styles.image} />
+          <Image source={source} style={styles.image} />
           <ListItem.Content style={styles.recipeItemContent}>
             <ListItem.Title style={styles.recipeName}>{name}</ListItem.Title>
             <ListItem.Title style={styles.nbPersons}>{` (${nbPersons} pers.)`}</ListItem.Title>

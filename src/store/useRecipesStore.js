@@ -25,13 +25,14 @@ const useRecipesStore = create((set, get) => ({
     return recipes.find((recipe) => recipe.id === id);
   },
 
-  updateRecipe: async ({ id, name, nbPersonsBase, ingredients }) => {
+  updateRecipe: async ({ id, name, nbPersonsBase, ingredients, imageUri }) => {
     const updatedRecipe = {
       id,
       name,
       nbPersonsBase,
       principalKind: getPrincipalKind(ingredients),
       ingredients,
+      imageUri,
     };
     await storeData(`recipe_${updatedRecipe.id}`, updatedRecipe);
     let recipes = [...get().recipes];
@@ -51,6 +52,7 @@ const useRecipesStore = create((set, get) => ({
         nbPersonsBase,
         principalKind: getPrincipalKind(ingredients),
         ingredients,
+        imageUri: '',
       };
       recipes.push(newRecipe);
       await storeData(`recipe_${newRecipe.id}`, newRecipe);

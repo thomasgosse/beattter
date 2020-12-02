@@ -13,7 +13,7 @@ export default function PersonPicker({ nbPersons, setNbPersons, label, isReadOnl
 
   const styles = StyleSheet.create({
     container: {
-      justifyContent: isReadOnly ? 'flex-start' : 'center',
+      justifyContent: 'center',
       flexDirection: 'row',
       backgroundColor: colors.listRow,
       alignItems: 'center',

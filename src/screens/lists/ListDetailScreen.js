@@ -108,16 +108,20 @@ export default function ListDetail({ navigation, route }) {
   return (
     <ScrollView style={styles.container}>
       <Label containerStyle={styles.labelList} label="Recettes de la liste" />
-      {recipes.map((recipe, index) => (
-        <ListDetailRecipeRow
-          key={recipe.id}
-          name={recipe.name}
-          nbPersons={recipe.nbPersons}
-          nbPersonsBase={recipe.nbPersonsBase}
-          index={index}
-          removeRecipe={removeRecipe.bind(null, id, recipe.id)}
-        />
-      ))}
+      {recipes.map((recipe, index) => {
+        console.log(recipe);
+        return (
+          <ListDetailRecipeRow
+            key={recipe.id}
+            name={recipe.name}
+            uri={recipe.imageUri}
+            nbPersons={recipe.nbPersons}
+            nbPersonsBase={recipe.nbPersonsBase}
+            index={index}
+            removeRecipe={removeRecipe.bind(null, id, recipe.id)}
+          />
+        );
+      })}
 
       {sections.map((section) => (
         <React.Fragment key={section.title}>

@@ -22,6 +22,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const [name, setName] = useState('');
   const [nbPersonsBase, setNbPersonsBase] = useState(2);
   const [ingredients, setIngredients] = useState([]);
+  const [uri, setUri] = useState('');
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [modifiedLists, setModifiedLists] = useState([]);
   const { getRecipeById, updateRecipe, deleteRecipe } = useRecipesStore(
@@ -83,6 +84,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
     setName(r.name);
     setNbPersonsBase(r.nbPersonsBase);
     setIngredients(r.ingredients);
+    setUri(r.imageUri);
   }, [id, getRecipeById]);
 
   function removeIngredient(index) {
@@ -140,7 +142,14 @@ export default function RecipeDetailScreen({ route, navigation }) {
   }
 
   async function onPressModify() {
-    const recipeUpdate = { id: recipe.id, name, nbPersonsBase, ingredients, principalKind: recipe.principalKind };
+    const recipeUpdate = {
+      id: recipe.id,
+      name,
+      nbPersonsBase,
+      ingredients,
+      principalKind: recipe.principalKind,
+      imageUri: uri,
+    };
     if (!isReadOnly && !isEqual(recipe, recipeUpdate)) {
       await updateRecipe(recipeUpdate);
       setModifiedLists(await updateRecipeInOngoingLists(recipeUpdate));
@@ -150,11 +159,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   }
 
   return (
-    <WithImageHeader
-      source={require('../../assets/chou.jpg')}
-      isReadOnly={isReadOnly}
-      headerRightAction={onPressModify}
-    >
+    <WithImageHeader uri={uri} setUri={setUri} isReadOnly={isReadOnly} headerRightAction={onPressModify}>
       <>
         <Input
           containerStyle={styles.input}

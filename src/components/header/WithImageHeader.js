@@ -6,7 +6,7 @@ import { useSafeArea } from 'react-native-safe-area-context';
 import HeaderBar from './HeaderBar';
 import HeaderImage, { HEADER_IMAGE_HEIGHT } from './HeaderImage';
 
-export default function WithImageHeader({ children, source, isReadOnly, headerRightAction }) {
+export default function WithImageHeader({ children, uri, setUri, isReadOnly, headerRightAction }) {
   const y = new Animated.Value(0);
   const insets = useSafeArea();
   const { bottom: paddingBottom } = insets;
@@ -23,8 +23,6 @@ export default function WithImageHeader({ children, source, isReadOnly, headerRi
 
   return (
     <View style={styles.header}>
-      <HeaderImage y={y} source={source} />
-
       <ScrollView
         style={StyleSheet.absoluteFill}
         scrollEventThrottle={1}
@@ -34,6 +32,7 @@ export default function WithImageHeader({ children, source, isReadOnly, headerRi
         <View style={{ paddingBottom }}>{children}</View>
       </ScrollView>
 
+      <HeaderImage y={y} uri={uri} setUri={setUri} isReadOnly={isReadOnly} />
       <HeaderBar y={y} onPressModify={headerRightAction} isReadOnly={isReadOnly} />
     </View>
   );

@@ -60,6 +60,7 @@ export default function RecipesScreen({ navigation }) {
         <RecipeListItem
           name={item.name}
           id={item.id}
+          uri={item.imageUri}
           nbPersonsBase={item.nbPersonsBase}
           index={index}
           ingredients={item.ingredients}
