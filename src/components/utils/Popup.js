@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { ThemeContext } from 'react-native-elements';
-
 import Modal from 'react-native-modal';
 
 export default function Popup({ children, isVisible, close }) {
@@ -29,19 +28,13 @@ export default function Popup({ children, isVisible, close }) {
     if (isVisible) {
       timeout = setTimeout(() => {
         close();
-      }, 3000);
+      }, 7000);
     }
     return () => clearTimeout(timeout);
   }, [close, isVisible]);
 
   return (
-    <Modal
-      isVisible={isVisible}
-      onSwipeComplete={close}
-      onBackdropPress={close}
-      swipeDirection={['up', 'left', 'right', 'down']}
-      style={styles.view}
-    >
+    <Modal isVisible={isVisible} onSwipeComplete={close} onBackdropPress={close} style={styles.view}>
       <SafeAreaView style={styles.view}>
         <TouchableWithoutFeedback style={styles.container} onPress={close}>
           {children}
