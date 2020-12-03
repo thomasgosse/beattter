@@ -1,19 +1,21 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import shallow from 'zustand/shallow';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Label from '../../components/utils/Label';
 import ListDetailRecipeRow from '../../components/lists/ListDetailRecipeRow';
 import ListDetailIngredientRow from '../../components/lists/ListDetailIngredientRow';
 import EmptyList from '../../components/utils/EmptyList';
 
-import useListsStore from '../../store/useListsStore';
+import useListsStore, { isListOver } from '../../store/useListsStore';
 import kinds from '../../kinds';
 
 export default function ListDetail({ navigation, route }) {
   const id = route.params?.id;
 
+  const [isReadOnly, setIsReadOnly] = useState(false);
   const [isSwiping, setIsSwiping] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
@@ -44,6 +46,22 @@ export default function ListDetail({ navigation, route }) {
       marginTop: 10,
       marginLeft: 10,
     },
+    isReadOnly: {
+      marginTop: 10,
+      marginHorizontal: 10,
+      borderRadius: 8,
+      backgroundColor: colors.success,
+      height: 50,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    isReadOnlyText: {
+      color: colors.header,
+      fontSize: 16,
+      fontWeight: '500',
+      marginRight: 10,
+    },
   });
 
   const updateStates = useCallback(() => {
@@ -67,6 +85,7 @@ export default function ListDetail({ navigation, route }) {
     });
     setIngredients(ings);
     setRecipes(list.recipes);
+    setIsReadOnly(isListOver(list.endingDay));
   }, [getListById, id]);
 
   useEffect(() => {
@@ -107,11 +126,16 @@ export default function ListDetail({ navigation, route }) {
   }
 
   return (
-    <ScrollView style={styles.container} scrollEnabled={!isSwiping}>
-      <Label containerStyle={styles.labelList} label="Recettes de la liste" />
-      {recipes.map((recipe, index) => {
-        console.log(recipe);
-        return (
+    <>
+      {isReadOnly && (
+        <View style={styles.isReadOnly}>
+          <Text style={styles.isReadOnlyText}>Cette liste est en lecture seule</Text>
+          <Icon name="lock-closed" size={24} color={colors.header} />
+        </View>
+      )}
+      <ScrollView style={styles.container} scrollEnabled={!isSwiping}>
+        <Label containerStyle={styles.labelList} label="Recettes de la liste" />
+        {recipes.map((recipe, index) => (
           <ListDetailRecipeRow
             key={recipe.id}
             name={recipe.name}
@@ -121,25 +145,27 @@ export default function ListDetail({ navigation, route }) {
             index={index}
             setIsSwiping={setIsSwiping}
             removeRecipe={removeRecipe.bind(null, id, recipe.id)}
+            isReadOnly={isReadOnly}
           />
-        );
-      })}
+        ))}
 
-      {sections.map((section) => (
-        <React.Fragment key={section.title}>
-          <Label containerStyle={styles.sectionLabel} label={section.title} />
-          {section.data.map((ingredient) => (
-            <ListDetailIngredientRow
-              key={ingredient.slug + ingredient.recipeId}
-              name={ingredient.name}
-              recipeName={ingredient.recipeName}
-              quantity={ingredient.quantity}
-              checked={ingredient.checked}
-              onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
-            />
-          ))}
-        </React.Fragment>
-      ))}
-    </ScrollView>
+        {sections.map((section) => (
+          <React.Fragment key={section.title}>
+            <Label containerStyle={styles.sectionLabel} label={section.title} />
+            {section.data.map((ingredient) => (
+              <ListDetailIngredientRow
+                key={ingredient.slug + ingredient.recipeId}
+                name={ingredient.name}
+                recipeName={ingredient.recipeName}
+                quantity={ingredient.quantity}
+                checked={ingredient.checked}
+                onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
+                isReadOnly={isReadOnly}
+              />
+            ))}
+          </React.Fragment>
+        ))}
+      </ScrollView>
+    </>
   );
 }

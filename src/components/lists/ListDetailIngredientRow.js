@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import CheckBox from '@react-native-community/checkbox';
 
-export default function ListDetailIngredientRow({ name, recipeName, quantity, checked, onCheck, index }) {
+export default function ListDetailIngredientRow({ name, recipeName, quantity, checked, onCheck, isReadOnly, index }) {
   const [toggleCheckbox, setToggleCheckbox] = useState(checked);
 
   const {
@@ -66,16 +66,16 @@ export default function ListDetailIngredientRow({ name, recipeName, quantity, ch
         style={styles.checkbox}
         onAnimationType="bounce"
         offAnimationType="bounce"
-        disabled={false}
+        disabled={isReadOnly}
         onValueChange={async (value) => {
           setToggleCheckbox(value);
           await onCheck(value);
         }}
         value={checked}
         animationDuration={0.3}
-        tintColor={colors.textTitle}
-        onFillColor={colors.textTitle}
-        onTintColor={colors.textTitle}
+        tintColor={isReadOnly ? colors.divider : colors.textTitle}
+        onFillColor={isReadOnly ? colors.divider : colors.textTitle}
+        onTintColor={isReadOnly ? colors.divider : colors.textTitle}
         onCheckColor={colors.header}
       />
     </View>
