@@ -12,6 +12,7 @@ import useRecipesStore from '../../store/useRecipesStore';
 
 export default function CreateRecipeScreen({ navigation, route }) {
   const [name, setName] = useState('');
+  const [isSwiping, setIsSwiping] = useState(false);
   const [nbPersonsBase, setNbPersonsBase] = useState(2);
   const { createRecipe, ingredients, removeIngredient, addIngredient } = useRecipesStore(
     (state) => ({
@@ -43,7 +44,7 @@ export default function CreateRecipeScreen({ navigation, route }) {
   });
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} scrollEnabled={!isSwiping}>
       <Input
         containerStyle={styles.input}
         label="Nom de la recette"
@@ -58,6 +59,7 @@ export default function CreateRecipeScreen({ navigation, route }) {
         ingredients={ingredients}
         removeIngredient={removeIngredient}
         initiatorRoute="CreateRecipe"
+        setIsSwiping={setIsSwiping}
       />
 
       <Button

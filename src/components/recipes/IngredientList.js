@@ -14,6 +14,7 @@ export default function IngredientList({
   onPressAddCart,
   isReadOnly,
   initiatorRoute,
+  setIsSwiping,
 }) {
   const listItemHeight = 60;
   const hasTransitioned = useRef(false);
@@ -59,6 +60,7 @@ export default function IngredientList({
           removeIngredient={removeIngredient}
           isReadOnly={isReadOnly}
           hasTransitioned={hasTransitioned}
+          setIsSwiping={setIsSwiping}
         />
       ))}
 

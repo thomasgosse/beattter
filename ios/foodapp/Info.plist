@@ -61,5 +61,7 @@
 	<string>$(PRODUCT_NAME) would like to use your camera (For upload your photo)</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like access to your photo gallery (For Upload your photo)</string>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 </dict>
 </plist>

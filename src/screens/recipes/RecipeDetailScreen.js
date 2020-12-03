@@ -25,6 +25,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   const [uri, setUri] = useState('');
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [modifiedLists, setModifiedLists] = useState([]);
+  const [isSwiping, setIsSwiping] = useState(false);
   const { getRecipeById, updateRecipe, deleteRecipe } = useRecipesStore(
     (state) => ({
       getRecipeById: state.getRecipeById,
@@ -159,7 +160,13 @@ export default function RecipeDetailScreen({ route, navigation }) {
   }
 
   return (
-    <WithImageHeader uri={uri} setUri={setUri} isReadOnly={isReadOnly} headerRightAction={onPressModify}>
+    <WithImageHeader
+      uri={uri}
+      setUri={setUri}
+      isReadOnly={isReadOnly}
+      headerRightAction={onPressModify}
+      isSwiping={isSwiping}
+    >
       <>
         <Input
           containerStyle={styles.input}
@@ -183,6 +190,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
               params: { recipe: { id, name, nbPersonsBase, ingredients: JSON.parse(JSON.stringify(ingredients)) } },
             });
           }}
+          setIsSwiping={setIsSwiping}
         />
 
         {!isReadOnly && <Button text="Supprimer" containerStyle={styles.deleteButtton} onPress={onPressDelete} />}

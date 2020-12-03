@@ -14,6 +14,7 @@ import kinds from '../../kinds';
 export default function ListDetail({ navigation, route }) {
   const id = route.params?.id;
 
+  const [isSwiping, setIsSwiping] = useState(false);
   const [ingredients, setIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [sections, setSections] = useState([]);
@@ -106,7 +107,7 @@ export default function ListDetail({ navigation, route }) {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} scrollEnabled={!isSwiping}>
       <Label containerStyle={styles.labelList} label="Recettes de la liste" />
       {recipes.map((recipe, index) => {
         console.log(recipe);
@@ -118,6 +119,7 @@ export default function ListDetail({ navigation, route }) {
             nbPersons={recipe.nbPersons}
             nbPersonsBase={recipe.nbPersonsBase}
             index={index}
+            setIsSwiping={setIsSwiping}
             removeRecipe={removeRecipe.bind(null, id, recipe.id)}
           />
         );

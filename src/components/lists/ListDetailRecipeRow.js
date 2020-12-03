@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import ListDetailRecipeModalDelete from './ListDetailRecipeModalDelete';
 
-export default function ListDetailRecipeRow({ name, nbPersons, uri, index, removeRecipe }) {
+export default function ListDetailRecipeRow({ name, nbPersons, uri, setIsSwiping, index, removeRecipe }) {
   const rowRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -70,6 +70,8 @@ export default function ListDetailRecipeRow({ name, nbPersons, uri, index, remov
         disableRightSwipe={true}
         rightOpenValue={-hiddenItemWidth}
         useNativeDriver={false}
+        swipeGestureBegan={() => setIsSwiping(true)}
+        swipeGestureEnded={() => setIsSwiping(false)}
       >
         <View style={styles.hiddenRow}>
           <TouchableOpacity style={styles.hiddenBtn} onPress={() => setModalVisible(true)}>

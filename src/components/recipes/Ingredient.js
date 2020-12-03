@@ -6,7 +6,15 @@ import { SwipeRow } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
-export default function Ingredient({ ingredient, index, itemHeight, removeIngredient, isReadOnly, hasTransitioned }) {
+export default function Ingredient({
+  ingredient,
+  index,
+  itemHeight,
+  removeIngredient,
+  isReadOnly,
+  hasTransitioned,
+  setIsSwiping,
+}) {
   const rowRef = useRef(null);
   const animatedHeight = useRef(new Animated.Value(1)).current;
   const hiddenItemWidth = 50;
@@ -92,6 +100,8 @@ export default function Ingredient({ ingredient, index, itemHeight, removeIngred
       rightOpenValue={-Dimensions.get('window').width}
       onSwipeValueChange={onSwipeValueChange}
       useNativeDriver={false}
+      swipeGestureBegan={() => setIsSwiping(true)}
+      swipeGestureEnded={() => setIsSwiping(false)}
     >
       <View style={styles.hiddenContainer}>
         <View style={styles.hiddenBtn}>
