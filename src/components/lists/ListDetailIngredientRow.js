@@ -54,7 +54,7 @@ export default function ListDetailIngredientRow({ name, recipeName, quantity, ch
           <Text style={styles.ingredientName}>{name}</Text>
           <Text style={styles.quantity}>
             {' '}
-            - {quantity.value}
+            - {parseFloat(quantity.value)}
             {quantity.unit}
           </Text>
         </View>

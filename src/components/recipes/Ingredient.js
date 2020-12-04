@@ -122,7 +122,7 @@ export default function Ingredient({
             <ListItem.Title style={styles.ingredientName}>{ingredient.name}</ListItem.Title>
             <ListItem.Title style={styles.quantity}>
               {' '}
-              - {ingredient.quantity.value}
+              - {parseFloat(ingredient.quantity.value)}
               {ingredient.quantity.unit}
             </ListItem.Title>
           </ListItem.Content>
