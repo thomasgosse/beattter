@@ -1,4 +1,4 @@
-package com.foodapp;
+package com.beattter;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "foodapp";
+    return "beattter";
   }
 }

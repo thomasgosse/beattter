@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, Animated, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Animated, TouchableOpacity } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import { useSafeArea } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,25 +10,15 @@ import { HEADER_IMAGE_HEIGHT } from './HeaderImage';
 const MIN_HEADER_HEIGHT = 45;
 const ICON_SIZE = 26;
 
+const AnimatedIcon = Animated.createAnimatedComponent(Icon);
+
 export default function HeaderBar({ y, onPressModify, isReadOnly }) {
   const insets = useSafeArea();
   const { top: paddingTop } = insets;
-  let opacity = y.interpolate({
-    inputRange: [HEADER_IMAGE_HEIGHT - 200, HEADER_IMAGE_HEIGHT - 150],
-    outputRange: [0, 1],
-    extrapolateRight: 'clamp',
-  });
 
   const {
     theme: { colors },
   } = useContext(ThemeContext);
-  const btn = {
-    color: colors.header,
-    fontSize: 18,
-    position: 'absolute',
-    top: (ICON_SIZE - 18) / 2,
-    right: 16,
-  };
   const styles = StyleSheet.create({
     container: {
       position: 'absolute',
@@ -38,10 +28,10 @@ export default function HeaderBar({ y, onPressModify, isReadOnly }) {
     },
     headerBarContent: {
       height: MIN_HEADER_HEIGHT,
-    },
-    headerBackBtn: {
-      position: 'absolute',
-      left: 16,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 16,
     },
     headerBarBackground: {
       ...StyleSheet.absoluteFillObject,
@@ -49,23 +39,23 @@ export default function HeaderBar({ y, onPressModify, isReadOnly }) {
       borderBottomWidth: 1,
       borderBottomColor: colors.divider,
     },
-    title: {
+    btn: {
       fontSize: 18,
     },
-    btn,
     btnBold: {
-      ...btn,
+      fontSize: 18,
       fontWeight: '600',
     },
-    btnBlack: {
-      ...btn,
-      color: 'black',
-    },
-    btnBoldBlack: {
-      ...btn,
-      color: 'black',
-      fontWeight: '600',
-    },
+  });
+
+  const opacity = y.interpolate({
+    inputRange: [HEADER_IMAGE_HEIGHT - 200, HEADER_IMAGE_HEIGHT - 150],
+    outputRange: [0, 1],
+    extrapolateRight: 'clamp',
+  });
+  const color = y.interpolate({
+    inputRange: [HEADER_IMAGE_HEIGHT - 200, HEADER_IMAGE_HEIGHT - 150],
+    outputRange: [colors.header, 'black'],
   });
 
   return (
@@ -73,20 +63,14 @@ export default function HeaderBar({ y, onPressModify, isReadOnly }) {
       <Animated.View style={[styles.headerBarBackground, { opacity }]} />
       <View style={styles.headerBarContent}>
         <TouchableOpacity onPress={() => RootNavigation.goBack()}>
-          <>
-            <Icon style={styles.headerBackBtn} name="arrow-back-outline" size={ICON_SIZE} color={colors.header} />
-            <Animated.View style={[styles.headerBackBtn, { opacity }]}>
-              <Icon name="arrow-back-outline" size={ICON_SIZE} color="black" />
-            </Animated.View>
-          </>
+          <AnimatedIcon style={{ color }} name="arrow-back-outline" size={ICON_SIZE} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onPressModify}>
-          {isReadOnly ? <Text style={styles.btn}>Modifier</Text> : <Text style={styles.btnBold}>OK</Text>}
           {isReadOnly ? (
-            <Animated.Text style={[styles.btnBlack, { opacity }]}>Modifier</Animated.Text>
+            <Animated.Text style={[styles.btn, { color }]}>Modifier</Animated.Text>
           ) : (
-            <Animated.Text style={[styles.btnBoldBlack, { opacity }]}>OK</Animated.Text>
+            <Animated.Text style={[styles.btnBold, { color }]}>OK</Animated.Text>
           )}
         </TouchableOpacity>
       </View>

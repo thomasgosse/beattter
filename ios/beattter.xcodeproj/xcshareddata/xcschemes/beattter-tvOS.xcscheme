@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "foodapp-tvOS.app"
-               BlueprintName = "foodapp-tvOS"
-               ReferencedContainer = "container:foodapp.xcodeproj">
+               BuildableName = "beattter-tvOS.app"
+               BlueprintName = "beattter-tvOS"
+               ReferencedContainer = "container:beattter.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "foodapp-tvOSTests.xctest"
-               BlueprintName = "foodapp-tvOSTests"
-               ReferencedContainer = "container:foodapp.xcodeproj">
+               BuildableName = "beattter-tvOSTests.xctest"
+               BlueprintName = "beattter-tvOSTests"
+               ReferencedContainer = "container:beattter.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "foodapp-tvOS.app"
-            BlueprintName = "foodapp-tvOS"
-            ReferencedContainer = "container:foodapp.xcodeproj">
+            BuildableName = "beattter-tvOS.app"
+            BlueprintName = "beattter-tvOS"
+            ReferencedContainer = "container:beattter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "foodapp-tvOS.app"
-            BlueprintName = "foodapp-tvOS"
-            ReferencedContainer = "container:foodapp.xcodeproj">
+            BuildableName = "beattter-tvOS.app"
+            BlueprintName = "beattter-tvOS"
+            ReferencedContainer = "container:beattter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -52,7 +52,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme} ref={themeProvideRef}>
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" translucent={true} />
+        <StatusBar barStyle="dark-content" translucent backgroundColor="transparent" />
         <SafeAreaProvider>
           <NavigationContainer ref={navigationRef}>
             <RootNavigator />

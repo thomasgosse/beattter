@@ -17,7 +17,7 @@ export default function IngredientPickNavigator({ navigation }) {
     <Stack.Navigator
       initialRouteName="Ajouter un ingrédient"
       screenOptions={{
-        headerStatusBarHeight: 0,
+        ...(Platform.OS === 'ios' && { headerStatusBarHeight: 0 }),
         headerStyle: { backgroundColor: colors.header, elevation: 0, shadowOpacity: 0 },
       }}
     >

@@ -11,7 +11,6 @@ export default function Popup({ children, isVisible, close }) {
   const styles = StyleSheet.create({
     view: {
       justifyContent: 'flex-end',
-      marginVertical: 0,
     },
     container: {
       backgroundColor: colors.success,
@@ -34,7 +33,7 @@ export default function Popup({ children, isVisible, close }) {
   }, [close, isVisible]);
 
   return (
-    <Modal isVisible={isVisible} onSwipeComplete={close} onBackdropPress={close} style={styles.view}>
+    <Modal isVisible={isVisible} onBackdropPress={close} style={styles.view}>
       <SafeAreaView style={styles.view}>
         <TouchableWithoutFeedback style={styles.container} onPress={close}>
           {children}
