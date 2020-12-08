@@ -13,6 +13,7 @@ import WithImageHeader from '../../components/header/WithImageHeader';
 
 import useRecipesStore from '../../store/useRecipesStore';
 import useListsStore from '../../store/useListsStore';
+import { updateIngredients } from '../../store/helper';
 
 export default function RecipeDetailScreen({ route, navigation }) {
   const ingredient = route.params?.ingredient;
@@ -70,7 +71,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
   useEffect(() => {
     if (ingredient) {
       let ings = [...ingredients];
-      ings.push(ingredient);
+      ings = updateIngredients(ings, ingredient);
       setIngredients(ings);
       navigation.setParams({ ingredient: null });
     }

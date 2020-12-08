@@ -12,7 +12,7 @@ import EmptyList from '../../components/utils/EmptyList';
 import ListDetailDualButton from '../../components/lists/ListDetailDualButton';
 
 import useListsStore from '../../store/useListsStore';
-import useListDetail from './useListDetail';
+import useListDetail from '../../hooks/useListDetail';
 
 export default function ListDetail({ navigation, route }) {
   const id = route.params?.id;
@@ -74,14 +74,18 @@ export default function ListDetail({ navigation, route }) {
   });
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={() => setIsReadOnly(!isReadOnly)}>
-          <Text style={styles.headerRight}>{isReadOnly ? 'Modifier' : 'OK'}</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation, isReadOnly, styles.headerRight]);
+    if (isOver) {
+      navigation.setOptions({ headerRight: () => {} });
+    } else {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity onPress={() => setIsReadOnly(!isReadOnly)}>
+            <Text style={styles.headerRight}>{isReadOnly ? 'Modifier' : 'OK'}</Text>
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [navigation, isReadOnly, isOver, styles.headerRight]);
 
   function getCheckFunction(recipeId, ingrSlug) {
     if (recipeId === 'detached') {

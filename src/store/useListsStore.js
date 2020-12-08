@@ -1,5 +1,6 @@
 import create from 'zustand';
 import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
+import { updateIngredients } from './helper';
 
 export const isListOver = (endingDay) => {
   let now = new Date().setHours(0, 0, 0);
@@ -94,11 +95,7 @@ const useListsStore = create((set, get) => ({
   addIngredient: async (ingredient, listId) => {
     const lists = [...get().lists];
     const index = lists.findIndex((item) => item.id === listId);
-    if (lists[index].ingredients) {
-      lists[index].ingredients.push(ingredient);
-    } else {
-      lists[index].ingredients = [ingredient];
-    }
+    lists[index].ingredients = updateIngredients(lists[index].ingredients, ingredient);
     await storeData(`list_${listId}`, lists[index]);
     updateLists(lists, set);
   },

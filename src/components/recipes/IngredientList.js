@@ -55,7 +55,7 @@ export default function IngredientList({
         <Ingredient
           ingredient={ingredient}
           index={i}
-          key={ingredient.name + ingredient.quantity.unit}
+          key={ingredient.name + JSON.stringify(ingredient.quantity)}
           itemHeight={listItemHeight}
           removeIngredient={removeIngredient}
           isReadOnly={isReadOnly}

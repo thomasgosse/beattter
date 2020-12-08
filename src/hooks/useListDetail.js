@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import useListsStore, { isListOver } from '../../store/useListsStore';
+import useListsStore, { isListOver } from '../store/useListsStore';
 
-import kinds from '../../kinds';
+import kinds from '../kinds';
 
 export default function useListDetail(id, route, navigation) {
   const [isOver, setIsOver] = useState(false);

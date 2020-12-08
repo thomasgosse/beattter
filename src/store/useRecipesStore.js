@@ -2,6 +2,7 @@ import create from 'zustand';
 
 import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
 import { getPrincipalKind } from '../services/ingredient';
+import { updateIngredients } from './helper';
 
 const useRecipesStore = create((set, get) => ({
   recipes: [],
@@ -80,7 +81,7 @@ const useRecipesStore = create((set, get) => ({
 
   addIngredient: (ingredient) => {
     let ingredients = [...get().ingredients];
-    ingredients.push(ingredient);
+    updateIngredients(ingredients, ingredient);
     set({ ingredients });
   },
 
