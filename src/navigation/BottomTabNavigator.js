@@ -17,10 +17,10 @@ export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {
     function getHeaderTitle() {
       const routeName = getFocusedRouteNameFromRoute(route);
-      if (routeName === 'Lists') {
-        return 'Listes de courses';
-      } else {
+      if (routeName === 'Recipes') {
         return 'Mes Recettes';
+      } else {
+        return 'Listes de courses';
       }
     }
 
@@ -47,22 +47,22 @@ export default function BottomTabNavigator({ navigation, route }) {
       }}
     >
       <BottomTab.Screen
-        name="Recipes"
-        component={RecipesScreen}
-        options={{
-          title: 'Recettes',
-          tabBarIcon: ({ focused }) => (
-            <Icon size={28} name="book-outline" color={focused ? colors.textTitle : colors.textBaseLight} />
-          ),
-        }}
-      />
-      <BottomTab.Screen
         name="Lists"
         component={ListsNavigator}
         options={{
           title: 'Listes',
           tabBarIcon: ({ focused }) => (
             <Icon size={28} name="cart-outline" color={focused ? colors.textTitle : colors.textBaseLight} />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Recipes"
+        component={RecipesScreen}
+        options={{
+          title: 'Recettes',
+          tabBarIcon: ({ focused }) => (
+            <Icon size={28} name="book-outline" color={focused ? colors.textTitle : colors.textBaseLight} />
           ),
         }}
       />

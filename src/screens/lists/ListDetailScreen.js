@@ -33,6 +33,8 @@ export default function ListDetail({ navigation, route }) {
     navigation
   );
 
+  const isEmpty = recipes.length === 0 && ingredients.length === 0;
+
   const insets = useSafeArea();
   const {
     theme: { colors },
@@ -74,7 +76,7 @@ export default function ListDetail({ navigation, route }) {
   });
 
   useLayoutEffect(() => {
-    if (isOver) {
+    if (isOver || isEmpty) {
       navigation.setOptions({ headerRight: () => {} });
     } else {
       navigation.setOptions({
@@ -85,7 +87,7 @@ export default function ListDetail({ navigation, route }) {
         ),
       });
     }
-  }, [navigation, isReadOnly, isOver, styles.headerRight]);
+  }, [navigation, isReadOnly, isOver, isEmpty, styles.headerRight]);
 
   function getCheckFunction(recipeId, ingrSlug) {
     if (recipeId === 'detached') {
@@ -109,7 +111,7 @@ export default function ListDetail({ navigation, route }) {
     />
   );
 
-  if (recipes.length === 0 && ingredients.length === 0) {
+  if (isEmpty) {
     return (
       <EmptyList
         source={require('../../assets/empty-lists.png')}

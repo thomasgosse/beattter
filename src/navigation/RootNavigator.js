@@ -14,7 +14,7 @@ import IngredientPickNavigator from './IngredientPickNavigator';
 import AddRecipeToListNavigator from './AddRecipeToListNavigator';
 
 const Stack = createNativeStackNavigator();
-const INITIAL_ROUTE_NAME = 'Recipes';
+const INITIAL_ROUTE_NAME = 'Lists';
 
 export default function RootNavigator() {
   const {
