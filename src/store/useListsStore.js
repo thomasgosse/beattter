@@ -1,23 +1,6 @@
 import create from 'zustand';
 import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
-import { updateIngredients } from './helper';
-
-export const isListOver = (endingDay) => {
-  let now = new Date().setHours(0, 0, 0);
-  return new Date(endingDay) < now;
-};
-
-const orderDescStartingDay = (a, b) => {
-  var keyA = new Date(a.startingDay),
-    keyB = new Date(b.startingDay);
-  if (keyA < keyB) {
-    return -1;
-  }
-  if (keyA > keyB) {
-    return 1;
-  }
-  return 0;
-};
+import { updateIngredients, orderDescStartingDay, isListOver } from './helper';
 
 function updateLists(lists, set) {
   let onGoingLists = [];
@@ -59,7 +42,7 @@ const useListsStore = create((set, get) => ({
       const lists = (await getMultipleWithRegex('list_')) || [];
       updateLists(lists, set);
     } catch (e) {
-      console.log('Could not get lists', e);
+      console.log('getLists', e);
     } finally {
       set({ loading: false });
     }
@@ -72,7 +55,6 @@ const useListsStore = create((set, get) => ({
 
   createList: async (endingDay, startingDay, name) => {
     try {
-      set({ loading: true });
       let lists = [...get().lists];
       const list = {
         endingDay,
@@ -86,9 +68,7 @@ const useListsStore = create((set, get) => ({
       await storeData(`list_${list.id}`, list);
       updateLists(lists, set);
     } catch (e) {
-      console.log('Could not create list', e);
-    } finally {
-      set({ loading: false });
+      console.log('getListById', e);
     }
   },
 
@@ -118,7 +98,7 @@ const useListsStore = create((set, get) => ({
       await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
     } catch (e) {
-      console.log('Could not update list', e);
+      console.log('addRecipeToList', e);
     }
   },
 
@@ -131,7 +111,7 @@ const useListsStore = create((set, get) => ({
       await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
     } catch (e) {
-      console.log('Could not remove recipe from list', e);
+      console.log('removeRecipeFromList', e);
     }
   },
 
@@ -193,7 +173,7 @@ const useListsStore = create((set, get) => ({
       await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
     } catch (e) {
-      console.log('Could not update list', e);
+      console.log('updateRecipeNbPersons', e);
     }
   },
 
@@ -205,9 +185,7 @@ const useListsStore = create((set, get) => ({
       await removeData(`list_${id}`);
       updateLists(lists, set);
     } catch (e) {
-      console.log('Could not delete list', e);
-    } finally {
-      set({ loading: false });
+      console.log('deleteList', e);
     }
   },
 

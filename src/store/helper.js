@@ -14,3 +14,20 @@ export function updateIngredients(ingredients, ingredient) {
   }
   return ingredients;
 }
+
+export function orderDescStartingDay(a, b) {
+  var keyA = new Date(a.startingDay),
+    keyB = new Date(b.startingDay);
+  if (keyA < keyB) {
+    return -1;
+  }
+  if (keyA > keyB) {
+    return 1;
+  }
+  return 0;
+}
+
+export function isListOver(endingDay) {
+  let now = new Date().setHours(0, 0, 0);
+  return new Date(endingDay) < now;
+}

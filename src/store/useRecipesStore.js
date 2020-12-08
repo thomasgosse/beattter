@@ -15,7 +15,7 @@ const useRecipesStore = create((set, get) => ({
       const recipes = (await getMultipleWithRegex('recipe_')) || [];
       set({ recipes });
     } catch (e) {
-      console.log('Could not get recipes', e);
+      console.log('getRecipes', e);
     } finally {
       set({ loading: false });
     }
@@ -44,7 +44,6 @@ const useRecipesStore = create((set, get) => ({
 
   createRecipe: async (name, nbPersonsBase) => {
     try {
-      set({ loading: true });
       let recipes = [...get().recipes];
       const ingredients = get().ingredients;
       const newRecipe = {
@@ -59,9 +58,7 @@ const useRecipesStore = create((set, get) => ({
       await storeData(`recipe_${newRecipe.id}`, newRecipe);
       set({ recipes, ingredients: [] });
     } catch (e) {
-      console.log('Could not create recipe', e);
-    } finally {
-      set({ loading: false });
+      console.log('createRecipe', e);
     }
   },
 
@@ -73,9 +70,7 @@ const useRecipesStore = create((set, get) => ({
       await removeData(`recipe_${id}`);
       set({ recipes });
     } catch (e) {
-      console.log('Could not delete recipe', e);
-    } finally {
-      set({ loading: false });
+      console.log('deleteRecipe', e);
     }
   },
 

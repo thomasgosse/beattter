@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import useListsStore, { isListOver } from '../store/useListsStore';
+import useListsStore from '../store/useListsStore';
+import { isListOver } from '../store/helper';
 
 import kinds from '../kinds';
 
