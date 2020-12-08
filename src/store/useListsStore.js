@@ -79,6 +79,7 @@ const useListsStore = create((set, get) => ({
         name,
         id: Date.now().toString(),
         recipes: [],
+        ingredients: [],
       };
       lists.push(list);
       await storeData(`list_${list.id}`, list);
@@ -88,6 +89,27 @@ const useListsStore = create((set, get) => ({
     } finally {
       set({ loading: false });
     }
+  },
+
+  addIngredient: async (ingredient, listId) => {
+    const lists = [...get().lists];
+    const index = lists.findIndex((item) => item.id === listId);
+    if (lists[index].ingredients) {
+      lists[index].ingredients.push(ingredient);
+    } else {
+      lists[index].ingredients = [ingredient];
+    }
+    await storeData(`list_${listId}`, lists[index]);
+    updateLists(lists, set);
+  },
+
+  deleteIngredient: async (listId, ingrSlug) => {
+    const lists = [...get().lists];
+    const index = lists.findIndex((item) => item.id === listId);
+    const ingrIndex = lists[index].ingredients?.findIndex((ingr) => ingr.slug === ingrSlug);
+    lists[index].ingredients.splice(ingrIndex, 1);
+    await storeData(`list_${listId}`, lists[index]);
+    updateLists(lists, set);
   },
 
   addRecipeToList: async (listId, recipe, nbPersons) => {
@@ -146,18 +168,23 @@ const useListsStore = create((set, get) => ({
     return false;
   },
 
+  checkIngredient: async (listId, ingrSlug, value) => {
+    const lists = [...get().lists];
+    const index = lists.findIndex((item) => item.id === listId);
+    const ingrIndex = lists[index].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
+    lists[index].ingredients[ingrIndex].checked = value;
+    await storeData(`list_${listId}`, lists[index]);
+    updateLists(lists, set);
+  },
+
   checkRecipeIngredient: async (listId, recipeId, ingrSlug, value) => {
-    try {
-      const lists = [...get().lists];
-      const index = lists.findIndex((item) => item.id === listId);
-      const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
-      const ingrIndex = lists[index].recipes[recipeIndex].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
-      lists[index].recipes[recipeIndex].ingredients[ingrIndex].checked = value;
-      await storeData(`list_${listId}`, lists[index]);
-      updateLists(lists, set);
-    } catch (e) {
-      console.log('Could not update list', e);
-    }
+    const lists = [...get().lists];
+    const index = lists.findIndex((item) => item.id === listId);
+    const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
+    const ingrIndex = lists[index].recipes[recipeIndex].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
+    lists[index].recipes[recipeIndex].ingredients[ingrIndex].checked = value;
+    await storeData(`list_${listId}`, lists[index]);
+    updateLists(lists, set);
   },
 
   updateRecipeNbPersons: async (listId, recipeId, value) => {

@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useRef, useState, useEffect } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemeContext, ListItem } from 'react-native-elements';
 import { SwipeRow } from 'react-native-swipe-list-view';
@@ -6,9 +6,19 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import ListDetailRecipeModalDelete from './ListDetailRecipeModalDelete';
 
-export default function ListDetailRecipeRow({ name, nbPersons, uri, setIsSwiping, index, removeRecipe, isReadOnly }) {
+export default function ListDetailRecipeRow({
+  name,
+  nbPersons,
+  uri,
+  setIsSwiping,
+  index,
+  removeRecipe,
+  isReadOnly,
+  hasTransitioned,
+}) {
   const rowRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [source, setSource] = useState(uri ? { uri } : require('../../assets/empty-recipes.png'));
 
   const hiddenItemWidth = 70;
   const {
@@ -60,7 +70,21 @@ export default function ListDetailRecipeRow({ name, nbPersons, uri, setIsSwiping
     },
   });
 
-  const source = uri ? { uri } : require('../../assets/empty-recipes.png');
+  useEffect(() => {
+    let current = rowRef.current;
+    let timeout;
+    if (!isReadOnly && index === 0 && !hasTransitioned.current) {
+      hasTransitioned.current = true;
+      rowRef.current.manuallySwipeRow(-hiddenItemWidth);
+      timeout = setTimeout(() => {
+        rowRef.current.manuallySwipeRow(0);
+      }, 1000);
+    }
+    return () => {
+      current.manuallySwipeRow(0);
+      clearTimeout(timeout);
+    };
+  }, [isReadOnly, hasTransitioned, index]);
 
   return (
     <>
@@ -81,7 +105,11 @@ export default function ListDetailRecipeRow({ name, nbPersons, uri, setIsSwiping
         </View>
 
         <ListItem containerStyle={styles.recipe} bottomDivider topDivider={index === 0}>
-          <Image source={source} style={styles.image} />
+          <Image
+            source={source}
+            style={styles.image}
+            onError={() => setSource(require('../../assets/empty-recipes.png'))}
+          />
           <ListItem.Content style={styles.recipeItemContent}>
             <ListItem.Title style={styles.recipeName}>{name}</ListItem.Title>
             <ListItem.Title style={styles.nbPersons}>{` (${nbPersons} pers.)`}</ListItem.Title>

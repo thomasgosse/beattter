@@ -12,7 +12,7 @@ const ICON_SIZE = 26;
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
 
-export default function HeaderBar({ y, onPressModify, isReadOnly }) {
+export default function HeaderBar({ y, onPressModify, isReadOnly, isImageAvailable }) {
   const insets = useSafeArea();
   const { top: paddingTop } = insets;
 
@@ -55,7 +55,7 @@ export default function HeaderBar({ y, onPressModify, isReadOnly }) {
   });
   const color = y.interpolate({
     inputRange: [HEADER_IMAGE_HEIGHT - 200, HEADER_IMAGE_HEIGHT - 150],
-    outputRange: [colors.header, 'black'],
+    outputRange: [isImageAvailable ? colors.header : 'black', 'black'],
   });
 
   return (

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, StyleSheet, ScrollView, Animated } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -7,6 +7,7 @@ import HeaderBar from './HeaderBar';
 import HeaderImage, { HEADER_IMAGE_HEIGHT } from './HeaderImage';
 
 export default function WithImageHeader({ children, uri, setUri, isReadOnly, headerRightAction, isSwiping }) {
+  const [isImageAvailable, setIsImageAvailable] = useState(true);
   const y = new Animated.Value(0);
   const insets = useSafeArea();
   const { bottom: paddingBottom } = insets;
@@ -33,8 +34,8 @@ export default function WithImageHeader({ children, uri, setUri, isReadOnly, hea
         <View style={{ paddingBottom }}>{children}</View>
       </ScrollView>
 
-      <HeaderImage y={y} uri={uri} setUri={setUri} isReadOnly={isReadOnly} />
-      <HeaderBar y={y} onPressModify={headerRightAction} isReadOnly={isReadOnly} />
+      <HeaderImage y={y} uri={uri} setUri={setUri} isReadOnly={isReadOnly} setIsImageAvailable={setIsImageAvailable} />
+      <HeaderBar y={y} onPressModify={headerRightAction} isReadOnly={isReadOnly} isImageAvailable={isImageAvailable} />
     </View>
   );
 }

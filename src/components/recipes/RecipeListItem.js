@@ -8,7 +8,9 @@ import * as RootNavigation from '../../navigation/RootNavigation';
 import { isSeasonal } from '../../services/ingredient';
 
 export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredients, principalKind, index }) {
+  const [source, setSource] = useState(uri ? { uri } : require('../../assets/empty-recipes.png'));
   const [seasonal, setSeasonal] = useState(false);
+
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -69,7 +71,9 @@ export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredien
     setSeasonal(isSeasonal(ingredients));
   }, [ingredients]);
 
-  const source = uri ? { uri } : require('../../assets/chou.jpg');
+  useEffect(() => {
+    setSource(uri ? { uri } : require('../../assets/empty-recipes.png'));
+  }, [uri, setSource]);
 
   return (
     <TouchableOpacity
@@ -85,7 +89,11 @@ export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredien
       }
     >
       <View style={styles.card}>
-        <Image source={source} style={styles.image} />
+        <Image
+          source={source}
+          style={styles.image}
+          onError={() => setSource(require('../../assets/empty-recipes.png'))}
+        />
         <View>
           <View style={styles.firstRow}>
             <Text style={styles.name} numberOfLines={2}>

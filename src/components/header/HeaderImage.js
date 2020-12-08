@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Platform, ActionSheetIOS, Dimensions, Animated, TouchableOpacity } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,7 +10,9 @@ export const HEADER_IMAGE_HEIGHT = wHeight / 3;
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
-export default function HeaderImage({ y, uri, setUri, isReadOnly }) {
+export default function HeaderImage({ y, uri, setUri, isReadOnly, setIsImageAvailable }) {
+  const [source, setSource] = useState(uri ? { uri } : require('../../assets/empty-recipes.png'));
+
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -86,7 +88,20 @@ export default function HeaderImage({ y, uri, setUri, isReadOnly }) {
     }
   }
 
-  const source = uri ? { uri } : require('../../assets/chou.jpg');
+  useEffect(() => {
+    setSource(uri ? { uri } : require('../../assets/empty-recipes.png'));
+  }, [uri, setSource]);
+
+  const onLoad = () => {
+    if (source.uri === uri) {
+      setIsImageAvailable(true);
+    }
+  };
+
+  const onError = () => {
+    setSource(require('../../assets/empty-recipes.png'));
+    setIsImageAvailable(false);
+  };
 
   return (
     <AnimatedTouchableOpacity
@@ -94,7 +109,13 @@ export default function HeaderImage({ y, uri, setUri, isReadOnly }) {
       style={[styles.container, { bottom }]}
       onPress={getActionSheet}
     >
-      <Animated.Image source={source} blurRadius={isReadOnly ? 0 : 4} style={[styles.image, { top, height }]} />
+      <Animated.Image
+        source={source}
+        blurRadius={isReadOnly ? 0 : 4}
+        style={[styles.image, { top, height }]}
+        onLoad={onLoad}
+        onError={onError}
+      />
       {!isReadOnly && <Icon name="camera" size={50} color={colors.header} />}
     </AnimatedTouchableOpacity>
   );

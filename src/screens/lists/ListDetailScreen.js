@@ -1,35 +1,39 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useLayoutEffect, useState, useContext, useRef } from 'react';
 import shallow from 'zustand/shallow';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Platform } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useSafeArea } from 'react-native-safe-area-context';
 
 import Label from '../../components/utils/Label';
 import ListDetailRecipeRow from '../../components/lists/ListDetailRecipeRow';
 import ListDetailIngredientRow from '../../components/lists/ListDetailIngredientRow';
 import EmptyList from '../../components/utils/EmptyList';
+import ListDetailDualButton from '../../components/lists/ListDetailDualButton';
 
-import useListsStore, { isListOver } from '../../store/useListsStore';
-import kinds from '../../kinds';
+import useListsStore from '../../store/useListsStore';
+import useListDetail from './useListDetail';
 
 export default function ListDetail({ navigation, route }) {
   const id = route.params?.id;
+  const hasTransitioned = useRef(false);
 
-  const [isReadOnly, setIsReadOnly] = useState(false);
+  const [isReadOnly, setIsReadOnly] = useState(true);
   const [isSwiping, setIsSwiping] = useState(false);
-  const [ingredients, setIngredients] = useState([]);
-  const [recipes, setRecipes] = useState([]);
-  const [sections, setSections] = useState([]);
-  const { getListById, removeRecipeFromList, updateRecipeNbPersons, checkRecipeIngredient } = useListsStore(
+  const { checkRecipeIngredient, checkIngredient } = useListsStore(
     (state) => ({
-      getListById: state.getListById,
-      removeRecipeFromList: state.removeRecipeFromList,
-      updateRecipeNbPersons: state.updateRecipeNbPersons,
       checkRecipeIngredient: state.checkRecipeIngredient,
+      checkIngredient: state.checkIngredient,
     }),
     shallow
   );
+  const { recipes, sections, ingredients, isOver, removeRecipe, removeIngredient } = useListDetail(
+    id,
+    route,
+    navigation
+  );
 
+  const insets = useSafeArea();
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -46,7 +50,7 @@ export default function ListDetail({ navigation, route }) {
       marginTop: 10,
       marginLeft: 10,
     },
-    isReadOnly: {
+    isOver: {
       marginTop: 10,
       marginHorizontal: 10,
       borderRadius: 8,
@@ -56,84 +60,76 @@ export default function ListDetail({ navigation, route }) {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    isReadOnlyText: {
+    isOverText: {
       color: colors.header,
       fontSize: 16,
       fontWeight: '500',
       marginRight: 10,
     },
+    headerRight: {
+      fontSize: 18,
+      color: Platform.OS === 'ios' ? colors.iOSDefault : colors.androidDefault,
+      fontWeight: isReadOnly ? '400' : '600',
+    },
   });
 
-  const updateStates = useCallback(() => {
-    const list = getListById(id);
-    if (!list) {
-      return;
-    }
-
-    const ings = list.recipes.flatMap((recipe) => {
-      return recipe.ingredients.map((ingredient) => {
-        return {
-          ...ingredient,
-          quantity: {
-            unit: ingredient.quantity.unit,
-            value: ((recipe.nbPersons / recipe.nbPersonsBase) * Number(ingredient.quantity.value)).toFixed(2),
-          },
-          recipeId: recipe.id,
-          recipeName: recipe.name,
-        };
-      });
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => setIsReadOnly(!isReadOnly)}>
+          <Text style={styles.headerRight}>{isReadOnly ? 'Modifier' : 'OK'}</Text>
+        </TouchableOpacity>
+      ),
     });
-    setIngredients(ings);
-    setRecipes(list.recipes);
-    setIsReadOnly(isListOver(list.endingDay));
-  }, [getListById, id]);
+  }, [navigation, isReadOnly, styles.headerRight]);
 
-  useEffect(() => {
-    updateStates();
-  }, [updateStates]);
-
-  useEffect(() => {
-    const updatedSections = ingredients.reduce((acc, val) => {
-      const index = acc.findIndex((section) => section.title === kinds[val.kind].description);
-      if (index > -1) {
-        acc[index].data.push(val);
-      } else {
-        acc.push({ title: kinds[val.kind].description, data: [val] });
-      }
-      return acc;
-    }, []);
-    setSections(updatedSections);
-  }, [ingredients, setSections]);
-
-  async function removeRecipe(listId, recipeId, remove, nbPersonsToRemove) {
-    if (remove) {
-      await removeRecipeFromList(listId, recipeId);
+  function getCheckFunction(recipeId, ingrSlug) {
+    if (recipeId === 'detached') {
+      return checkIngredient.bind(null, id, ingrSlug);
     } else {
-      await updateRecipeNbPersons(listId, recipeId, -nbPersonsToRemove);
+      return checkRecipeIngredient.bind(null, id, recipeId, ingrSlug);
     }
-    updateStates();
   }
+
+  const dualButton = (
+    <ListDetailDualButton
+      firstOnPress={() =>
+        navigation.navigate('IngredientPick', {
+          screen: 'Ajouter un ingrédient',
+          params: {
+            initiatorRoute: 'ListDetail',
+          },
+        })
+      }
+      secondOnPress={() => navigation.navigate('Recipes', { screen: 'Recipes' })}
+    />
+  );
 
   if (recipes.length === 0 && ingredients.length === 0) {
     return (
       <EmptyList
         source={require('../../assets/empty-lists.png')}
-        text="Tu n'as pas de listes de courses en cours, crées-en une pour y ajouter tes recettes."
+        text="Tu n'as pas d'ingrédients dans ta liste, ajoutes-en en cherchant, ou via tes recettes."
         btnText="Aller aux recettes"
-        onPress={() => navigation.navigate('Recipes', { screen: 'Recipes' })}
-      />
+      >
+        {dualButton}
+      </EmptyList>
     );
   }
 
   return (
     <>
-      {isReadOnly && (
-        <View style={styles.isReadOnly}>
-          <Text style={styles.isReadOnlyText}>Cette liste est en lecture seule</Text>
+      {isOver && (
+        <View style={styles.isOver}>
+          <Text style={styles.isOverText}>Cette liste est en lecture seule</Text>
           <Icon name="lock-closed" size={24} color={colors.header} />
         </View>
       )}
-      <ScrollView style={styles.container} scrollEnabled={!isSwiping}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: insets.bottom }}
+        scrollEnabled={!isSwiping}
+      >
         <Label containerStyle={styles.labelList} label="Recettes de la liste" />
         {recipes.map((recipe, index) => (
           <ListDetailRecipeRow
@@ -146,6 +142,7 @@ export default function ListDetail({ navigation, route }) {
             setIsSwiping={setIsSwiping}
             removeRecipe={removeRecipe.bind(null, id, recipe.id)}
             isReadOnly={isReadOnly}
+            hasTransitioned={hasTransitioned}
           />
         ))}
 
@@ -159,12 +156,15 @@ export default function ListDetail({ navigation, route }) {
                 recipeName={ingredient.recipeName}
                 quantity={ingredient.quantity}
                 checked={ingredient.checked}
-                onCheck={checkRecipeIngredient.bind(null, id, ingredient.recipeId, ingredient.slug)}
+                onCheck={getCheckFunction(ingredient.recipeId, ingredient.slug)}
+                isOver={isOver}
                 isReadOnly={isReadOnly}
+                deleteIngredient={() => removeIngredient(id, ingredient.slug)}
               />
             ))}
           </React.Fragment>
         ))}
+        {!isOver && dualButton}
       </ScrollView>
     </>
   );

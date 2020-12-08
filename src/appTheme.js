@@ -17,6 +17,8 @@ export default {
       danger: '#e32434',
       success: '#047857',
       button: '#56c9d8',
+      iOSDefault: '#007AFF',
+      androidDefault: '#2196F3',
     },
   },
   dark: {
@@ -37,6 +39,8 @@ export default {
       danger: '#e32434',
       success: '#047857',
       button: '#56c9d8',
+      iOSDefault: '#007AFF',
+      androidDefault: '#2196F3',
     },
   },
 };

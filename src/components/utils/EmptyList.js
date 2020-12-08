@@ -4,7 +4,7 @@ import { ThemeContext } from 'react-native-elements';
 
 import Button from './Button';
 
-export default function EmptyList({ source, text, btnText, onPress }) {
+export default function EmptyList({ source, text, btnText, onPress, children }) {
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -34,7 +34,7 @@ export default function EmptyList({ source, text, btnText, onPress }) {
     <ScrollView contentContainerStyle={styles.contentContainer} style={styles.container}>
       <Image style={styles.image} source={source} />
       <Text style={styles.text}>{text}</Text>
-      <Button text={btnText} onPress={onPress} />
+      {children ? children : <Button text={btnText} onPress={onPress} />}
     </ScrollView>
   );
 }

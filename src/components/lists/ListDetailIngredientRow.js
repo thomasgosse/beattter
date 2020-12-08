@@ -1,9 +1,20 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import CheckBox from '@react-native-community/checkbox';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function ListDetailIngredientRow({ name, recipeName, quantity, checked, onCheck, isReadOnly, index }) {
+export default function ListDetailIngredientRow({
+  name,
+  recipeName,
+  quantity,
+  checked,
+  onCheck,
+  isOver,
+  isReadOnly,
+  deleteIngredient,
+  index,
+}) {
   const [toggleCheckbox, setToggleCheckbox] = useState(checked);
 
   const {
@@ -27,9 +38,14 @@ export default function ListDetailIngredientRow({ name, recipeName, quantity, ch
       color: colors.textBase,
       fontSize: 16,
     },
+    controls: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     checkbox: {
       width: 25,
       height: 25,
+      marginLeft: 15,
     },
     content: {
       flexDirection: 'column',
@@ -58,26 +74,35 @@ export default function ListDetailIngredientRow({ name, recipeName, quantity, ch
             {quantity.unit}
           </Text>
         </View>
-        <Text style={styles.secondColumn} numberOfLines={1}>
-          {recipeName}
-        </Text>
+        {recipeName !== '' && (
+          <Text style={styles.secondColumn} numberOfLines={1}>
+            {recipeName}
+          </Text>
+        )}
       </View>
-      <CheckBox
-        style={styles.checkbox}
-        onAnimationType="bounce"
-        offAnimationType="bounce"
-        disabled={isReadOnly}
-        onValueChange={async (value) => {
-          setToggleCheckbox(value);
-          await onCheck(value);
-        }}
-        value={checked}
-        animationDuration={0.3}
-        tintColor={isReadOnly ? colors.divider : colors.textTitle}
-        onFillColor={isReadOnly ? colors.divider : colors.textTitle}
-        onTintColor={isReadOnly ? colors.divider : colors.textTitle}
-        onCheckColor={colors.header}
-      />
+      <View style={styles.controls}>
+        {!isReadOnly && recipeName === '' && (
+          <TouchableOpacity onPress={deleteIngredient}>
+            <Icon name="trash" size={28} color={colors.danger} />
+          </TouchableOpacity>
+        )}
+        <CheckBox
+          style={styles.checkbox}
+          onAnimationType="bounce"
+          offAnimationType="bounce"
+          disabled={isOver}
+          onValueChange={async (value) => {
+            setToggleCheckbox(value);
+            await onCheck(value);
+          }}
+          value={checked}
+          animationDuration={0.3}
+          tintColor={isOver ? colors.divider : colors.textTitle}
+          onFillColor={isOver ? colors.divider : colors.textTitle}
+          onTintColor={isOver ? colors.divider : colors.textTitle}
+          onCheckColor={colors.header}
+        />
+      </View>
     </View>
   );
 }
