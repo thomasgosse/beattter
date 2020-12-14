@@ -1,6 +1,6 @@
 export function updateIngredients(ingredients, ingredient) {
   if (!ingredients || ingredients.length === 0) {
-    return [];
+    return [ingredient];
   }
 
   let ingrIndex = ingredients.findIndex(
