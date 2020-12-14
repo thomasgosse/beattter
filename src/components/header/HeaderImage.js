@@ -95,6 +95,8 @@ export default function HeaderImage({ y, uri, setUri, isReadOnly, setIsImageAvai
   const onLoad = () => {
     if (source.uri === uri) {
       setIsImageAvailable(true);
+    } else if (!uri) {
+      setIsImageAvailable(false);
     }
   };
 

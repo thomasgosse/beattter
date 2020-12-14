@@ -65,9 +65,9 @@ export default function CreateRecipeScreen({ navigation, route }) {
       <Button
         text="Créer"
         disabled={!name}
-        onPress={() => {
-          createRecipe(name, nbPersonsBase);
-          navigation.goBack();
+        onPress={async () => {
+          const result = await createRecipe(name, nbPersonsBase);
+          result && navigation.goBack();
         }}
         containerStyle={styles.button}
       />

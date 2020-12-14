@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
-import CheckBox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+import CheckBox from '../utils/CheckBox';
 
 export default function ListDetailIngredientRow({
   name,
@@ -63,46 +64,42 @@ export default function ListDetailIngredientRow({
     },
   });
 
+  const onPress = async () => {
+    if (isOver) {
+      return;
+    }
+    const result = await onCheck(!toggleCheckbox);
+    result && setToggleCheckbox(!toggleCheckbox);
+  };
+
   return (
-    <View style={styles.ingredient}>
-      <View style={styles.content}>
-        <View style={styles.firstColumn}>
-          <Text style={styles.ingredientName}>{name}</Text>
-          <Text style={styles.quantity}>
-            {' '}
-            - {parseFloat(quantity.value)}
-            {quantity.unit}
-          </Text>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View style={styles.ingredient}>
+        <View style={styles.content}>
+          <View style={styles.firstColumn}>
+            <Text style={styles.ingredientName}>{name}</Text>
+            <Text style={styles.quantity}>
+              {' '}
+              - {parseFloat(quantity.value)}
+              {quantity.unit}
+            </Text>
+          </View>
+          {recipeName !== '' && (
+            <Text style={styles.secondColumn} numberOfLines={1}>
+              {recipeName}
+            </Text>
+          )}
         </View>
-        {recipeName !== '' && (
-          <Text style={styles.secondColumn} numberOfLines={1}>
-            {recipeName}
-          </Text>
-        )}
+        <View style={styles.controls}>
+          {!isReadOnly && recipeName === '' && (
+            <TouchableOpacity onPress={deleteIngredient}>
+              <Icon name="trash" size={28} color={colors.danger} />
+            </TouchableOpacity>
+          )}
+
+          <CheckBox toggleCheckbox={toggleCheckbox} onPress={onPress} isOver={isOver} />
+        </View>
       </View>
-      <View style={styles.controls}>
-        {!isReadOnly && recipeName === '' && (
-          <TouchableOpacity onPress={deleteIngredient}>
-            <Icon name="trash" size={28} color={colors.danger} />
-          </TouchableOpacity>
-        )}
-        <CheckBox
-          style={styles.checkbox}
-          onAnimationType="bounce"
-          offAnimationType="bounce"
-          disabled={isOver}
-          onValueChange={async (value) => {
-            setToggleCheckbox(value);
-            await onCheck(value);
-          }}
-          value={checked}
-          animationDuration={0.3}
-          tintColor={isOver ? colors.divider : colors.textTitle}
-          onFillColor={isOver ? colors.divider : colors.textTitle}
-          onTintColor={isOver ? colors.divider : colors.textTitle}
-          onCheckColor={colors.header}
-        />
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }

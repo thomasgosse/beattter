@@ -35,6 +35,7 @@ const useListsStore = create((set, get) => ({
   onGoingLists: [],
   overLists: [],
   loading: false,
+  error: undefined,
 
   getLists: async () => {
     try {
@@ -42,7 +43,7 @@ const useListsStore = create((set, get) => ({
       const lists = (await getMultipleWithRegex('list_')) || [];
       updateLists(lists, set);
     } catch (e) {
-      console.log('getLists', e);
+      set({ error: 'getLists' });
     } finally {
       set({ loading: false });
     }
@@ -67,26 +68,47 @@ const useListsStore = create((set, get) => ({
       lists.push(list);
       await storeData(`list_${list.id}`, list);
       updateLists(lists, set);
+      return true;
     } catch (e) {
-      console.log('getListById', e);
+      set({ error: 'createList' });
+    }
+  },
+
+  deleteList: async (id) => {
+    try {
+      const lists = [...get().lists];
+      const prevIndex = lists.findIndex((item) => item.id === id);
+      lists.splice(prevIndex, 1);
+      await removeData(`list_${id}`);
+      updateLists(lists, set);
+    } catch (e) {
+      set({ error: 'deleteList' });
     }
   },
 
   addIngredient: async (ingredient, listId) => {
-    const lists = [...get().lists];
-    const index = lists.findIndex((item) => item.id === listId);
-    lists[index].ingredients = updateIngredients(lists[index].ingredients, ingredient);
-    await storeData(`list_${listId}`, lists[index]);
-    updateLists(lists, set);
+    try {
+      const lists = [...get().lists];
+      const index = lists.findIndex((item) => item.id === listId);
+      lists[index].ingredients = updateIngredients(lists[index].ingredients, ingredient);
+      await storeData(`list_${listId}`, lists[index]);
+      updateLists(lists, set);
+    } catch (e) {
+      console.error('addIngredient', e);
+    }
   },
 
   deleteIngredient: async (listId, ingrSlug) => {
-    const lists = [...get().lists];
-    const index = lists.findIndex((item) => item.id === listId);
-    const ingrIndex = lists[index].ingredients?.findIndex((ingr) => ingr.slug === ingrSlug);
-    lists[index].ingredients.splice(ingrIndex, 1);
-    await storeData(`list_${listId}`, lists[index]);
-    updateLists(lists, set);
+    try {
+      const lists = [...get().lists];
+      const index = lists.findIndex((item) => item.id === listId);
+      const ingrIndex = lists[index].ingredients?.findIndex((ingr) => ingr.slug === ingrSlug);
+      lists[index].ingredients.splice(ingrIndex, 1);
+      await storeData(`list_${listId}`, lists[index]);
+      updateLists(lists, set);
+    } catch (e) {
+      set({ error: 'deleteIngredient' });
+    }
   },
 
   addRecipeToList: async (listId, recipe, nbPersons) => {
@@ -97,8 +119,9 @@ const useListsStore = create((set, get) => ({
       lists[index].recipes.push(recipe);
       await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
+      return true;
     } catch (e) {
-      console.log('addRecipeToList', e);
+      set({ error: 'addRecipeToList' });
     }
   },
 
@@ -111,29 +134,33 @@ const useListsStore = create((set, get) => ({
       await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
     } catch (e) {
-      console.log('removeRecipeFromList', e);
+      set({ error: 'removeRecipeFromList' });
     }
   },
 
   updateRecipeInOngoingLists: async (r) => {
-    let recipeUpdate = JSON.parse(JSON.stringify(r));
-    let modifiedLists = [];
-    const lists = await Promise.all(
-      get().lists.map(async (list) => {
-        if (isListOver(list.endingDay)) {
+    try {
+      let recipeUpdate = JSON.parse(JSON.stringify(r));
+      let modifiedLists = [];
+      const lists = await Promise.all(
+        get().lists.map(async (list) => {
+          if (isListOver(list.endingDay)) {
+            return list;
+          }
+          const recipeIndex = list.recipes.findIndex((recipe) => recipe.id === recipeUpdate.id);
+          if (recipeIndex > -1) {
+            list.recipes[recipeIndex] = updateRecipe(list.recipes[recipeIndex], recipeUpdate);
+            modifiedLists.push(list.name);
+            await storeData(`list_${list.id}`, list);
+          }
           return list;
-        }
-        const recipeIndex = list.recipes.findIndex((recipe) => recipe.id === recipeUpdate.id);
-        if (recipeIndex > -1) {
-          list.recipes[recipeIndex] = updateRecipe(list.recipes[recipeIndex], recipeUpdate);
-          modifiedLists.push(list.name);
-          await storeData(`list_${list.id}`, list);
-        }
-        return list;
-      })
-    );
-    updateLists(lists, set);
-    return modifiedLists;
+        })
+      );
+      updateLists(lists, set);
+      return modifiedLists;
+    } catch (e) {
+      console.error('updateRecipeInOngoingLists', e);
+    }
   },
 
   isRecipeInList: (listId, recipeId) => {
@@ -146,22 +173,32 @@ const useListsStore = create((set, get) => ({
   },
 
   checkIngredient: async (listId, ingrSlug, value) => {
-    const lists = [...get().lists];
-    const index = lists.findIndex((item) => item.id === listId);
-    const ingrIndex = lists[index].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
-    lists[index].ingredients[ingrIndex].checked = value;
-    await storeData(`list_${listId}`, lists[index]);
-    updateLists(lists, set);
+    try {
+      const lists = [...get().lists];
+      const index = lists.findIndex((item) => item.id === listId);
+      const ingrIndex = lists[index].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
+      lists[index].ingredients[ingrIndex].checked = value;
+      await storeData(`list_${listId}`, lists[index]);
+      updateLists(lists, set);
+      return true;
+    } catch (e) {
+      set({ error: 'checkIngredient' });
+    }
   },
 
   checkRecipeIngredient: async (listId, recipeId, ingrSlug, value) => {
-    const lists = [...get().lists];
-    const index = lists.findIndex((item) => item.id === listId);
-    const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
-    const ingrIndex = lists[index].recipes[recipeIndex].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
-    lists[index].recipes[recipeIndex].ingredients[ingrIndex].checked = value;
-    await storeData(`list_${listId}`, lists[index]);
-    updateLists(lists, set);
+    try {
+      const lists = [...get().lists];
+      const index = lists.findIndex((item) => item.id === listId);
+      const recipeIndex = lists[index].recipes.findIndex((recipe) => recipe.id === recipeId);
+      const ingrIndex = lists[index].recipes[recipeIndex].ingredients.findIndex((ingr) => ingr.slug === ingrSlug);
+      lists[index].recipes[recipeIndex].ingredients[ingrIndex].checked = value;
+      await storeData(`list_${listId}`, lists[index]);
+      updateLists(lists, set);
+      return true;
+    } catch (e) {
+      set({ error: 'checkRecipeIngredient' });
+    }
   },
 
   updateRecipeNbPersons: async (listId, recipeId, value) => {
@@ -172,23 +209,13 @@ const useListsStore = create((set, get) => ({
       lists[index].recipes[recipeIndex].nbPersons += value;
       await storeData(`list_${listId}`, lists[index]);
       updateLists(lists, set);
+      return true;
     } catch (e) {
-      console.log('updateRecipeNbPersons', e);
+      set({ error: 'updateRecipeNbPersons' });
     }
   },
 
-  deleteList: async (id) => {
-    try {
-      const lists = [...get().lists];
-      const prevIndex = lists.findIndex((item) => item.id === id);
-      lists.splice(prevIndex, 1);
-      await removeData(`list_${id}`);
-      updateLists(lists, set);
-    } catch (e) {
-      console.log('deleteList', e);
-    }
-  },
-
+  resetError: () => set({ error: undefined }),
   reset: async () => set({}, true),
 }));
 

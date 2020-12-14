@@ -6,6 +6,7 @@ import { ThemeProvider } from 'react-native-elements';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { navigationRef } from './navigation/RootNavigation';
+import ErrorPopup from './components/utils/ErrorPopup';
 import RootNavigator from './navigation/RootNavigator';
 import appTheme from './appTheme';
 
@@ -57,6 +58,7 @@ const App = () => {
           <NavigationContainer ref={navigationRef}>
             <RootNavigator />
           </NavigationContainer>
+          <ErrorPopup />
         </SafeAreaProvider>
       </View>
     </ThemeProvider>

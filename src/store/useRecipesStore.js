@@ -8,6 +8,7 @@ const useRecipesStore = create((set, get) => ({
   recipes: [],
   loading: false,
   ingredients: [],
+  error: undefined,
 
   getRecipes: async () => {
     try {
@@ -15,7 +16,7 @@ const useRecipesStore = create((set, get) => ({
       const recipes = (await getMultipleWithRegex('recipe_')) || [];
       set({ recipes });
     } catch (e) {
-      console.log('getRecipes', e);
+      set({ error: 'getRecipes' });
     } finally {
       set({ loading: false });
     }
@@ -24,22 +25,6 @@ const useRecipesStore = create((set, get) => ({
   getRecipeById: (id) => {
     let recipes = get().recipes;
     return recipes.find((recipe) => recipe.id === id);
-  },
-
-  updateRecipe: async ({ id, name, nbPersonsBase, ingredients, imageUri }) => {
-    const updatedRecipe = {
-      id,
-      name,
-      nbPersonsBase,
-      principalKind: getPrincipalKind(ingredients),
-      ingredients,
-      imageUri,
-    };
-    await storeData(`recipe_${updatedRecipe.id}`, updatedRecipe);
-    let recipes = [...get().recipes];
-    const index = recipes.findIndex((recipe) => recipe.id === id);
-    recipes[index] = updatedRecipe;
-    set({ recipes });
   },
 
   createRecipe: async (name, nbPersonsBase) => {
@@ -57,8 +42,30 @@ const useRecipesStore = create((set, get) => ({
       recipes.push(newRecipe);
       await storeData(`recipe_${newRecipe.id}`, newRecipe);
       set({ recipes, ingredients: [] });
+      return true;
     } catch (e) {
-      console.log('createRecipe', e);
+      set({ error: 'createRecipe' });
+    }
+  },
+
+  updateRecipe: async ({ id, name, nbPersonsBase, ingredients, imageUri }) => {
+    try {
+      const updatedRecipe = {
+        id,
+        name,
+        nbPersonsBase,
+        principalKind: getPrincipalKind(ingredients),
+        ingredients,
+        imageUri,
+      };
+      await storeData(`recipe_${updatedRecipe.id}`, updatedRecipe);
+      let recipes = [...get().recipes];
+      const index = recipes.findIndex((recipe) => recipe.id === id);
+      recipes[index] = updatedRecipe;
+      set({ recipes });
+      return true;
+    } catch (e) {
+      set({ error: 'updateRecipe' });
     }
   },
 
@@ -69,14 +76,15 @@ const useRecipesStore = create((set, get) => ({
       recipes.splice(prevIndex, 1);
       await removeData(`recipe_${id}`);
       set({ recipes });
+      return true;
     } catch (e) {
-      console.log('deleteRecipe', e);
+      set({ error: 'deleteRecipe' });
     }
   },
 
   addIngredient: (ingredient) => {
     let ingredients = [...get().ingredients];
-    updateIngredients(ingredients, ingredient);
+    ingredients = updateIngredients(ingredients, ingredient);
     set({ ingredients });
   },
 
@@ -86,6 +94,7 @@ const useRecipesStore = create((set, get) => ({
     set({ ingredients });
   },
 
+  resetError: () => set({ error: undefined }),
   reset: async () => set({}, true),
 }));
 

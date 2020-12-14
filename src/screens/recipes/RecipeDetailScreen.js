@@ -133,9 +133,9 @@ export default function RecipeDetailScreen({ route, navigation }) {
         },
         {
           text: 'OK',
-          onPress: () => {
-            deleteRecipe(id);
-            navigation.goBack();
+          onPress: async () => {
+            const result = await deleteRecipe(id);
+            result && navigation.goBack();
           },
         },
       ],
@@ -153,8 +153,8 @@ export default function RecipeDetailScreen({ route, navigation }) {
       imageUri: uri,
     };
     if (!isReadOnly && !isEqual(recipe, recipeUpdate)) {
-      await updateRecipe(recipeUpdate);
-      setModifiedLists(await updateRecipeInOngoingLists(recipeUpdate));
+      const result = await updateRecipe(recipeUpdate);
+      result && setModifiedLists((await updateRecipeInOngoingLists(recipeUpdate)) || []);
       setRecipe(recipeUpdate);
     }
     setIsReadOnly(!isReadOnly);

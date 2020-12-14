@@ -6,9 +6,13 @@ import Modal from 'react-native-modal';
 
 import Button from '../utils/Button';
 
+import useListsStore from '../../store/useListsStore';
+
 export default function ListDetailRecipeModalDelete({ modalVisible, nbPersons, removeRecipe, onClose }) {
   const [selectedValue, setSelectedValue] = useState(1);
   const [values, setValues] = useState([...Array(nbPersons).keys()].map((i) => (i + 1).toString()));
+
+  const error = useListsStore((state) => state.error);
 
   const {
     theme: { colors },
@@ -50,6 +54,12 @@ export default function ListDetailRecipeModalDelete({ modalVisible, nbPersons, r
       fontWeight: '500',
       ...this.text,
     },
+    textError: {
+      marginTop: 5,
+      minHeight: 20,
+      fontSize: 16,
+      color: colors.danger,
+    },
   });
 
   useEffect(() => {
@@ -77,6 +87,7 @@ export default function ListDetailRecipeModalDelete({ modalVisible, nbPersons, r
           </Picker>
         </View>
         <Button containerStyle={styles.button} text={`Supprimer`} onPress={onPress} />
+        <Text style={styles.textError}>{error}</Text>
       </View>
     </Modal>
   );

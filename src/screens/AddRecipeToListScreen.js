@@ -55,17 +55,17 @@ export default function AddRecipeToListScreen({ navigation, route }) {
           },
           {
             text: 'OK',
-            onPress: () => {
-              updateRecipeNbPersons(listId, route.params?.recipe.id, nbPersons);
-              navigation.goBack();
+            onPress: async () => {
+              const result = await updateRecipeNbPersons(listId, route.params?.recipe.id, nbPersons);
+              result && navigation.goBack();
             },
           },
         ],
         { cancelable: false }
       );
     } else {
-      await addRecipeToList(listId, route.params?.recipe, nbPersons);
-      navigation.goBack();
+      const result = await addRecipeToList(listId, route.params?.recipe, nbPersons);
+      result && navigation.goBack();
     }
   }
 

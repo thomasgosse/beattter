@@ -4,7 +4,7 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { ThemeContext } from 'react-native-elements';
 import Modal from 'react-native-modal';
 
-export default function Popup({ children, isVisible, close }) {
+export default function Popup({ children, isVisible, close, time, containerStyle }) {
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -19,6 +19,7 @@ export default function Popup({ children, isVisible, close }) {
       alignItems: 'center',
       borderRadius: 20,
       borderColor: 'rgba(0, 0, 0, 0.1)',
+      ...containerStyle,
     },
   });
 
@@ -27,10 +28,10 @@ export default function Popup({ children, isVisible, close }) {
     if (isVisible) {
       timeout = setTimeout(() => {
         close();
-      }, 7000);
+      }, time || 7000);
     }
     return () => clearTimeout(timeout);
-  }, [close, isVisible]);
+  }, [close, time, isVisible]);
 
   return (
     <Modal isVisible={isVisible} onBackdropPress={close} style={styles.view}>
