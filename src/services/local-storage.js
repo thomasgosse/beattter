@@ -8,6 +8,14 @@ export async function storeData(key, value) {
   }
 }
 
+export async function getData(key) {
+  try {
+    return AsyncStorage.getItem(key);
+  } catch (e) {
+    console.log('Error while getting value');
+  }
+}
+
 export async function removeData(key) {
   try {
     await AsyncStorage.removeItem(key);

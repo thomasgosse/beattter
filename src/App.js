@@ -8,8 +8,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { navigationRef } from './navigation/RootNavigation';
 import ErrorPopup from './components/utils/ErrorPopup';
 import RootNavigator from './navigation/RootNavigator';
-import appTheme from './appTheme';
+import { init } from './services/init-service';
 
+import appTheme from './theme';
 import useListsStore from './store/useListsStore';
 import useRecipesStore from './store/useRecipesStore';
 
@@ -35,6 +36,7 @@ const App = () => {
     AppState.addEventListener('change', handleAppStateChange);
     Appearance.addChangeListener(handleAppearanceChange);
     handleAppStateChange('active');
+    init();
     return () => {
       AppState.removeEventListener('change', handleAppStateChange);
       Appearance.removeChangeListener(handleAppearanceChange);
