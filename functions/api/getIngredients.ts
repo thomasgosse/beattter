@@ -3,7 +3,7 @@ import { Db } from 'mongodb';
 import { connectToDatabase } from '../services/mongo';
 import { getDatas } from '../services/cache';
 
-type Query = { nPerPage?: number; pageNumber?: number };
+type Query = { nPerPage?: number; pageNumber?: number; version?: number };
 export type Ingredient = {
   _id: string;
   name: string;
@@ -45,11 +45,12 @@ async function getIngredients(args: GetIngredientsArgs): Promise<Ingredient[]> {
 
 export default async (request: NowRequest, response: NowResponse): Promise<void> => {
   let { nPerPage = 100, pageNumber = 1 }: Query = request.query;
+  const { version = 1 }: Query = request.query;
   nPerPage = Number(nPerPage);
   pageNumber = Number(pageNumber);
   const db = await connectToDatabase(process.env.MONGODB_URI);
 
-  const key = `${pageNumber}_${nPerPage}`;
+  const key = `${pageNumber}_${nPerPage}_v_${version}`;
   const ingredients = await getDatas<GetIngredientsArgs, Ingredient>(key, getIngredients, {
     db,
     pageNumber,
