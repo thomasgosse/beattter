@@ -46,6 +46,7 @@ export default function RootNavigator() {
         headerStyle: { backgroundColor: colors.header },
         headerTitleStyle: { color: colors.textTitle },
         stackPresentation: 'push',
+        headerLargeTitle: true,
       }}
     >
       <Stack.Screen
