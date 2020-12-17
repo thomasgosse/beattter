@@ -8,13 +8,15 @@ import Input from '../../components/utils/Input';
 import Button from '../../components/utils/Button';
 import IngredientKindTooltip from '../../components/recipes/IngredientKindTooltip';
 
-import data from '../../data';
+import useIngredientsStore from '../../store/useIngredientsStore';
 
 export default function IngredientPickerScreen({ navigation, route }) {
   const [search, setSearch] = useState('');
   const [integer, setInteger] = useState(integers[0]);
   const [decimal, setDecimal] = useState(decimals[0]);
   const [unit, setUnit] = useState(units[0]);
+
+  const ingredients = useIngredientsStore((state) => state.ingredients);
 
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const [selectedIngredient, setSelectedIngredient] = useState({});
@@ -48,7 +50,7 @@ export default function IngredientPickerScreen({ navigation, route }) {
   useEffect(() => {
     function filterResult() {
       if (search.length > 2) {
-        let filteredBySearch = data.filter((d) => {
+        let filteredBySearch = ingredients.filter((d) => {
           const slugSearch = slugify(search.toUpperCase());
           const slugData = d.name.toUpperCase();
           return slugify(slugData).indexOf(slugSearch) > -1;
@@ -63,7 +65,7 @@ export default function IngredientPickerScreen({ navigation, route }) {
     timer.current = setTimeout(() => {
       filterResult();
     }, 200);
-  }, [search]);
+  }, [search, ingredients]);
 
   function getPicker(list, selectedValue, onValueChange) {
     return (

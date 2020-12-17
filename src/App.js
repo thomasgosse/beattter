@@ -13,6 +13,7 @@ import { init } from './services/init-service';
 import appTheme from './theme';
 import useListsStore from './store/useListsStore';
 import useRecipesStore from './store/useRecipesStore';
+import useIngredientsStore from './store/useIngredientsStore';
 
 enableScreens();
 
@@ -20,12 +21,14 @@ const App = () => {
   const themeProvideRef = useRef(null);
   const getLists = useListsStore((state) => state.getLists);
   const getRecipes = useRecipesStore((state) => state.getRecipes);
+  const getIngredients = useIngredientsStore((state) => state.getIngredients);
 
   useEffect(() => {
     function handleAppStateChange(appState) {
       if (appState === 'active') {
         getLists();
         getRecipes();
+        getIngredients();
       }
     }
 
@@ -41,7 +44,7 @@ const App = () => {
       AppState.removeEventListener('change', handleAppStateChange);
       Appearance.removeChangeListener(handleAppearanceChange);
     };
-  }, [getLists, getRecipes]);
+  }, [getLists, getRecipes, getIngredients]);
 
   const theme = Appearance.getColorScheme() === 'light' ? appTheme.light : appTheme.dark;
 
