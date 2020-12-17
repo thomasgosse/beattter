@@ -2523,6 +2523,11 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
+dotenv@^8.0.0:
+  version "8.2.0"
+  resolved "https://adeo.jfrog.io/adeo/api/npm/npm/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  integrity sha1-l+YZJZradQ7qPk6j4mvO6lQksWo=
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.npmjs.org/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -5800,6 +5805,13 @@ react-native-calendars@^1.403.0:
     prop-types "^15.5.10"
     react-native-swipe-gestures "^1.0.5"
     xdate "^0.8.0"
+
+react-native-dotenv@^2.4.3:
+  version "2.4.3"
+  resolved "https://adeo.jfrog.io/adeo/api/npm/npm/react-native-dotenv/-/react-native-dotenv-2.4.3.tgz#1d04043ecbba185dc1ddc01fd22b5aec162b891c"
+  integrity sha1-HQQEPsu6GF3B3cAf0ita7BYriRw=
+  dependencies:
+    dotenv "^8.0.0"
 
 react-native-elements@^2.3.2:
   version "2.3.2"
