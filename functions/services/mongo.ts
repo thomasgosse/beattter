@@ -8,7 +8,7 @@ export async function connectToDatabase(uri: string): Promise<Db> {
   }
 
   const client = await MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  const db = client.db('sample_mflix');
+  const db = client.db('data');
 
   cachedDb = db;
   return db;

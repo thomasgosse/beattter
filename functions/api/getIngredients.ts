@@ -44,7 +44,7 @@ async function getIngredients(args: GetIngredientsArgs): Promise<Ingredient[]> {
 }
 
 export default async (request: NowRequest, response: NowResponse): Promise<void> => {
-  let { nPerPage = 100, pageNumber = 1 }: Query = request.query;
+  let { nPerPage = 100, pageNumber = 0 }: Query = request.query;
   const { version = 1 }: Query = request.query;
   nPerPage = Number(nPerPage);
   pageNumber = Number(pageNumber);
