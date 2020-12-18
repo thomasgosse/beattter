@@ -1,14 +1,13 @@
 import create from 'zustand';
 
-import { getData } from '../services/local-storage';
+import { getMultipleWithRegex } from '../services/local-storage';
 
 const useIngredientsStore = create((set) => ({
   ingredients: [],
 
   getIngredients: async () => {
     try {
-      const rawIngredients = await getData('ingredients');
-      const ingredients = JSON.parse(rawIngredients);
+      const ingredients = (await getMultipleWithRegex('ingredient_')) || [];
       set({ ingredients });
     } catch (e) {
       console.error('getIngredients', e);

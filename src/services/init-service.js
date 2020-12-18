@@ -1,18 +1,47 @@
 import axios from 'axios';
 import { API_URL } from '@env';
 
-import { getData, storeData } from '../services/local-storage';
+import { getData, storeData, storeMultipleData } from '../services/local-storage';
 import data from '../data';
 
-export async function init() {
-  const ingredientsVersion = await getData('ingredients-version');
-  if (!ingredientsVersion) {
-    await storeData('ingredients', data);
-    await storeData('ingredients-version', 1);
-  }
+const BASE_VERSION = 1;
 
-  const result = await axios.get(`${API_URL}/getVersion`);
-  if (ingredientsVersion === result.data?.version) {
-    console.log('Alredy up to date !');
+async function updateIngredients(ingredients, version) {
+  const keyValuePairs = ingredients.map((item) => [`ingredient_${item.slug}`, JSON.stringify(item)]);
+  await storeMultipleData(keyValuePairs);
+  await storeData('version', version);
+  console.log(`Added/updated ${keyValuePairs.length}, and set version to ${version}`);
+  return version;
+}
+
+async function fetchAndUpdateIngredients(version) {
+  const result = await axios.get(`${API_URL}/getIngredients?version=${version}`);
+  await updateIngredients(result.data, version);
+}
+
+async function updateIngredientsToLatest(latestVersion, localVersion) {
+  let currentVersion = localVersion + 1;
+  while (latestVersion >= currentVersion) {
+    await fetchAndUpdateIngredients(currentVersion);
+    currentVersion += 1;
+  }
+}
+
+export async function init() {
+  try {
+    let localVersion = await getData('version');
+    if (!localVersion) {
+      await updateIngredients(data, BASE_VERSION);
+      localVersion = BASE_VERSION;
+    }
+
+    localVersion = Number(localVersion);
+    const result = await axios.get(`${API_URL}/getVersion`);
+    const latestVersion = result.data?.version;
+    if (latestVersion > localVersion) {
+      await updateIngredientsToLatest(latestVersion, localVersion);
+    }
+  } catch (e) {
+    console.error('Something went wrong', e);
   }
 }

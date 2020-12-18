@@ -33,3 +33,7 @@ export async function getMultipleWithRegex(regex) {
   const keyValues = await AsyncStorage.multiGet(keys);
   return keyValues.map(([, value]) => JSON.parse(value));
 }
+
+export async function storeMultipleData(keyValuePairs) {
+  await AsyncStorage.multiSet(keyValuePairs);
+}
