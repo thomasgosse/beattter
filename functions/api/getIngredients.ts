@@ -5,7 +5,6 @@ import { getDatas } from '../services/cache';
 
 type Query = { nPerPage?: number; pageNumber?: number; version?: number };
 export type Ingredient = {
-  _id: string;
   name: string;
   slug: string;
   kind:
@@ -30,24 +29,32 @@ type GetIngredientsArgs = {
   db: Db;
   pageNumber: number;
   nPerPage: number;
+  version: number;
 };
 
 async function getIngredients(args: GetIngredientsArgs): Promise<Ingredient[]> {
-  const { db, pageNumber, nPerPage } = args;
+  const { db, pageNumber, nPerPage, version } = args;
+
+  let query = {};
+  if (version > 1) {
+    query = { version };
+  }
+
   return db
     .collection('ingredients')
-    .find()
-    .sort({ name: 1 })
+    .find(query)
+    .project({ _id: 0, version: 0 })
+    .sort({ slug: 1 })
     .skip(pageNumber * nPerPage)
     .limit(nPerPage)
     .toArray();
 }
 
 export default async (request: NowRequest, response: NowResponse): Promise<void> => {
-  let { nPerPage = 100, pageNumber = 0 }: Query = request.query;
-  const { version = 1 }: Query = request.query;
+  let { nPerPage = 100, pageNumber = 0, version = 1 }: Query = request.query;
   nPerPage = Number(nPerPage);
   pageNumber = Number(pageNumber);
+  version = Number(version);
   const db = await connectToDatabase(process.env.MONGODB_URI);
 
   const key = `${pageNumber}_${nPerPage}_v_${version}`;
@@ -55,6 +62,7 @@ export default async (request: NowRequest, response: NowResponse): Promise<void>
     db,
     pageNumber,
     nPerPage,
+    version,
   });
   response.status(200).json(ingredients);
 };
