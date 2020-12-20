@@ -24,11 +24,12 @@ const App = () => {
   const getIngredients = useIngredientsStore((state) => state.getIngredients);
 
   useEffect(() => {
-    function handleAppStateChange(appState) {
+    async function handleAppStateChange(appState) {
       if (appState === 'active') {
-        getLists();
-        getRecipes();
-        getIngredients();
+        await getLists();
+        await getRecipes();
+        await getIngredients();
+        await init();
       }
     }
 
@@ -39,7 +40,6 @@ const App = () => {
     AppState.addEventListener('change', handleAppStateChange);
     Appearance.addChangeListener(handleAppearanceChange);
     handleAppStateChange('active');
-    init();
     return () => {
       AppState.removeEventListener('change', handleAppStateChange);
       Appearance.removeChangeListener(handleAppearanceChange);

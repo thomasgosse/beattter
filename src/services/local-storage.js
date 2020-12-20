@@ -35,5 +35,6 @@ export async function getMultipleWithRegex(regex) {
 }
 
 export async function storeMultipleData(keyValuePairs) {
-  await AsyncStorage.multiSet(keyValuePairs);
+  const kvp = keyValuePairs.map(([key, value]) => [key, JSON.stringify(value)]);
+  await AsyncStorage.multiSet(kvp);
 }

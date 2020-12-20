@@ -67,9 +67,10 @@ export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredien
     },
   });
 
+  const ingredientsJSON = JSON.stringify(ingredients);
   useEffect(() => {
     setSeasonal(isSeasonal(ingredients));
-  }, [ingredients]);
+  }, [ingredientsJSON, ingredients]);
 
   useEffect(() => {
     setSource(uri ? { uri } : require('../../assets/empty-recipes.png'));

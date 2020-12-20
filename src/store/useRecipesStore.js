@@ -69,6 +69,21 @@ const useRecipesStore = create((set, get) => ({
     }
   },
 
+  updateRecipeWithIngredients: async (ingredients) => {
+    const recipes = [...get().recipes];
+    for (const recipe of recipes) {
+      ingredients.forEach(([, ingredient]) => {
+        const index = recipe.ingredients.findIndex((i) => i.slug === ingredient.slug);
+        if (index > -1) {
+          delete recipe.ingredients[index].months;
+          recipe.ingredients[index] = { ...recipe.ingredients[index], ...ingredient };
+        }
+      });
+      await storeData(`recipe_${recipe.id}`, recipe);
+    }
+    set({ recipes });
+  },
+
   deleteRecipe: async (id) => {
     try {
       const recipes = [...get().recipes];
