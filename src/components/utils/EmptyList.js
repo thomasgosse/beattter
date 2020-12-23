@@ -28,6 +28,7 @@ export default function EmptyList({ source, text, btnText, onPress, children }) 
       color: colors.textBase,
       textAlign: 'center',
       marginVertical: 20,
+      minHeight: 60,
     },
   });
   return (
