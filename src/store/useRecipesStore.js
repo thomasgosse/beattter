@@ -2,6 +2,7 @@ import create from 'zustand';
 
 import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
 import { getPrincipalKind } from '../services/ingredient';
+import { deleteFile, StoragePath } from '../services/fs';
 import { updateIngredients } from './helper';
 
 const useRecipesStore = create((set, get) => ({
@@ -88,8 +89,12 @@ const useRecipesStore = create((set, get) => ({
     try {
       const recipes = [...get().recipes];
       const prevIndex = recipes.findIndex((item) => item.id === id);
+      const imageUri = recipes[prevIndex]?.imageUri;
       recipes.splice(prevIndex, 1);
       await removeData(`recipe_${id}`);
+      if (imageUri) {
+        await deleteFile(`${StoragePath}/${imageUri}`);
+      }
       set({ recipes });
       return true;
     } catch (e) {

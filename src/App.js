@@ -9,6 +9,7 @@ import { navigationRef } from './navigation/RootNavigation';
 import ErrorPopup from './components/utils/ErrorPopup';
 import RootNavigator from './navigation/RootNavigator';
 import { init } from './services/init-service';
+import { emptyTemporaryDir } from './services/fs';
 
 import appTheme from './theme';
 import useListsStore from './store/useListsStore';
@@ -28,9 +29,10 @@ const App = () => {
       if (appState === 'active') {
         await getLists();
         await getRecipes();
-        await getIngredients();
         await init();
+        await getIngredients();
       }
+      emptyTemporaryDir();
     }
 
     function handleAppearanceChange({ colorScheme }) {
