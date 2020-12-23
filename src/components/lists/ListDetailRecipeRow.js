@@ -4,6 +4,7 @@ import { ThemeContext, ListItem } from 'react-native-elements';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { StoragePath } from '../../services/fs';
 import ListDetailRecipeModalDelete from './ListDetailRecipeModalDelete';
 
 export default function ListDetailRecipeRow({
@@ -18,7 +19,9 @@ export default function ListDetailRecipeRow({
 }) {
   const rowRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [source, setSource] = useState(uri ? { uri } : require('../../assets/empty-recipes.png'));
+  const [source, setSource] = useState(
+    uri ? { uri: `${StoragePath}/${uri}` } : require('../../assets/empty-recipes.png')
+  );
 
   const hiddenItemWidth = 70;
   const {

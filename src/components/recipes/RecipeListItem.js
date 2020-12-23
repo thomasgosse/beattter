@@ -3,12 +3,15 @@ import { Text, StyleSheet, View, Image, Dimensions, TouchableOpacity } from 'rea
 import { ThemeContext } from 'react-native-elements';
 import IngredientKindTooltip from './IngredientKindTooltip';
 
+import { StoragePath } from '../../services/fs';
 import * as RootNavigation from '../../navigation/RootNavigation';
 
 import { isSeasonal } from '../../services/ingredient';
 
 export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredients, principalKind, index }) {
-  const [source, setSource] = useState(uri ? { uri } : require('../../assets/empty-recipes.png'));
+  const [source, setSource] = useState(
+    uri ? { uri: `${StoragePath}/${uri}` } : require('../../assets/empty-recipes.png')
+  );
   const [seasonal, setSeasonal] = useState(false);
 
   const {
@@ -73,7 +76,7 @@ export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredien
   }, [ingredientsJSON, ingredients]);
 
   useEffect(() => {
-    setSource(uri ? { uri } : require('../../assets/empty-recipes.png'));
+    setSource(uri ? { uri: `${StoragePath}/${uri}` } : require('../../assets/empty-recipes.png'));
   }, [uri, setSource]);
 
   return (

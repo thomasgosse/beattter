@@ -3,7 +3,8 @@ import { StyleSheet, Platform, ActionSheetIOS, Dimensions, Animated, TouchableOp
 import { ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { DocumentDirectoryPath, copyFile } from 'react-native-fs';
+
+import { StoragePath, copy, deleteFile } from '../../services/fs';
 
 const { height: wHeight, width: wWidth } = Dimensions.get('window');
 export const HEADER_IMAGE_HEIGHT = wHeight / 3;
@@ -11,7 +12,9 @@ export const HEADER_IMAGE_HEIGHT = wHeight / 3;
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
 
 export default function HeaderImage({ y, uri, setUri, isReadOnly, setIsImageAvailable }) {
-  const [source, setSource] = useState(uri ? { uri } : require('../../assets/empty-recipes.png'));
+  const [source, setSource] = useState(
+    uri ? { uri: `${StoragePath}/${uri}` } : require('../../assets/empty-recipes.png')
+  );
 
   const {
     theme: { colors },
@@ -52,12 +55,15 @@ export default function HeaderImage({ y, uri, setUri, isReadOnly, setIsImageAvai
   });
 
   async function imagePickerCallback(result) {
-    if (result.didCancel) {
-      return;
+    if (result.didCancel) return;
+
+    const destPath = `${StoragePath}/${result.fileName}`;
+    await copy(result.uri, destPath);
+    if (uri) {
+      const toDelete = `${StoragePath}/${uri}`;
+      await deleteFile(toDelete);
     }
-    const destPath = DocumentDirectoryPath + '/' + result.fileName;
-    await copyFile(result.uri, destPath);
-    setUri(destPath);
+    setUri(result.fileName);
   }
 
   function getActionSheet() {
@@ -65,8 +71,8 @@ export default function HeaderImage({ y, uri, setUri, isReadOnly, setIsImageAvai
 
     const options = {
       mediaType: 'photo',
-      maxHeight: 1600,
-      maxWidth: 1600,
+      maxHeight: 1200,
+      maxWidth: 1200,
       includeBase64: false,
       quality: 0.8,
     };
@@ -89,7 +95,7 @@ export default function HeaderImage({ y, uri, setUri, isReadOnly, setIsImageAvai
   }
 
   useEffect(() => {
-    setSource(uri ? { uri } : require('../../assets/empty-recipes.png'));
+    setSource(uri ? { uri: `${StoragePath}/${uri}` } : require('../../assets/empty-recipes.png'));
   }, [uri, setSource]);
 
   const onLoad = () => {
