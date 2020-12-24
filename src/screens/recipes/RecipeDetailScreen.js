@@ -49,7 +49,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
     button: { alignSelf: 'center', marginVertical: 30 },
     deleteButtton: {
       alignSelf: 'center',
-      marginVertical: 30,
+      marginVertical: 20,
       backgroundColor: colors.danger,
       borderWidth: 0,
     },
@@ -185,6 +185,7 @@ export default function RecipeDetailScreen({ route, navigation }) {
           removeIngredient={removeIngredient}
           isReadOnly={isReadOnly}
           initiatorRoute="RecipeDetail"
+          nbPersonsBase={nbPersonsBase}
           onPressAddCart={() => {
             navigation.navigate('AddRecipeToList', {
               screen: 'Ajouter à une liste',

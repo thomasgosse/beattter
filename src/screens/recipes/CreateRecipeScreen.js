@@ -60,6 +60,7 @@ export default function CreateRecipeScreen({ navigation, route }) {
         removeIngredient={removeIngredient}
         initiatorRoute="CreateRecipe"
         setIsSwiping={setIsSwiping}
+        nbPersonsBase={nbPersonsBase}
       />
 
       <Button

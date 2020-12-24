@@ -1,17 +1,19 @@
 import React, { useContext, useRef } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { ListItem, ThemeContext } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Ingredient from './Ingredient';
 import * as RootNavigation from '../../navigation/RootNavigation';
 import Label from '../utils/Label';
+import Button from '../utils/Button';
 
 export default function IngredientList({
   label,
   ingredients,
   removeIngredient,
   onPressAddCart,
+  nbPersonsBase,
   isReadOnly,
   initiatorRoute,
   setIsSwiping,
@@ -25,32 +27,32 @@ export default function IngredientList({
     listItem: {
       backgroundColor: colors.listRow,
     },
-    labelContainer: { flexDirection: 'row', marginBottom: 7, alignItems: 'center' },
     label: {
       marginLeft: 10,
+      marginBottom: 7,
     },
-    labelAction: {
-      marginLeft: 10,
-      width: 35,
-      height: 35,
+    button: {
+      marginTop: 20,
+      alignSelf: 'center',
+      paddingTop: 10,
+      paddingBottom: 10,
+    },
+    buttonContent: {
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      borderRadius: 999999,
-      backgroundColor: colors.listRow,
+    },
+    buttonText: {
+      color: colors.body,
+      fontWeight: '500',
+      paddingLeft: 10,
+      fontSize: 16,
     },
   });
 
   return (
     <>
-      <View style={styles.labelContainer}>
-        {label && <Label label="Ingrédients" containerStyle={styles.label} />}
-        {initiatorRoute !== 'CreateRecipe' && (
-          <TouchableOpacity style={styles.labelAction} onPress={onPressAddCart}>
-            <Icon size={24} name="cart-outline" color={colors.textTitleLighter} />
-          </TouchableOpacity>
-        )}
-      </View>
-
+      {label && <Label label={`Ingrédients/quantités pour ${nbPersonsBase}`} containerStyle={styles.label} />}
       {ingredients.map((ingredient, i) => (
         <Ingredient
           ingredient={ingredient}
@@ -63,7 +65,6 @@ export default function IngredientList({
           setIsSwiping={setIsSwiping}
         />
       ))}
-
       {!isReadOnly && (
         <View style={styles.listItem}>
           <ListItem
@@ -84,6 +85,15 @@ export default function IngredientList({
             </ListItem.Content>
           </ListItem>
         </View>
+      )}
+
+      {isReadOnly && (
+        <Button containerStyle={styles.button} onPress={onPressAddCart}>
+          <View style={styles.buttonContent}>
+            <Icon size={22} name="cart-outline" color={colors.body} />
+            <Text style={styles.buttonText}>Ajouter à une liste</Text>
+          </View>
+        </Button>
       )}
     </>
   );
