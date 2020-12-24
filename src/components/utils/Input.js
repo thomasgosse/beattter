@@ -3,7 +3,16 @@ import { StyleSheet, View, TextInput } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import Label from './Label';
 
-export default function Input({ containerStyle, label, placeholder, value, setValue, isReadOnly }) {
+export default function Input({
+  containerStyle,
+  label,
+  placeholder,
+  value,
+  setValue,
+  keyboardType,
+  returnKeyType,
+  isReadOnly,
+}) {
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -37,6 +46,8 @@ export default function Input({ containerStyle, label, placeholder, value, setVa
         value={value}
         onChangeText={(text) => setValue && setValue(text)}
         style={styles.input}
+        keyboardType={keyboardType || 'default'}
+        returnKeyType={returnKeyType || 'default'}
       />
       <View style={styles.divider} />
     </View>
