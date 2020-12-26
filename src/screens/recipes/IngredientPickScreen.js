@@ -1,16 +1,17 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, StyleSheet, FlatList, Keyboard, KeyboardAvoidingView } from 'react-native';
-import { Picker } from '@react-native-community/picker';
 import { ListItem, ThemeContext } from 'react-native-elements';
+import { useSafeArea } from 'react-native-safe-area-context';
 import slugify from 'slugify';
 
 import Input from '../../components/utils/Input';
 import Button from '../../components/utils/Button';
 import IngredientKindTooltip from '../../components/recipes/IngredientKindTooltip';
+import PickerModal from '../../components/utils/PickerModal';
 
 import useIngredientsStore from '../../store/useIngredientsStore';
 
-const units = ['kg', 'gr', 'l', 'cl', 'ml', 'pièce(s)', 'c.à café', 'c.à soupe'];
+const units = ['kg', 'gr', 'l', 'cl', 'ml', 'pièce(s)', 'boite(s)', 'c.à café', 'c.à soupe'];
 
 export default function IngredientPickerScreen({ navigation, route }) {
   const [search, setSearch] = useState('');
@@ -20,6 +21,7 @@ export default function IngredientPickerScreen({ navigation, route }) {
   const [selectedIngredient, setSelectedIngredient] = useState({});
 
   const ingredients = useIngredientsStore((state) => state.ingredients);
+  const insets = useSafeArea();
 
   const {
     theme: { colors },
@@ -41,12 +43,12 @@ export default function IngredientPickerScreen({ navigation, route }) {
     picker: { flex: 1 },
     button: {
       alignSelf: 'center',
-      marginVertical: 30,
+      marginBottom: insets.bottom,
     },
     inputQuantity: {
       marginHorizontal: 10,
       marginVertical: 20,
-      width: '50%',
+      width: '60%',
     },
   });
 
@@ -115,13 +117,9 @@ export default function IngredientPickerScreen({ navigation, route }) {
           keyboardType="decimal-pad"
           returnKeyType="done"
           value={value}
-          setValue={setValue}
+          setValue={(v) => setValue(v?.replace(',', '.'))}
         />
-        <Picker mode="dialog" style={styles.picker} selectedValue={unit} onValueChange={setUnit}>
-          {units.map((item) => {
-            return <Picker.Item label={item} key={item} value={item} />;
-          })}
-        </Picker>
+        <PickerModal list={units} triggerLabel="Unité" selectedValue={unit} onValueChange={setUnit} />
       </View>
 
       <Button

@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
 import { Picker } from '@react-native-community/picker';
-import Modal from 'react-native-modal';
 
 import Button from '../utils/Button';
+import BottomModal from '../utils/BottomModal';
 
 import useListsStore from '../../store/useListsStore';
 
@@ -18,22 +18,6 @@ export default function ListDetailRecipeModalDelete({ modalVisible, nbPersons, r
     theme: { colors },
   } = useContext(ThemeContext);
   const styles = StyleSheet.create({
-    modalView: {
-      margin: 20,
-      backgroundColor: colors.body,
-      borderRadius: 20,
-      padding: 35,
-      alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 3.84,
-      elevation: 5,
-    },
-
     pickersContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -74,21 +58,19 @@ export default function ListDetailRecipeModalDelete({ modalVisible, nbPersons, r
   }
 
   return (
-    <Modal isVisible={modalVisible} onBackdropPress={onClose}>
-      <View style={styles.modalView}>
-        <Text style={styles.text}>
-          Supprimer <Text style={styles.recipeName}>{selectedValue} personne(s)</Text> de la liste ?
-        </Text>
-        <View style={styles.pickersContainer}>
-          <Picker style={styles.picker} selectedValue={selectedValue} onValueChange={setSelectedValue}>
-            {values.map((item) => {
-              return <Picker.Item label={item} key={item} value={Number(item)} />;
-            })}
-          </Picker>
-        </View>
-        <Button containerStyle={styles.button} text={`Supprimer`} onPress={onPress} />
-        <Text style={styles.textError}>{error}</Text>
+    <BottomModal isVisible={modalVisible} onClose={onClose}>
+      <Text style={styles.text}>
+        Supprimer <Text style={styles.recipeName}>{selectedValue} personne(s)</Text> de la liste ?
+      </Text>
+      <View style={styles.pickersContainer}>
+        <Picker style={styles.picker} selectedValue={selectedValue} onValueChange={setSelectedValue}>
+          {values.map((item) => {
+            return <Picker.Item label={item} key={item} value={Number(item)} />;
+          })}
+        </Picker>
       </View>
-    </Modal>
+      <Button containerStyle={styles.button} text="Supprimer" onPress={onPress} />
+      <Text style={styles.textError}>{error}</Text>
+    </BottomModal>
   );
 }
