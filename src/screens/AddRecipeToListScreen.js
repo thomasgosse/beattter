@@ -12,7 +12,7 @@ import Button from '../components/utils/Button';
 import useListsStore from '../store/useListsStore';
 
 export default function AddRecipeToListScreen({ navigation, route }) {
-  const [nbPersons, setNbPersons] = useState(1);
+  const [nbPersons, setNbPersons] = useState(route.params?.recipe.nbPersonsBase);
   const { lists, addRecipeToList, isRecipeInList, updateRecipeNbPersons } = useListsStore(
     (state) => ({
       lists: state.onGoingLists,
