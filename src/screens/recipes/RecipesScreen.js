@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import shallow from 'zustand/shallow';
 import { View, StyleSheet, ActivityIndicator, FlatList } from 'react-native';
 import { ThemeContext } from 'react-native-elements';
+import { useSafeArea } from 'react-native-safe-area-context';
 
 import RecipeListItem from '../../components/recipes/RecipeListItem';
 import EmptyList from '../../components/utils/EmptyList';
@@ -17,6 +18,7 @@ export default function RecipesScreen({ navigation }) {
     shallow
   );
 
+  const insets = useSafeArea();
   const {
     theme: { colors },
   } = useContext(ThemeContext);
@@ -28,7 +30,7 @@ export default function RecipesScreen({ navigation }) {
     },
     list: {
       marginTop: 15,
-      flex: 1,
+      paddingBottom: insets.bottom,
     },
   });
 
