@@ -15,9 +15,9 @@ export function updateIngredients(ingredients, ingredient) {
   return ingredients;
 }
 
-export function orderDescStartingDay(a, b) {
-  var keyA = new Date(a.startingDay),
-    keyB = new Date(b.startingDay);
+export function orderDescTimestamp(key, a, b) {
+  var keyA = new Date(a[key]),
+    keyB = new Date(b[key]);
   if (keyA < keyB) {
     return -1;
   }

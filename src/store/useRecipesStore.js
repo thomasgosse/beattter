@@ -3,7 +3,9 @@ import create from 'zustand';
 import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
 import { getPrincipalKind } from '../services/ingredient';
 import { deleteFile, StoragePath } from '../services/fs';
-import { updateIngredients } from './helper';
+import { updateIngredients, orderDescTimestamp } from './helper';
+
+const orderDescId = orderDescTimestamp.bind(null, 'id');
 
 const useRecipesStore = create((set, get) => ({
   recipes: [],
@@ -15,6 +17,7 @@ const useRecipesStore = create((set, get) => ({
     try {
       set({ loading: true });
       const recipes = (await getMultipleWithRegex('recipe_')) || [];
+      recipes.sort(orderDescId);
       set({ recipes });
     } catch (e) {
       set({ error: 'getRecipes' });

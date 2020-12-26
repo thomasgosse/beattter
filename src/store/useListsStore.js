@@ -1,6 +1,8 @@
 import create from 'zustand';
 import { getMultipleWithRegex, removeData, storeData } from '../services/local-storage';
-import { updateIngredients, orderDescStartingDay, isListOver } from './helper';
+import { updateIngredients, orderDescTimestamp, isListOver } from './helper';
+
+const orderDescStartingDay = orderDescTimestamp.bind(null, 'startingDay');
 
 function updateLists(lists, set) {
   let onGoingLists = [];
