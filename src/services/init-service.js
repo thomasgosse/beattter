@@ -5,7 +5,7 @@ import { getData, storeData, storeMultipleData } from '../services/local-storage
 import useRecipesStore from '../store/useRecipesStore';
 import data from '../data';
 
-const BASE_VERSION = 1;
+const BASE_VERSION = 3;
 
 async function updateIngredients(ingredients, version) {
   const keyValuePairs = ingredients.map((item) => [`ingredient_${item.slug}`, item]);
