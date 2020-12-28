@@ -27,4 +27,8 @@ export default {
     image: require('./assets/seasonal.png'),
     description: '100% de saison',
   },
+  'not-seasonal': {
+    image: require('./assets/not-seasonal.png'),
+    description: 'Pas de saison',
+  },
 };

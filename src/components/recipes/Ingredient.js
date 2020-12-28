@@ -1,10 +1,11 @@
 import React, { useContext, useRef, useEffect } from 'react';
-import { StyleSheet, Animated, View, Dimensions } from 'react-native';
+import { StyleSheet, Animated, View, Dimensions, Text } from 'react-native';
 import { ListItem, ThemeContext } from 'react-native-elements';
 import { SwipeRow } from 'react-native-swipe-list-view';
-
 import Icon from 'react-native-vector-icons/Ionicons';
+
 import IngredientKindTooltip from './IngredientKindTooltip';
+import { isIngredientSeasonal } from '../../services/ingredient';
 
 export default function Ingredient({
   ingredient,
@@ -56,6 +57,8 @@ export default function Ingredient({
       color: colors.textBaseLight,
       fontWeight: '500',
     },
+    listItemKinds: { flexDirection: 'row' },
+    kindTooltip: { marginLeft: 5 },
   });
 
   const onSwipeValueChange = (swipeData) => {
@@ -119,14 +122,19 @@ export default function Ingredient({
       >
         <ListItem containerStyle={styles.listItem} bottomDivider topDivider={index === 0}>
           <ListItem.Content style={styles.listItemContent}>
-            <ListItem.Title style={styles.ingredientName}>{ingredient.name}</ListItem.Title>
-            <ListItem.Title style={styles.quantity}>
-              {' '}
-              - {parseFloat(ingredient.quantity.value)}
-              {ingredient.quantity.unit}
+            <ListItem.Title style={styles.ingredientName} numberOfLines={1}>
+              {ingredient.name}
+              <Text style={styles.quantity} numberOfLines={1}>
+                {' '}
+                - {parseFloat(ingredient.quantity.value)}
+                {ingredient.quantity.unit}
+              </Text>
             </ListItem.Title>
           </ListItem.Content>
-          <IngredientKindTooltip kind={ingredient.kind} />
+          <View style={styles.listItemKinds}>
+            {!isIngredientSeasonal(ingredient.months) && <IngredientKindTooltip kind="not-seasonal" />}
+            <IngredientKindTooltip kind={ingredient.kind} containerStyle={styles.kindTooltip} />
+          </View>
         </ListItem>
       </Animated.View>
     </SwipeRow>

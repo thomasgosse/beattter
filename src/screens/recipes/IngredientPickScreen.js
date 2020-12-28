@@ -10,6 +10,7 @@ import IngredientKindTooltip from '../../components/recipes/IngredientKindToolti
 import PickerModal from '../../components/utils/PickerModal';
 
 import useIngredientsStore from '../../store/useIngredientsStore';
+import { isIngredientSeasonal } from '../../services/ingredient';
 
 const units = ['kg', 'gr', 'l', 'cl', 'ml', 'pièce(s)', 'boite(s)', 'c.à café', 'c.à soupe'];
 
@@ -50,6 +51,8 @@ export default function IngredientPickerScreen({ navigation, route }) {
       marginVertical: 20,
       width: '60%',
     },
+    listItemKinds: { flexDirection: 'row' },
+    kindTooltip: { marginLeft: 5 },
   });
 
   const timer = useRef();
@@ -103,7 +106,10 @@ export default function IngredientPickerScreen({ navigation, route }) {
                 {item.name}
               </ListItem.Title>
             </ListItem.Content>
-            <IngredientKindTooltip kind={item.kind} />
+            <View style={styles.listItemKinds}>
+              {!isIngredientSeasonal(item.months) && <IngredientKindTooltip kind="not-seasonal" />}
+              <IngredientKindTooltip kind={item.kind} containerStyle={styles.kindTooltip} />
+            </View>
           </ListItem>
         )}
         keyExtractor={(item) => item.slug + item.kind}

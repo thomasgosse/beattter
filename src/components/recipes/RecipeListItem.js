@@ -6,7 +6,7 @@ import IngredientKindTooltip from './IngredientKindTooltip';
 import { StoragePath } from '../../services/fs';
 import * as RootNavigation from '../../navigation/RootNavigation';
 
-import { isSeasonal } from '../../services/ingredient';
+import { isRecipeSeasonal } from '../../services/ingredient';
 
 export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredients, principalKind, index }) {
   const [source, setSource] = useState(
@@ -72,7 +72,7 @@ export default function RecipeListItem({ name, id, uri, nbPersonsBase, ingredien
 
   const ingredientsJSON = JSON.stringify(ingredients);
   useEffect(() => {
-    setSeasonal(isSeasonal(ingredients));
+    setSeasonal(isRecipeSeasonal(ingredients));
   }, [ingredientsJSON, ingredients]);
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { Avatar, Tooltip, ThemeContext } from 'react-native-elements';
 
 import kinds from '../../kinds';
 
-export default function IngredientKindTooltip({ kind }) {
+export default function IngredientKindTooltip({ kind, containerStyle }) {
   const [tooltipSize] = useState({ w: Dimensions.get('window').width / 2, h: 16 });
   const {
     theme: { colors },
@@ -29,7 +29,7 @@ export default function IngredientKindTooltip({ kind }) {
         </Text>
       }
     >
-      <Avatar rounded source={kinds[kind]?.image} />
+      <Avatar rounded source={kinds[kind]?.image} containerStyle={containerStyle} />
     </Tooltip>
   );
 }

@@ -1,10 +1,19 @@
-export function isSeasonal(ingredients) {
+export function isRecipeSeasonal(ingredients) {
   const month = new Date().getMonth() + 1;
   for (const ingredient of ingredients) {
     const monthIndex = ingredient.months?.indexOf(month);
     if (monthIndex === -1) {
       return false;
     }
+  }
+  return true;
+}
+
+export function isIngredientSeasonal(months) {
+  const month = new Date().getMonth() + 1;
+  const monthIndex = months?.indexOf(month);
+  if (monthIndex === -1) {
+    return false;
   }
   return true;
 }
