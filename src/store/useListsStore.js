@@ -146,13 +146,14 @@ const useListsStore = create((set, get) => ({
       let modifiedLists = [];
       const lists = await Promise.all(
         get().lists.map(async (list) => {
-          if (isListOver(list.endingDay)) {
-            return list;
-          }
           const recipeIndex = list.recipes.findIndex((recipe) => recipe.id === recipeUpdate.id);
           if (recipeIndex > -1) {
-            list.recipes[recipeIndex] = updateRecipe(list.recipes[recipeIndex], recipeUpdate);
-            modifiedLists.push(list.name);
+            if (isListOver(list.endingDay)) {
+              list.recipes[recipeIndex].imageUri = r.imageUri;
+            } else {
+              list.recipes[recipeIndex] = updateRecipe(list.recipes[recipeIndex], recipeUpdate);
+              modifiedLists.push(list.name);
+            }
             await storeData(`list_${list.id}`, list);
           }
           return list;
